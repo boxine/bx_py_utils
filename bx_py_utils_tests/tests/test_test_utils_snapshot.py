@@ -81,7 +81,6 @@ def test_assert_text_snapshot():
             )
         written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.txt').read_text()
         assert written_text == 'this is:\nmultiline "text"\none\ntwo\nthree\nfour'
-        print(repr(exc_info.value.args[0]))
         assert exc_info.value.args[0] == (
             'Text not equal:\n'
             '- this is:\n'
