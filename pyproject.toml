@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_py_utils'
-version = "37-rc.1"
+version = "37"
 description = 'Various Python utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
