@@ -1,6 +1,5 @@
 import json
 import pathlib
-import re
 from unittest import TestCase
 
 from bx_py_utils.graphql_introspection import complete_query, introspection_query
@@ -31,7 +30,7 @@ class GraphQLIntrospectionTest(TestCase):
         self._craft_query_snapshot('shopify_schema', 'QueryRoot', allow_recursive=False)
 
     def test_craft_query_string_shopify_product_only(self):
-        with (TEST_DIR / f'shopify_schema.json').open() as f:
+        with (TEST_DIR / 'shopify_schema.json').open() as f:
             introspection_doc = json.load(f)['data']
 
         got = complete_query(introspection_doc, 'Product')

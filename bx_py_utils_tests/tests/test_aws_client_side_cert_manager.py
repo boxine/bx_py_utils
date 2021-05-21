@@ -1,15 +1,14 @@
 from pathlib import Path
-from unittest import mock
+from unittest import TestCase, mock
 
 import requests
 import requests_mock
-from django.test import SimpleTestCase
 
 from bx_py_utils.aws.client_side_cert_manager import ClientSideCertManager
 from bx_py_utils.test_utils.mock_boto3session import MockedBoto3Session
 
 
-class ClientSideCertManagerTestCase(SimpleTestCase):
+class ClientSideCertManagerTestCase(TestCase):
     def test_cert_manager(self):
 
         def mocked_response(request, context):
