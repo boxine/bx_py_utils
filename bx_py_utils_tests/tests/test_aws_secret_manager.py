@@ -1,13 +1,11 @@
-from unittest import mock
-
-from django.test import SimpleTestCase
+from unittest import TestCase, mock
 
 from bx_py_utils.aws.secret_manager import SecretsManager
 from bx_py_utils.test_utils.mock_aws_secret_manager import SecretsManagerMock
 from bx_py_utils.test_utils.mock_boto3session import MockedBoto3Session
 
 
-class SecretManagerTestCase(SimpleTestCase):
+class SecretManagerTestCase(TestCase):
     def test_get_secret_string(self):
         with mock.patch('boto3.session.Session', MockedBoto3Session()) as m:
             m.add_secret_string(foo='bar')

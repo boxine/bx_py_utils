@@ -1,21 +1,26 @@
 import inspect
-
-from django.test import SimpleTestCase
+from unittest import TestCase
 
 from bx_py_utils.test_utils.assertion import assert_equal, assert_text_equal, pformat_ndiff, text_ndiff
 
 
-class AssertionTestCase(SimpleTestCase):
+class AssertionTestCase(TestCase):
     def test_assert_equal(self):
         assert_equal(1, 1)
         assert_equal('a', 'a')
         x = object
         assert_equal(x, x)
 
-        with self.assertRaisesMessage(AssertionError, 'Objects are not equal:\n- 1\n+ 2'):
+        with self.assertRaises(AssertionError) as cm:
             assert_equal(1, 2, diff_func=pformat_ndiff)
+        assert cm.exception.args[0] == 'Objects are not equal:\n- 1\n+ 2'
 
-        msg = (
+        with self.assertRaises(AssertionError) as cm:
+            assert_equal(
+                [{1: {2: 'two'}}],
+                [{1: {2: 'XXX'}}]
+            )
+        assert cm.exception.args[0] == (
             'Objects are not equal:\n'
             '--- got\n'
             '\n'
@@ -32,33 +37,15 @@ class AssertionTestCase(SimpleTestCase):
             '     }\n'
             ' ]'
         )
-        with self.assertRaisesMessage(AssertionError, msg):
-            assert_equal(
-                [{1: {2: 'two'}}],
-                [{1: {2: 'XXX'}}]
-            )
 
     def test_assert_text_equal(self):
         assert_text_equal(txt1='foo', txt2='foo')
 
-        with self.assertRaisesMessage(AssertionError, 'Text not equal:\n- 1\n+ 2'):
+        with self.assertRaises(AssertionError) as cm:
             assert_text_equal('1', '2', diff_func=text_ndiff)
+        assert cm.exception.args[0] == 'Text not equal:\n- 1\n+ 2'
 
-        msg = (
-            'Text not equal:\n'
-            '--- got\n'
-            '\n'
-            '+++ expected\n'
-            '\n'
-            '@@ -1,4 +1,4 @@\n'
-            '\n'
-            '-oNe\n'
-            '+one\n'
-            ' two\n'
-            ' three\n'
-            ' four'
-        )
-        with self.assertRaisesMessage(AssertionError, msg):
+        with self.assertRaises(AssertionError) as cm:
             assert_text_equal(
                 inspect.cleandoc('''
                     oNe
@@ -75,3 +62,17 @@ class AssertionTestCase(SimpleTestCase):
                     five
                 '''),
             )
+        assert cm.exception.args[0] == (
+            'Text not equal:\n'
+            '--- got\n'
+            '\n'
+            '+++ expected\n'
+            '\n'
+            '@@ -1,4 +1,4 @@\n'
+            '\n'
+            '-oNe\n'
+            '+one\n'
+            ' two\n'
+            ' three\n'
+            ' four'
+        )

@@ -1,9 +1,9 @@
-from django.test import SimpleTestCase
+from unittest import TestCase
 
 from bx_py_utils.compat import removeprefix, removesuffix
 
 
-class CompatTest(SimpleTestCase):
+class CompatTest(TestCase):
     def test_removeprefix(self):
         assert removeprefix('fooobar', 'fooo') == 'bar'
         assert removeprefix('fooobar', 'bar') == 'fooobar'

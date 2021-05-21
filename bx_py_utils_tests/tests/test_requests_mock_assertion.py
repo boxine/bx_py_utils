@@ -1,11 +1,12 @@
+from unittest import TestCase
+
 import requests
 import requests_mock
-from django.test import SimpleTestCase
 
 from bx_py_utils.test_utils.requests_mock_assertion import assert_json_requests_mock
 
 
-class RequestsMockAssertionTestCase(SimpleTestCase):
+class RequestsMockAssertionTestCase(TestCase):
     def test_basic(self):
         with requests_mock.mock() as m:
             m.post('http://test.tld', text='resp')
@@ -21,16 +22,16 @@ class RequestsMockAssertionTestCase(SimpleTestCase):
             m.post('http://test.tld', text='resp')
             requests.post('http://test.tld', data='This it no JSON !')
 
-        msg = (
-            "POST http://test.tld/ without valid JSON:"
-            " Expecting value: line 1 column 1 (char 0) in:\n"
-            "'This it no JSON !'"
-        )
-        with self.assertRaisesMessage(AssertionError, msg):
+        with self.assertRaises(AssertionError) as cm:
             assert_json_requests_mock(mock=m, data=[{
                 'request': 'POST https://foo.tld/bar/',
                 'json': {'req': 'one'},
             }])
+        assert cm.exception.args[0] == (
+            "POST http://test.tld/ without valid JSON:"
+            " Expecting value: line 1 column 1 (char 0) in:\n"
+            "'This it no JSON !'"
+        )
 
     def test(self):
         with requests_mock.mock() as m:
@@ -58,7 +59,15 @@ class RequestsMockAssertionTestCase(SimpleTestCase):
             'json': {'req': 'two'},
         }])
 
-        msg = (
+        with self.assertRaises(AssertionError) as cm:
+            assert_json_requests_mock(mock=m, data=[{
+                'request': 'POST https://foo.tld/bar/',
+                'json': {'req': 'one'},
+            }, {
+                'request': 'POST https://foo.tld/bar/',
+                'json': {'req': 'XXX'},
+            }])
+        assert cm.exception.args[0] == (
             'Request history are not equal:\n'
             '--- got\n'
             '\n'
@@ -75,11 +84,3 @@ class RequestsMockAssertionTestCase(SimpleTestCase):
             '         "request": "POST https://foo.tld/bar/"\n'
             '     }'
         )
-        with self.assertRaisesMessage(AssertionError, msg):
-            assert_json_requests_mock(mock=m, data=[{
-                'request': 'POST https://foo.tld/bar/',
-                'json': {'req': 'one'},
-            }, {
-                'request': 'POST https://foo.tld/bar/',
-                'json': {'req': 'XXX'},
-            }])

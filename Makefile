@@ -70,14 +70,7 @@ test: pytest
 publish: ## Release new version to PyPi
 	poetry run publish
 
-makemessages: ## Make and compile locales message files
-	./manage.sh makemessages --all --no-location --no-obsolete
-	./manage.sh compilemessages --ignore=.tox
-
-start-dev-server: ## Start Django dev. server with the test project
-	./manage.sh run_testserver
-
-clean: ## Remove created files from the test project (e.g.: SQlite, static files)
+clean: ## Remove created files from the test project
 	git clean -dfX bx_py_utils_tests/
 
-.PHONY: help install lint fix pytest publish test clean makemessages start-dev-server
+.PHONY: help install lint fix pytest publish test clean
