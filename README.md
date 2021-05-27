@@ -25,6 +25,8 @@ Please take a look into the sources and tests for deeper informations.
 * `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file using json)
 * `assert_text_snapshot` - Same as `assert_snapshot` comparing text strings
 * `assert_py_snapshot` - Snapshot test using `PrettyPrinter()`
+* `FileWatcher()` - Context manager to record if new files have been created with optional cleanup.
+
 
 ### humanize
 
@@ -39,10 +41,12 @@ Please take a look into the sources and tests for deeper informations.
 * `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
 * `bx_py_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
 
+
 ### GraphQL
 
 * `graphql_introspection.introspection_query` Generate an introspection query to get an introspection doc.
 * `graphql_introspection.complete_query` Generate a full query for all fields from an introspection doc.
+
 
 ### misc
 
@@ -56,6 +60,9 @@ Please take a look into the sources and tests for deeper informations.
 * `hash_utils.url_safe_hash()` - Generate URL safe hashes
 * `compat.removeprefix()` - Backport of `str.removeprefix` from PEP-616
 * `compat.removesuffix()` - Backport of `str.removesuffix` from PEP-616
+* `path.assert_is_dir()` - Check if given path is a directory, with human error message
+* `path.assert_is_file()` - Check if given path is a file, with human error message
+* `stack_info.last_frame_outside_path()` - Returns the stack frame that is the direct successor of given "file_path"
 
 
 ## Backwards-incompatible changes

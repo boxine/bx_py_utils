@@ -6,9 +6,20 @@ from uuid import UUID
 
 import pytest
 
+import bx_py_utils
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
 from bx_py_utils.test_utils.datetime import parse_dt
-from bx_py_utils.test_utils.snapshot import assert_py_snapshot, assert_snapshot, assert_text_snapshot
+from bx_py_utils.test_utils.filesystem_utils import FileWatcher
+from bx_py_utils.test_utils.snapshot import (
+    _AUTO_SNAPSHOT_NAME_COUNTER,
+    _get_caller_names,
+    assert_py_snapshot,
+    assert_snapshot,
+    assert_text_snapshot,
+)
+
+
+SELF_PATH = pathlib.Path(__file__).parent
 
 
 def test_assert_snapshot():
@@ -155,3 +166,74 @@ def test_assert_py_snapshot():
             "-    'uuid': '00000000-0000-0000-1111-000000000001'}\n"
             "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}"
         )
+
+
+def test_auto_source_names():
+    root_dir, snapshot_name = _get_caller_names()
+    assert root_dir == SELF_PATH
+
+    # Name of this file + name of this test function + sequential number
+    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+
+    # Call it again -> sequential number =+ 1 ???
+
+    root_dir, snapshot_name = _get_caller_names()
+    assert root_dir == SELF_PATH
+    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_2.snapshot'
+
+    # set own root_dir
+    own_root_dir = pathlib.Path(bx_py_utils.__file__).parent
+    root_dir, snapshot_name = _get_caller_names(root_dir=own_root_dir)
+    assert root_dir == own_root_dir
+    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+
+    # Set not existing root_dir:
+    with pytest.raises(NotADirectoryError) as cm:
+        _get_caller_names(root_dir='/foo/bar')
+    assert str(cm.value) == 'Directory does not exists: "/foo/bar"'
+
+    # set own snapshot name
+    root_dir, snapshot_name = _get_caller_names(snapshot_name='foo_bar')
+    assert root_dir == SELF_PATH
+    assert snapshot_name == 'foo_bar'
+
+    # not valid snapshot name
+    with pytest.raises(AssertionError) as cm:
+        _get_caller_names(snapshot_name='Foo Bar!')
+    assert str(cm.value) == "Invalid snapshot name 'Foo Bar!'"
+
+
+def test_assert_py_snapshot_auto_names():
+    snapshot_filename1 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_1.snapshot.txt'
+    snapshot_filename2 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_2.snapshot.txt'
+    snapshot_path1 = SELF_PATH / snapshot_filename1
+    snapshot_path2 = SELF_PATH / snapshot_filename2
+
+    example = [1, 2, 3]
+
+    with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
+        with pytest.raises(FileNotFoundError):
+            assert_py_snapshot(got=example)
+
+        assert snapshot_path1.is_file()
+
+        # Check created files: Is that only our expected files?
+        new_files = file_watcher.get_new_items()
+        assert new_files == {snapshot_path1}
+
+        # We would like to check the same file ;)
+        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+
+        assert_py_snapshot(got=example)
+
+        # Will a second test file created?
+
+        with pytest.raises(FileNotFoundError):
+            assert_py_snapshot(got=example)
+
+        assert snapshot_path1.is_file()
+        assert snapshot_path2.is_file()
+
+        # Check created files: Is that only our expected files?
+        new_files = file_watcher.get_new_items()
+        assert new_files == {snapshot_path1, snapshot_path2}
