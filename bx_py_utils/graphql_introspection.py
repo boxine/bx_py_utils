@@ -3,6 +3,9 @@ import json
 
 
 def introspection_query(depth: int):
+    """
+    Generate GraphQL introspection query with variable nested depth.
+    """
     fields_query = 'kind name ofType {' * depth + 'kind name' + '}' * depth
     return inspect.cleandoc(
         '''{

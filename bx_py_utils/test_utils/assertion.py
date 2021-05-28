@@ -5,7 +5,7 @@ from bx_py_utils.humanize.pformat import pformat
 
 def text_ndiff(txt1, txt2, fromfile=None, tofile=None):
     """
-    Generate a ndiff between two text strings.
+    Generate a `ndiff` between two text strings.
     (fromfile/tofile are ignored, only for compatibility with text_unified_diff signature)
     """
     return '\n'.join(difflib.ndiff(txt1.splitlines(), txt2.splitlines()))
@@ -13,7 +13,7 @@ def text_ndiff(txt1, txt2, fromfile=None, tofile=None):
 
 def pformat_ndiff(obj1, obj2, fromfile=None, tofile=None):
     """
-    Generate a ndiff from two objects, using pformat()
+    Generate a `ndiff` from two objects, using `pformat()`
     (fromfile/tofile are ignored, only for compatibility with pformat_unified_diff signature)
     """
     return '\n'.join(
@@ -44,7 +44,7 @@ def text_unified_diff(txt1, txt2, fromfile: str = 'got', tofile: str = 'expected
 
 def pformat_unified_diff(obj1, obj2, fromfile: str = 'got', tofile: str = 'expected'):
     """
-    Generate a unified diff from two objects, using pformat()
+    Generate a unified diff from two objects, using `pformat()`
     """
     return _unified_diff(pformat(obj1), pformat(obj2), fromfile=fromfile, tofile=tofile)
 
@@ -57,7 +57,7 @@ def assert_equal(
         tofile: str = 'expected',
         diff_func=pformat_unified_diff):
     """
-    Check if the two objects are the same. Display a nice diff, using pformat()
+    Check if the two objects are the same. Display a nice diff, using `pformat()`
     """
     if obj1 != obj2:
         if not msg:

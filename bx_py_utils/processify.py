@@ -1,9 +1,7 @@
-"""
-https://gist.github.com/Chiron1991/8199fc1a41c2107982053aba809838c6
-
-tests functions from the gist were moved to utilities.tests.test_processify
-so they can be picked up by our test runner
-"""
+# https://gist.github.com/Chiron1991/8199fc1a41c2107982053aba809838c6
+#
+# tests functions from the gist were moved to utilities.tests.test_processify
+# so they can be picked up by our test runner
 
 import sys
 import traceback

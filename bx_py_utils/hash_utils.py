@@ -24,6 +24,8 @@ def url_safe_encode(data, alphabet=ALPHABET):
 
 def url_safe_hash(data, max_size=None, hasher_name='sha3_512', encoding='utf-8'):
     """
+    Generate a URL safe hash with `max_size` from given string/bytes.
+
     >>> url_safe_hash('foo', max_size=16)
     'tMXtn6KpcjzTdzTk'
     """

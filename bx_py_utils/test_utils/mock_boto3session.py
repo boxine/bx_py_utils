@@ -3,7 +3,8 @@ import collections
 
 class MockedBoto3Session:
     """
-    Mock boto3.session.Session(), but only this parts:
+    Mock for `boto3.session.Session()`
+    but only this parts:
      * session.client()
      * session.client().get_secret_value()
     """

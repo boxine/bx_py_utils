@@ -3,7 +3,7 @@ import itertools
 
 def chunk_iterable(iterable, chunk_size):
     """
-    Returns a generator that yields slices of iterable of the given chunk_size.
+    Returns a generator that yields slices of iterable of the given `chunk_size`.
 
     Basic example:
     >>> list(chunk_iterable(range(6), 2))

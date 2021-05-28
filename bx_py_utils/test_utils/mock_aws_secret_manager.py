@@ -1,6 +1,6 @@
 class SecretsManagerMock:
     """
-    Mock for bx_py_utils.aws.secret_manager.SecretsManager
+    Mock for `bx_py_utils.aws.secret_manager.SecretsManager()`
     """
 
     def __init__(self, **data):

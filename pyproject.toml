@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'bx_py_utils'
-version = "37"
+version = "38.rc.1"
 description = 'Various Python utility functions'
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
@@ -31,6 +31,12 @@ flynt = '*'
 autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+
+# pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
+# so we must install pdoc only with 3.7 or newer, to get a up-to-date version.
+# The result is, that we can't generate the docs with Python 3.6, but this
+# seems not to be a show stopper ;)
+pdoc = { version = "*", python = ">=3.7" }  # https://pdoc.dev/
 
 [tool.poetry.scripts]
 publish = "bx_py_utils_tests.publish:publish"
