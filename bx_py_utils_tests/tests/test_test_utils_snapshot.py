@@ -13,6 +13,7 @@ from bx_py_utils.test_utils.filesystem_utils import FileWatcher
 from bx_py_utils.test_utils.snapshot import (
     _AUTO_SNAPSHOT_NAME_COUNTER,
     _get_caller_names,
+    _get_snapshot_file,
     assert_py_snapshot,
     assert_snapshot,
     assert_text_snapshot,
@@ -22,13 +23,28 @@ from bx_py_utils.test_utils.snapshot import (
 SELF_PATH = pathlib.Path(__file__).parent
 
 
+def test_get_snapshot_file():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        snapshot_file = _get_snapshot_file(
+            root_dir=tmp_dir, snapshot_name='foo_bar', extension='.123'
+        )
+        assert snapshot_file == pathlib.Path(tmp_dir) / 'foo_bar.snapshot.123'
+        assert not snapshot_file.is_file()
+
+        snapshot_file = _get_snapshot_file(
+            root_dir=tmp_dir, snapshot_name='foobar.snapshot', extension='.txt'
+        )
+        assert snapshot_file == pathlib.Path(tmp_dir) / 'foobar.snapshot.txt'
+        assert not snapshot_file.is_file()
+
+
 def test_assert_snapshot():
     with tempfile.TemporaryDirectory() as tmp_dir:
         with pytest.raises(FileNotFoundError) as excinfo:
             assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 5}])
         assert 'No such file or directory' in str(excinfo.value)
         assert tmp_dir in str(excinfo.value)
-        assert 'snap.json' in str(excinfo.value)
+        assert 'snap.snapshot.json' in str(excinfo.value)
 
         assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 5}])
 
@@ -237,3 +253,22 @@ def test_assert_py_snapshot_auto_names():
         # Check created files: Is that only our expected files?
         new_files = file_watcher.get_new_items()
         assert new_files == {snapshot_path1, snapshot_path2}
+
+
+def test_assert_text_snapshot_auto_names():
+    snapshot_path = SELF_PATH / (
+        'test_test_utils_snapshot_assert_text_snapshot_auto_names_1.snapshot.txt'
+    )
+    example = 'Foo Bar!'
+    with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
+        with pytest.raises(FileNotFoundError):
+            assert_text_snapshot(got=example)
+
+        # Check created files: Is that only our expected files?
+        new_files = file_watcher.get_new_items()
+        assert new_files == {snapshot_path}
+
+        # We would like to check the same file ;)
+        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+
+        assert_text_snapshot(got=example)
