@@ -1,3 +1,5 @@
+import importlib
+import inspect
 import re
 import sys
 from pathlib import Path
@@ -15,7 +17,21 @@ except ImportError:
 from bx_py_utils.test_utils.assertion import assert_text_equal
 
 
-def generate_modules_doc(modules, start_level=1):
+class ModulePath:
+    def __init__(self):
+        self.cache = {}
+
+    def get_base_path(self, module_name):
+        base_module = module_name.partition('.')[0]
+        if base_module not in self.cache:
+            module = importlib.import_module(base_module)
+            module_path = Path(module.__file__).parent
+            self.cache[base_module] = module_path
+            return module_path
+        return self.cache[base_module]
+
+
+def generate_modules_doc(modules, start_level=1, link_template=None):
     """
     Generate a list of function/class information via pdoc.
     """
@@ -27,34 +43,55 @@ def generate_modules_doc(modules, start_level=1):
         except IndexError:
             return None
 
-    def get_doc_list(pdoc_list):
+    def get_doc_list(pdoc_list, root_path):
         for pdoc_item in sorted(pdoc_list):
             item_name = pdoc_item.name
             if item_name.startswith('_'):
                 continue
+
             item_doc_line = first_doc_line(pdoc_item.docstring)
-            if item_doc_line:
-                yield f'* `{item_name}()` - {item_doc_line}\n'
+            if not item_doc_line:
+                continue
+
+            item_name = f'`{item_name}()`'
+
+            if link_template:
+                item_path = Path(pdoc_item.source_file)
+                path = item_path.relative_to(root_path)
+
+                lines, lnum = inspect.findsource(pdoc_item.obj)
+                link = link_template.format(
+                    path=path,
+                    lnum=lnum + 1,
+                )
+                item_name = f'[{item_name}]({link})'
+
+            yield f'* {item_name} - {item_doc_line}\n'
+
+    module_path = ModulePath()
 
     module_names = extract.parse_specs(modules=modules)
     parts = []
     for module_name in sorted(module_names):
         module_obj = extract.load_module(module_name)
+
+        base_path = module_path.get_base_path(module_name=module_name)
+        module_root_path = base_path.parent
+
         pdoc_module = Module(module_obj)
 
         # Collect information
 
         module_doc_line = first_doc_line(pdoc_module.docstring)
 
-        class_docs = list(get_doc_list(pdoc_list=pdoc_module.classes))
-        func_docs = list(get_doc_list(pdoc_list=pdoc_module.functions))
+        class_docs = list(get_doc_list(pdoc_list=pdoc_module.classes, root_path=module_root_path))
+        func_docs = list(get_doc_list(pdoc_list=pdoc_module.functions, root_path=module_root_path))
 
         # Generate output only if information exists:
 
         if module_doc_line or class_docs or func_docs:
             level = module_name.count('.') + start_level
             parts.append(f'\n{"#" * level} {module_name}\n\n')
-            # print(pdoc_module.source_file)
 
         if module_doc_line:
             parts.append(f'{module_doc_line}\n\n')
@@ -70,6 +107,7 @@ def assert_readme(
     start_marker_line: str = '[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
     end_marker_line: str = '[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
     start_level: int = 1,
+    link_template: str = None,
 ):
     """
     Check and update README file with generate_modules_doc()
@@ -83,7 +121,11 @@ def assert_readme(
     assert start_marker_line in old_readme
     assert end_marker_line in old_readme
 
-    doc_block = generate_modules_doc(modules=modules, start_level=start_level)
+    doc_block = generate_modules_doc(
+        modules=modules,
+        start_level=start_level,
+        link_template=link_template,
+    )
 
     doc_block = f'{start_marker_line}\n{doc_block}\n{end_marker_line}'
 
