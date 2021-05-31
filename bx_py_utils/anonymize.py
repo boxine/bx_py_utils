@@ -14,6 +14,8 @@ _RE_OTHER = re.compile(r'[^xX_\.\s/-]')
 
 def anonymize(value: str) -> str:
     """
+    Anonymize the given string with special handling for eMail addresses.
+
     >>> anonymize('Foo Bar')
     'Fxx_Xxr'
     >>> anonymize('This is a Test 123 Foo Bar #+"-! End')

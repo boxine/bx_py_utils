@@ -1,3 +1,6 @@
+"""
+    Assert complex output via auto updated snapshot files with nice diff error messages.
+"""
 import json
 import pathlib
 import pprint
@@ -81,6 +84,9 @@ def assert_text_snapshot(
     tofile: str = 'expected',
     diff_func: Callable = text_unified_diff
 ):
+    """
+    Assert "text" string via snapshot file
+    """
     root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
     assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
     assert isinstance(got, str)
@@ -111,6 +117,9 @@ def assert_snapshot(
     tofile: str = 'expected',
     diff_func: Callable = pformat_unified_diff
 ):
+    """
+    Assert given data serialized to JSON snapshot file.
+    """
     root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
     assert isinstance(got, (dict, list))
 
@@ -142,7 +151,8 @@ def assert_py_snapshot(
     diff_func: Callable = _unified_diff
 ):
     """
-    Snapshot test using PrettyPrinter()
+    Assert complex python objects vio PrettyPrinter() snapshot file.
+
     Advantage over JSON:
      - More python object types are supported
      - The comparison is stricter. e.g.: UUID object instance vs. UUID string

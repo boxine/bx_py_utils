@@ -4,8 +4,8 @@ import pprint
 
 def pformat(value):
     """
-    Format given object.
-    Try to use JSON fist, because it nicer than pprint.pformat() ;)
+    Format given object: Try JSON fist and fallback to pformat()
+    (JSON dumps are nicer than pprint.pformat() ;)
     """
     try:
         value = json.dumps(value, indent=4, sort_keys=True, ensure_ascii=False)

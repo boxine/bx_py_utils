@@ -1,6 +1,6 @@
 class MockTimeMonotonicGenerator:
     """
-    Helper to mock time.monotonic() in tests.
+    Helper to mock `time.monotonic()` in tests.
 
     e.g.:
 

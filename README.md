@@ -16,53 +16,120 @@ Here only a simple list about existing utilities.
 Please take a look into the sources and tests for deeper informations.
 
 
-### test utilities
+[comment]: <> (✂✂✂ auto generated start ✂✂✂)
 
-* `datetime.parse_dt()` - Handy `datetime.strptime()` convert
-* `assert_json_requests_mock()` - Check the requests history of `requests_mock.mock()`
-* `assert_equal()` - Compare objects with a nice diff using pformat
-* `assert_text_equal()` - Compare text strings with a nice diff
-* `assert_snapshot` - Helper for quick snapshot test functionality (comparing value with one stored in a file using json)
-* `assert_text_snapshot` - Same as `assert_snapshot` comparing text strings
-* `assert_py_snapshot` - Snapshot test using `PrettyPrinter()`
-* `FileWatcher()` - Context manager to record if new files have been created with optional cleanup.
+### bx_py_utils.anonymize
 
+* `anonymize()` - Anonymize the given string with special handling for eMail addresses.
 
-### humanize
+### bx_py_utils.auto_doc
 
-* `humanize.time.human_timedelta()` - Converts a time duration into a friendly text representation. (`X ms`, `sec`, `minutes` etc.)
-* `pformat()` - Better `pretty-print-format` using JSON with fallback to `pprint.pformat()`
+* `assert_readme()` - Check and update README file with generate_modules_doc()
+* `generate_modules_doc()` - Generate a list of function/class information via pdoc.
 
+#### bx_py_utils.aws.client_side_cert_manager
 
-### AWS stuff
+* `ClientSideCertManager()` - Helper to manage client-side TLS certificate via AWS Secrets Manager by
 
-* `bx_py_utils.aws.secret_manager.SecretsManager` - Get values from AWS Secrets Manager
-* `bx_py_utils.test_utils.mock_aws_secret_manager.SecretsManagerMock` - Mock our `SecretsManager()` helper in tests
-* `bx_py_utils.test_utils.mock_boto3session.MockedBoto3Session` - Mock `boto3.session.Session()` (Currently only `get_secret_value()`)
-* `bx_py_utils.aws.client_side_cert_manager.ClientSideCertManager` - Helper to manage client-side TLS certificate via AWS Secrets Manager
+#### bx_py_utils.aws.secret_manager
 
+* `SecretsManager()` - Access AWS Secrets Manager values
 
-### GraphQL
+### bx_py_utils.compat
 
-* `graphql_introspection.introspection_query` Generate an introspection query to get an introspection doc.
-* `graphql_introspection.complete_query` Generate a full query for all fields from an introspection doc.
+* `removeprefix()` - Backport of `removeprefix` from PEP-616 (Python 3.9+)
+* `removesuffix()` - Backport of `removesuffix` from PEP-616 (Python 3.9+)
 
+### bx_py_utils.dict_utils
 
-### misc
+* `dict_get()` - nested dict `get()`
+* `pluck()` - Extract values from a dict, if they are present
 
-* `dict_utils.dict_get()` - nested dict `get()`
-* `dict_utils.pluck()` - Extract values from a dict, if they are present
-* `environ.cgroup_memory_usage()` - Get the memory usage of the current cgroup
-* `error_handling.print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame
-* `iteration.chunk_iterable()` - Create chunks off of any iterable
-* `processify.processify()` - Will execute the decorated function in a separate process
-* `anonymize.anonymize()` - Anonymize a string (With special handling of email addresses)
-* `hash_utils.url_safe_hash()` - Generate URL safe hashes
-* `compat.removeprefix()` - Backport of `str.removeprefix` from PEP-616
-* `compat.removesuffix()` - Backport of `str.removesuffix` from PEP-616
-* `path.assert_is_dir()` - Check if given path is a directory, with human error message
-* `path.assert_is_file()` - Check if given path is a file, with human error message
-* `stack_info.last_frame_outside_path()` - Returns the stack frame that is the direct successor of given "file_path"
+### bx_py_utils.environ
+
+* `cgroup_memory_usage()` - Returns the memory usage of the cgroup the Python interpreter is running in.
+
+### bx_py_utils.error_handling
+
+* `print_exc_plus()` - Print traceback information with a listing of all the local variables in each frame.
+
+### bx_py_utils.graphql_introspection
+
+* `introspection_query()` - Generate GraphQL introspection query with variable nested depth.
+
+### bx_py_utils.hash_utils
+
+* `url_safe_encode()` - Encode bytes into a URL safe string.
+* `url_safe_hash()` - Generate a URL safe hash with `max_size` from given string/bytes.
+
+#### bx_py_utils.humanize.pformat
+
+* `pformat()` - Format given object: Try JSON fist and fallback to pformat()
+
+#### bx_py_utils.humanize.time
+
+* `human_timedelta()` - Converts a time duration into a friendly text representation.
+
+### bx_py_utils.iteration
+
+* `chunk_iterable()` - Returns a generator that yields slices of iterable of the given `chunk_size`.
+
+### bx_py_utils.path
+
+* `assert_is_dir()` - Check if given path is a directory
+* `assert_is_file()` - Check if given path is a file
+
+### bx_py_utils.processify
+
+* `processify()` - Decorator to run a function as a process.
+
+### bx_py_utils.stack_info
+
+* `FrameNotFound()` - Base class for lookup errors.
+* `last_frame_outside_path()` - Returns the stack frame that is the direct successor of given "file_path".
+
+#### bx_py_utils.test_utils.assertion
+
+* `assert_equal()` - Check if the two objects are the same. Display a nice diff, using `pformat()`
+* `assert_text_equal()` - Check if the two text strings are the same. Display a error message with a diff.
+* `pformat_ndiff()` - Generate a `ndiff` from two objects, using `pformat()`
+* `pformat_unified_diff()` - Generate a unified diff from two objects, using `pformat()`
+* `text_ndiff()` - Generate a `ndiff` between two text strings.
+* `text_unified_diff()` - Generate a unified diff between two text strings.
+
+#### bx_py_utils.test_utils.datetime
+
+* `parse_dt()` - Helper for easy generate a `datetime` instance via string.
+
+#### bx_py_utils.test_utils.filesystem_utils
+
+* `FileWatcher()` - Helper to record which new files have been created.
+
+#### bx_py_utils.test_utils.mock_aws_secret_manager
+
+* `SecretsManagerMock()` - Mock for `bx_py_utils.aws.secret_manager.SecretsManager()`
+
+#### bx_py_utils.test_utils.mock_boto3session
+
+* `MockedBoto3Session()` - Mock for `boto3.session.Session()`
+
+#### bx_py_utils.test_utils.requests_mock_assertion
+
+* `assert_json_requests_mock()` - Check the requests history.
+
+#### bx_py_utils.test_utils.snapshot
+
+Assert complex output via auto updated snapshot files with nice diff error messages.
+
+* `assert_py_snapshot()` - Assert complex python objects vio PrettyPrinter() snapshot file.
+* `assert_snapshot()` - Assert given data serialized to JSON snapshot file.
+* `assert_text_snapshot()` - Assert "text" string via snapshot file
+
+#### bx_py_utils.test_utils.time
+
+* `MockTimeMonotonicGenerator()` - Helper to mock `time.monotonic()` in tests.
+
+[comment]: <> (✂✂✂ auto generated end ✂✂✂)
 
 
 ## Backwards-incompatible changes
