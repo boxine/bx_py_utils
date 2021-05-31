@@ -75,6 +75,23 @@ def _get_caller_names(root_dir: Union[pathlib.Path, str] = None, snapshot_name: 
     return root_dir, snapshot_name
 
 
+def _get_snapshot_file(
+    root_dir: Union[pathlib.Path, str] = None,
+    snapshot_name: str = None,
+    extension: str = None,
+):
+    # Auto set dir/name via stask information, if not set:
+    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
+
+    assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
+
+    if not snapshot_name.endswith('.snapshot'):
+        snapshot_name += '.snapshot'
+
+    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}{extension}'
+    return snapshot_file
+
+
 def assert_text_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
@@ -87,11 +104,9 @@ def assert_text_snapshot(
     """
     Assert "text" string via snapshot file
     """
-    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
-    assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
     assert isinstance(got, str)
 
-    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.snapshot{extension}'
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
     try:
         expected = snapshot_file.read_text()
     except (FileNotFoundError, OSError):
@@ -113,6 +128,7 @@ def assert_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: str = None,
+    extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = pformat_unified_diff
@@ -120,10 +136,9 @@ def assert_snapshot(
     """
     Assert given data serialized to JSON snapshot file.
     """
-    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
     assert isinstance(got, (dict, list))
 
-    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.json'
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
     try:
         with snapshot_file.open('r') as snapshot_handle:
             expected = json.load(snapshot_handle)
@@ -146,6 +161,7 @@ def assert_py_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: Any = None,
+    extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = _unified_diff
@@ -157,11 +173,9 @@ def assert_py_snapshot(
      - More python object types are supported
      - The comparison is stricter. e.g.: UUID object instance vs. UUID string
     """
-    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
-
     got_str = pprint.pformat(got, indent=4, width=120)
 
-    snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}.txt'
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
     try:
         expected_str = snapshot_file.read_text()
     except FileNotFoundError:
