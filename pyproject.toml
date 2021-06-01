@@ -66,17 +66,46 @@ default_section="THIRDPARTY"
 sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
 lines_after_imports=2
 
+[tool.coverage.run]
+omit=[".*"]
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/latest/customize.html#pyproject-toml
+minversion = "6.0"
+norecursedirs = ".* __pycache__ coverage* dist htmlcov"
+# sometimes helpfull "addopts" arguments:
+#    -vv
+#    --verbose
+#    --capture=no
+#    --trace-config
+#    --full-trace
+#    -p no:warnings
+addopts = """
+    --import-mode=importlib
+    --cov=.
+    --cov-report term-missing
+    --no-cov-on-fail
+    --showlocals
+    --doctest-modules
+    --failed-first
+    --last-failed-no-failures all
+    --new-first
+    -p no:randomly
+"""
+
 
 [tool.tox]
 # https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py39,py38,py37,py36
+envlist = py{37,38,39}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
-whitelist_externals = make
-commands = make pytest-ci
+install_dev_deps=True
+commands =
+    python --version
+    python -m pytest
 """
