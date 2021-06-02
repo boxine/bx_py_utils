@@ -15,15 +15,8 @@ check-poetry:
 		exit 1 ; \
 	fi
 
-install-poetry: ## install or update poetry
-	@if [[ "${POETRY_VERSION}" == *"Poetry"* ]] ; \
-	then \
-		echo 'Update poetry v$(POETRY_VERSION)' ; \
-		poetry self update ; \
-	else \
-		echo 'Install poetry' ; \
-		curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python3 ; \
-	fi
+install-poetry: ## install or update poetry via pip
+	pip3 install -U poetry
 
 install: check-poetry ## install via poetry
 	poetry install
