@@ -29,14 +29,14 @@ def _write_json(obj, snapshot_file):
         json.dump(obj, snapshot_handle, ensure_ascii=False, indent=4, sort_keys=True)
 
 
-def _get_caller_names(root_dir: Union[pathlib.Path, str] = None, snapshot_name: str = None):
+def _get_caller_names(
+        root_dir: Union[pathlib.Path, str] = None,
+        snapshot_name: str = None,
+        self_file_path: Union[pathlib.Path, str] = None):
     """
     Helper to get snapshot directory and name by stack frame info, but only if not given.
 
-    Note:
-      This only works if this function is in the same file as the snapshot functions.
-      Because we compare the file path in stack frame to get the caller frame.
-      (If this function will be moved: the file path in last_frame_outside_path() must be updated, too.)
+    self_file_path is used to get the stack frame outside of the caller for set path/filename.
     """
     if root_dir:
         if not isinstance(root_dir, pathlib.Path):
@@ -51,8 +51,11 @@ def _get_caller_names(root_dir: Union[pathlib.Path, str] = None, snapshot_name: 
     if not root_dir or not snapshot_name:
         # Set "root_dir" and "snapshot_name" if missing by stack frame info.
 
+        if not self_file_path:
+            self_file_path = SELF_FILE_PATH
+
         # Get the caller stack frame (First frame that is outside this file path):
-        external_stack_frame = last_frame_outside_path(file_path=SELF_FILE_PATH)
+        external_stack_frame = last_frame_outside_path(file_path=self_file_path)
         caller_path = pathlib.Path(external_stack_frame.filename)
         assert caller_path.is_file()
         if not root_dir:
@@ -79,9 +82,10 @@ def _get_snapshot_file(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     extension: str = None,
+    self_file_path: Union[pathlib.Path, str] = None,
 ):
     # Auto set dir/name via stask information, if not set:
-    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name)
+    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name, self_file_path)
 
     assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
 
@@ -99,14 +103,15 @@ def assert_text_snapshot(
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
-    diff_func: Callable = text_unified_diff
+    diff_func: Callable = text_unified_diff,
+    self_file_path: Union[pathlib.Path, str] = None,
 ):
     """
     Assert "text" string via snapshot file
     """
     assert isinstance(got, str)
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
         expected = snapshot_file.read_text()
     except (FileNotFoundError, OSError):
@@ -131,14 +136,15 @@ def assert_snapshot(
     extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
-    diff_func: Callable = pformat_unified_diff
+    diff_func: Callable = pformat_unified_diff,
+    self_file_path: Union[pathlib.Path, str] = None,
 ):
     """
     Assert given data serialized to JSON snapshot file.
     """
     assert isinstance(got, (dict, list))
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
         with snapshot_file.open('r') as snapshot_handle:
             expected = json.load(snapshot_handle)
@@ -164,7 +170,8 @@ def assert_py_snapshot(
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
-    diff_func: Callable = _unified_diff
+    diff_func: Callable = _unified_diff,
+    self_file_path: Union[pathlib.Path, str] = None,
 ):
     """
     Assert complex python objects vio PrettyPrinter() snapshot file.
@@ -175,7 +182,7 @@ def assert_py_snapshot(
     """
     got_str = pprint.pformat(got, indent=4, width=120)
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension)
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
         expected_str = snapshot_file.read_text()
     except FileNotFoundError:

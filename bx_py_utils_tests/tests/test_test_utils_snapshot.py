@@ -7,6 +7,7 @@ from uuid import UUID
 import pytest
 
 import bx_py_utils
+from bx_py_utils.test_utils import snapshot
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
 from bx_py_utils.test_utils.datetime import parse_dt
 from bx_py_utils.test_utils.filesystem_utils import FileWatcher
@@ -272,3 +273,12 @@ def test_assert_text_snapshot_auto_names():
         _AUTO_SNAPSHOT_NAME_COUNTER.clear()
 
         assert_text_snapshot(got=example)
+
+        # We would like to check the same file ;)
+        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+
+        # We can specify the path used to get the caller stack frame:
+        assert_text_snapshot(
+            got=example,
+            self_file_path=pathlib.Path(snapshot.__file__)
+        )
