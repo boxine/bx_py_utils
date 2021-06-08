@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 import bx_py_utils
 from bx_py_utils.auto_doc import ModulePath, assert_readme, generate_modules_doc
 
@@ -34,10 +36,11 @@ def test_generate_modules_doc_with_links():
     doc_block = generate_modules_doc(
         modules=['bx_py_utils.auto_doc'],
         start_level=0,
-        link_template='https://test.tld/blob/master/{path}#L{lnum}',
+        link_template='https://test.tld/blob/master/{path}#L{start}-L{end}',
     )
     assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L104) - Check'
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L121-L163)'
+        ' - Check'
     ) in doc_block
 
 
@@ -54,5 +57,24 @@ def test_auto_doc_in_readme():
         start_marker_line='[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
         end_marker_line='[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
         start_level=2,
-        link_template='https://github.com/boxine/bx_py_utils/blob/master/{path}#L{lnum}'
+        link_template='https://github.com/boxine/bx_py_utils/blob/master/{path}#L{start}-L{end}'
     )
+
+
+def test_old_link_template_pattern():
+    if sys.version_info < (3, 7):
+        # pdoc is not compatible with Python 3.6
+        return
+
+    with pytest.deprecated_call(match=(
+        '"lnum" in "link_template" will be removed in the future. Change it to "start"'
+    )):
+        doc_block = generate_modules_doc(
+            modules=['bx_py_utils.auto_doc'],
+            start_level=0,
+            link_template='https://test.tld/blob/master/{path}#L{lnum}',
+        )
+        assert doc_block
+    assert (
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L121) - Check'
+    ) in doc_block

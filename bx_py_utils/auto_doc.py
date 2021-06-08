@@ -2,6 +2,7 @@ import importlib
 import inspect
 import re
 import sys
+import warnings
 from pathlib import Path
 
 
@@ -31,11 +32,25 @@ class ModulePath:
         return self.cache[base_module]
 
 
+def get_code_location(obj):
+    """
+    Return start and end line number for an object via inspect.
+    """
+    lines, start = inspect.getsourcelines(obj)
+    return start, start + len(lines) - 1
+
+
 def generate_modules_doc(modules, start_level=1, link_template=None):
     """
     Generate a list of function/class information via pdoc.
     """
     assert sys.version_info >= (3, 7), 'pdoc is not compatible with Python 3.6'
+
+    if link_template and 'lnum' in link_template:
+        warnings.warn(
+            '"lnum" in "link_template" will be removed in the future. Change it to "start"',
+            DeprecationWarning
+        )
 
     def first_doc_line(doc_string):
         try:
@@ -59,10 +74,12 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
                 item_path = Path(pdoc_item.source_file)
                 path = item_path.relative_to(root_path)
 
-                lines, lnum = inspect.findsource(pdoc_item.obj)
+                start, end = get_code_location(obj=pdoc_item.obj)
                 link = link_template.format(
                     path=path,
-                    lnum=lnum + 1,
+                    lnum=start,  # TODO: Obsolete, will be removed in the future!
+                    start=start,
+                    end=end,
                 )
                 item_name = f'[{item_name}]({link})'
 
