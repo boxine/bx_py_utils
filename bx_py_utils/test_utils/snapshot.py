@@ -6,7 +6,7 @@ import pathlib
 import pprint
 import re
 from collections import Counter
-from typing import Any, Callable, Union
+from typing import Any, Callable, Optional, Union
 
 from bx_py_utils.compat import removeprefix
 from bx_py_utils.path import assert_is_dir
@@ -132,7 +132,7 @@ def assert_text_snapshot(
 def assert_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
-    got: str = None,
+    got: Optional[Union[dict, list]] = None,
     extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -142,7 +142,7 @@ def assert_snapshot(
     """
     Assert given data serialized to JSON snapshot file.
     """
-    assert isinstance(got, (dict, list))
+    assert got is None or isinstance(got, (dict, list))
 
     snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
