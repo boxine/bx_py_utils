@@ -3,11 +3,16 @@ from unittest import TestCase
 import requests
 import requests_mock
 
-from bx_py_utils.test_utils.requests_mock_assertion import assert_json_requests_mock
+from bx_py_utils.test_utils.requests_mock_assertion import (
+    assert_json_requests_mock,
+    assert_json_requests_mock_snapshot,
+    assert_requests_mock,
+    assert_requests_mock_snapshot,
+)
 
 
 class RequestsMockAssertionTestCase(TestCase):
-    def test_basic(self):
+    def test_basic_assert_json_requests_mock(self):
         with requests_mock.mock() as m:
             m.post('http://test.tld', text='resp')
             requests.post('http://test.tld', json={'foo': 'bar'})
@@ -15,6 +20,21 @@ class RequestsMockAssertionTestCase(TestCase):
         assert_json_requests_mock(mock=m, data=[{
             'request': 'POST http://test.tld/',
             'json': {'foo': 'bar'},
+        }])
+
+    def test_basic_assert_requests_mock(self):
+        with requests_mock.mock() as m:
+            m.get('http://test.tld', text='foo')
+            m.post('http://test.tld', text='bar')
+            requests.post('http://test.tld', data={'foo': 'one'})
+            requests.post('http://test.tld', json={'foo': 'two'})
+
+        assert_requests_mock(mock=m, data=[{
+            'request': 'POST http://test.tld/',
+            'text': 'foo=one',
+        }, {
+            'request': 'POST http://test.tld/',
+            'json': {'foo': 'two'},
         }])
 
     def test_no_valid_json(self):
@@ -84,3 +104,19 @@ class RequestsMockAssertionTestCase(TestCase):
             '         "request": "POST https://foo.tld/bar/"\n'
             '     }'
         )
+
+    def test_assert_json_requests_mock_snapshot(self):
+        with requests_mock.mock() as m:
+            m.post('http://test.tld', text='resp')
+            requests.post('http://test.tld', json={'foo': 'bar'})
+
+        assert_json_requests_mock_snapshot(mock=m)
+
+    def test_assert_requests_mock_snapshot(self):
+        with requests_mock.mock() as m:
+            m.get('http://test.tld', text='foo')
+            m.post('http://test.tld', text='bar')
+            requests.post('http://test.tld', data={'foo': 'one'})
+            requests.post('http://test.tld', json={'foo': 'two'})
+
+        assert_requests_mock_snapshot(mock=m)

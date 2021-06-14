@@ -116,7 +116,10 @@ Please take a look into the sources and tests for deeper informations.
 
 #### bx_py_utils.test_utils.requests_mock_assertion
 
-* [`assert_json_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L6-L33) - Check the requests history.
+* [`assert_json_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L30-L45) - Check the requests mock history. In this case all requests must be JSON.
+* [`assert_json_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L48-L55) - Check requests mock history via snapshot. Accepts only JSON requests.
+* [`assert_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L58-L78) - Check the requests mock history. Accept mixed "text" and "JSON".
+* [`assert_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L81-L86) - Check requests mock history via snapshot. Accept mixed "text" and "JSON".
 
 #### bx_py_utils.test_utils.snapshot
 
