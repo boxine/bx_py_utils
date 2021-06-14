@@ -1,0 +1,12 @@
+[
+    {
+        "request": "POST http://test.tld/",
+        "text": "foo=one"
+    },
+    {
+        "json": {
+            "foo": "two"
+        },
+        "request": "POST http://test.tld/"
+    }
+]
