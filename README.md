@@ -125,8 +125,8 @@ Please take a look into the sources and tests for deeper informations.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L166-L200) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L132-L163) - Assert given data serialized to JSON snapshot file.
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L167-L201) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L132-L164) - Assert given data serialized to JSON snapshot file.
 * [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L99-L129) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time

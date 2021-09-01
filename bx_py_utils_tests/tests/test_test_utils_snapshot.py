@@ -89,6 +89,13 @@ def test_assert_snapshot():
             ' ]'
         )
 
+        # invalid type
+        with pytest.raises(AssertionError) as exc_info:
+            assert_snapshot(tmp_dir, 'invalid_type', {1, 2})
+        assert exc_info.value.args[0] == (
+            'Not JSON-serializable: {1, 2} is not a dict or list, but a set'
+        )
+
 
 def test_assert_text_snapshot():
     with tempfile.TemporaryDirectory() as tmp_dir:

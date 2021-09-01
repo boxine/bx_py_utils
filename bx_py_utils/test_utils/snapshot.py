@@ -142,7 +142,8 @@ def assert_snapshot(
     """
     Assert given data serialized to JSON snapshot file.
     """
-    assert got is None or isinstance(got, (dict, list))
+    assert got is None or isinstance(got, (dict, list)), \
+        f'Not JSON-serializable: {got!r} is not a dict or list, but a {type(got).__name__}'
 
     snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
