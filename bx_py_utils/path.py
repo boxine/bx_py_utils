@@ -32,4 +32,3 @@ def read_json_file(path):
 
     with path.open('rb') as f:
         return json.load(f)
-    
