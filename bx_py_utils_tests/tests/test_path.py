@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from bx_py_utils.path import assert_is_dir, assert_is_file
+from bx_py_utils.path import assert_is_dir, assert_is_file, read_json_file
 
 
 def test_assert_is_dir():
@@ -29,3 +29,11 @@ def test_assert_is_file():
 
     assert_is_file(path=self_file_path)
     assert_is_file(path=str(self_file_path))
+
+
+def test_assert_is_dir():
+    json_path = Path(__file__).parent / 'json_file.json'
+    data = read_json_file(json_path)
+    assert data == {
+        'foo': ['bar', 42],
+    }

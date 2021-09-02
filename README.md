@@ -77,8 +77,8 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.path
 
-* [`assert_is_dir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L4-L12) - Check if given path is a directory
-* [`assert_is_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L15-L25) - Check if given path is a file
+* [`assert_is_dir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L5-L13) - Check if given path is a directory
+* [`assert_is_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L16-L26) - Check if given path is a file
 
 ### bx_py_utils.processify
 
