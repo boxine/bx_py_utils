@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 
@@ -23,3 +24,12 @@ def assert_is_file(path):
 
     if not path.is_file():
         raise FileNotFoundError(f'File does not exists: "{path}"')
+
+
+def read_json_file(path):
+    if not isinstance(path, Path):
+        path = Path(path)
+
+    with path.open('rb') as f:
+        return json.load(f)
+    
