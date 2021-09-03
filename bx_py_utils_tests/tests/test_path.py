@@ -31,7 +31,7 @@ def test_assert_is_file():
     assert_is_file(path=str(self_file_path))
 
 
-def test_assert_is_dir():
+def test_read_json_file():
     json_path = Path(__file__).parent / 'json_file.json'
     data = read_json_file(json_path)
     assert data == {
