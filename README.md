@@ -106,6 +106,10 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`FileWatcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/filesystem_utils.py#L6-L49) - Helper to record which new files have been created.
 
+#### bx_py_utils.test_utils.log_utils
+
+* [`RaiseLogUsage()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/log_utils.py#L4-L10) - A log handler, that raise an error on every log output.
+
 #### bx_py_utils.test_utils.mock_aws_secret_manager
 
 * [`SecretsManagerMock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mock_aws_secret_manager.py#L1-L16) - Mock for `bx_py_utils.aws.secret_manager.SecretsManager()`
