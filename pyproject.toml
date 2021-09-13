@@ -2,6 +2,7 @@
 name = 'bx_py_utils'
 version = "44"
 description = 'Various Python utility functions'
+homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
     'Jens Diemer <jens.diemer@boxine.de>',
     'Philipp Hagemeister <phihag@phihag.de>',
