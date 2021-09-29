@@ -22,6 +22,7 @@ from bx_py_utils.test_utils.assertion import (
 
 SELF_FILE_PATH = pathlib.Path(__file__)
 _AUTO_SNAPSHOT_NAME_COUNTER = Counter()
+_UNIFY_NEWLINES_RE = r'\r?\n'
 
 
 def _write_json(obj, snapshot_file):
@@ -113,13 +114,16 @@ def assert_text_snapshot(
 
     snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:
-        expected = snapshot_file.read_text()
+        expected = snapshot_file.read_bytes().decode('utf-8')
     except (FileNotFoundError, OSError):
-        snapshot_file.write_text(got)
+        snapshot_file.write_bytes(got.encode('utf-8'))
         raise
 
     if got != expected:
-        snapshot_file.write_text(got)
+        snapshot_file.write_bytes(got.encode('utf-8'))
+
+        if re.sub(_UNIFY_NEWLINES_RE, '', got) == re.sub(_UNIFY_NEWLINES_RE, '', expected):
+            raise AssertionError(f'Differing newlines: Expected {expected!r}, got {got!r}')
 
         # display error message with diff:
         assert_text_equal(

@@ -158,6 +158,21 @@ def test_assert_text_snapshot():
         written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.test2').read_text()
         assert written_text == TEXT
 
+        # Newlines
+        UNIX_TEXT = 'a\nnewline'
+        WINDOWS_TEXT = 'a\r\nnewline'
+        with pytest.raises(FileNotFoundError):
+            assert_text_snapshot(tmp_dir, 'newlines', UNIX_TEXT)
+        written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
+        assert written_bytes == UNIX_TEXT.encode('utf-8')
+
+        with pytest.raises(AssertionError) as exc_info:
+            assert_text_snapshot(tmp_dir, 'newlines', WINDOWS_TEXT)
+        written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
+        assert written_bytes == WINDOWS_TEXT.encode('utf-8')
+        assert exc_info.value.args[0] == (
+            '''Differing newlines: Expected 'a\\nnewline', got 'a\\r\\nnewline\''''
+        )
 
 def test_assert_py_snapshot():
     example = {
