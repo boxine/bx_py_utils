@@ -129,9 +129,10 @@ Please take a look into the sources and tests for deeper informations.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L171-L205) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L136-L168) - Assert given data serialized to JSON snapshot file.
-* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L100-L133) - Assert "text" string via snapshot file
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L215-L252) - Assert "html" string via snapshot file with pretty format via lxml
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L178-L212) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L143-L175) - Assert given data serialized to JSON snapshot file.
+* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L107-L140) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time
 

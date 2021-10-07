@@ -31,6 +31,7 @@ flynt = '*'
 autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+lxml = "*"
 
 # pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
 # so we must install pdoc only with 3.7 or newer, to get a up-to-date version.

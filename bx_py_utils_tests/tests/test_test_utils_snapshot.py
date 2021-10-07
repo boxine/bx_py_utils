@@ -1,12 +1,15 @@
 import datetime
+import inspect
 import pathlib
 import tempfile
 from decimal import Decimal
+from unittest.mock import patch
 from uuid import UUID
 
 import pytest
 
 import bx_py_utils
+from bx_py_utils.path import assert_is_file
 from bx_py_utils.test_utils import snapshot
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
 from bx_py_utils.test_utils.datetime import parse_dt
@@ -15,6 +18,7 @@ from bx_py_utils.test_utils.snapshot import (
     _AUTO_SNAPSHOT_NAME_COUNTER,
     _get_caller_names,
     _get_snapshot_file,
+    assert_html_snapshot,
     assert_py_snapshot,
     assert_snapshot,
     assert_text_snapshot,
@@ -174,6 +178,7 @@ def test_assert_text_snapshot():
             '''Differing newlines: Expected 'a\\nnewline', got 'a\\r\\nnewline\''''
         )
 
+
 def test_assert_py_snapshot():
     example = {
         'uuid': UUID('00000000-0000-0000-1111-000000000001'),
@@ -304,3 +309,45 @@ def test_assert_text_snapshot_auto_names():
             got=example,
             self_file_path=pathlib.Path(snapshot.__file__)
         )
+
+
+def test_assert_html_snapshot():
+    html = (
+        '<!DOCTYPE html><html><head><title>Page Title</title></head><body>'
+        '<h1>This is a Heading</h1><p>This is a paragraph.</p></body></html>'
+    )
+
+    snapshot_path = SELF_PATH / (
+        'test_test_utils_snapshot_assert_html_snapshot_1.snapshot.html'
+    )
+    assert_is_file(snapshot_path)
+
+    assert_html_snapshot(got=html)
+
+    formated_html = snapshot_path.read_text()
+
+    # etree pretty print adds a leading new line, but cleandoc not ;)
+    formated_html = formated_html.rstrip('\n')
+
+    assert formated_html == inspect.cleandoc('''
+        <html>
+          <head>
+            <title>Page Title</title>
+          </head>
+          <body>
+            <h1>This is a Heading</h1>
+            <p>This is a paragraph.</p>
+          </body>
+        </html>
+    ''')
+
+
+def test_assert_html_snapshot_without_lxml():
+    with patch.object(snapshot, 'etree', None), \
+            pytest.raises(ModuleNotFoundError) as cm:
+        assert_html_snapshot()
+
+    assert str(cm.value) == (
+        'The "lxml" package is needed for this function'
+        ' (Hint: assert_text_snapshot() as fallback)!'
+    )
