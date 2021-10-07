@@ -8,6 +8,13 @@ import re
 from collections import Counter
 from typing import Any, Callable, Optional, Union
 
+
+try:
+    from lxml import etree, html
+except ModuleNotFoundError:
+    etree = None
+
+
 from bx_py_utils.compat import removeprefix
 from bx_py_utils.path import assert_is_dir
 from bx_py_utils.stack_info import last_frame_outside_path
@@ -203,3 +210,44 @@ def assert_py_snapshot(
             fromfile=fromfile, tofile=tofile,
             diff_func=diff_func
         )
+
+
+def assert_html_snapshot(
+    root_dir: Union[pathlib.Path, str] = None,
+    snapshot_name: str = None,
+    got: str = None,
+    extension: str = '.html',
+    fromfile: str = 'got',
+    tofile: str = 'expected',
+    diff_func: Callable = text_unified_diff,
+    self_file_path: Union[pathlib.Path, str] = None,
+    method="xml",  # etree.tostring output: 'xml', 'html' etc.
+):
+    """
+    Assert "html" string via snapshot file with pretty format via lxml
+    """
+    if etree is None:
+        raise ModuleNotFoundError(
+            'The "lxml" package is needed for this function'
+            ' (Hint: assert_text_snapshot() as fallback)!'
+        )
+
+    assert isinstance(got, str)
+
+    got = etree.tostring(
+        html.fromstring(got),
+        encoding='unicode',
+        method=method,
+        pretty_print=True
+    )
+
+    assert_text_snapshot(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        got=got,
+        extension=extension,
+        fromfile=fromfile,
+        tofile=tofile,
+        diff_func=diff_func,
+        self_file_path=self_file_path,
+    )
