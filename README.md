@@ -63,6 +63,12 @@ Please take a look into the sources and tests for deeper informations.
 * [`url_safe_encode()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L13-L22) - Encode bytes into a URL safe string.
 * [`url_safe_hash()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L25-L46) - Generate a URL safe hash with `max_size` from given string/bytes.
 
+### bx_py_utils.html_utils
+
+* [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L15-L19) - Exception class used in validate_html() on HTML parse/validate error.
+* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L47-L61) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
+* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L22-L44) - Validate a HTML document (Needs 'lxml' package)
+
 #### bx_py_utils.humanize.pformat
 
 * [`pformat()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/humanize/pformat.py#L5-L16) - Format given object: Try JSON fist and fallback to pformat()
@@ -129,10 +135,10 @@ Please take a look into the sources and tests for deeper informations.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L215-L253) - Assert "html" string via snapshot file with pretty format via lxml
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L178-L212) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L143-L175) - Assert given data serialized to JSON snapshot file.
-* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L107-L140) - Assert "text" string via snapshot file
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L223-L255) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L186-L220) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L151-L183) - Assert given data serialized to JSON snapshot file.
+* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L115-L148) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time
 

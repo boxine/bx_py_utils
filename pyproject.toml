@@ -32,6 +32,7 @@ flynt = '*'
 autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+beautifulsoup4 = "*"
 lxml = "*"
 
 # pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,

@@ -8,11 +8,19 @@ import re
 from collections import Counter
 from typing import Any, Callable, Optional, Union
 
+from bx_py_utils.html_utils import pretty_format_html, validate_html
+
 
 try:
-    from lxml import etree, html
+    from lxml import html  # lxml is optional requirement
 except ModuleNotFoundError:
-    etree = None
+    html = None
+
+
+try:
+    from bs4 import BeautifulSoup  # BeautifulSoup4 is optional requirement
+except ModuleNotFoundError:
+    BeautifulSoup = None
 
 
 from bx_py_utils.compat import removeprefix
@@ -221,25 +229,19 @@ def assert_html_snapshot(
     tofile: str = 'expected',
     diff_func: Callable = text_unified_diff,
     self_file_path: Union[pathlib.Path, str] = None,
-    method="xml",  # etree.tostring output: 'xml', 'html' etc.
+    validate: bool = True,
+    pretty_format: bool = True,
 ):
     """
-    Assert "html" string via snapshot file with pretty format via lxml
+    Assert "html" string via snapshot file with validate and pretty format
     """
-    if etree is None:
-        raise ModuleNotFoundError(
-            'The "lxml" package is needed for this function'
-            ' (Hint: assert_text_snapshot() as fallback)!'
-        )
-
     assert isinstance(got, str)
 
-    got = etree.tostring(
-        html.fromstring(got),
-        encoding='unicode',
-        method=method,
-        pretty_print=True
-    )
+    if validate:
+        validate_html(got)
+
+    if pretty_format:
+        got = pretty_format_html(got)
 
     assert_text_snapshot(
         root_dir=root_dir,
