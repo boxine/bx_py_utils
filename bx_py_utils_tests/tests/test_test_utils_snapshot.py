@@ -316,9 +316,9 @@ def test_assert_html_snapshot():
     html = '''
         <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
          \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
-        <h1>This is a Heading</ \r\n h1> \r\n  \r\n
+        <h1>This is a Heading</h1> \r\n  \r\n
         <p \r\n >This is a paragraph.</p> \r\n  \r\n
-        </body> \r\n  \r\n </ \r\n html>
+        </body> \r\n  \r\n </html>
     '''
     assert_html_snapshot(got=html)
 

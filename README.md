@@ -65,9 +65,9 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.html_utils
 
-* [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L15-L19) - Exception class used in validate_html() on HTML parse/validate error.
-* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L47-L61) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
-* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L22-L44) - Validate a HTML document (Needs 'lxml' package)
+* [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L18-L41) - XMLSyntaxError with better error messages: used in validate_html()
+* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L69-L83) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
+* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L44-L66) - Validate a HTML document via XMLParser (Needs 'lxml' package)
 
 #### bx_py_utils.humanize.pformat
 
@@ -135,7 +135,7 @@ Please take a look into the sources and tests for deeper informations.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L223-L255) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L223-L261) - Assert "html" string via snapshot file with validate and pretty format
 * [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L186-L220) - Assert complex python objects vio PrettyPrinter() snapshot file.
 * [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L151-L183) - Assert given data serialized to JSON snapshot file.
 * [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L115-L148) - Assert "text" string via snapshot file
@@ -143,6 +143,10 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 #### bx_py_utils.test_utils.time
 
 * [`MockTimeMonotonicGenerator()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/time.py#L1-L19) - Helper to mock `time.monotonic()` in tests.
+
+### bx_py_utils.text_tools
+
+* [`cutout()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/text_tools.py#L1-L36) - Mark a point in a long text by line no + column with context lines around.
 
 [comment]: <> (✂✂✂ auto generated end ✂✂✂)
 

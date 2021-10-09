@@ -1,3 +1,4 @@
+import inspect
 from unittest.mock import patch
 
 import pytest
@@ -10,17 +11,37 @@ def test_validate_html():
     validate_html('<p>Test</p>')
     validate_html('<a><b/></a>')
 
-    with pytest.raises(InvalidHtml) as exc_info:
-        validate_html('<foo></bar>')
-    assert str(exc_info.value.args[0]) == (
-        'Tag foo invalid, line 1, column 5 (<string>, line 1)'
-    )
+    # Validator accept any tags, not only known one:
+    validate_html('<foo><bar/></foo>')
+    validate_html('<nav class="sticky" id="nav-sidebar"></nav>')
 
     with pytest.raises(InvalidHtml) as exc_info:
-        validate_html('<p> >broken< </p>')
-    assert str(exc_info.value.args[0]) == (
-        'htmlParseStartTag: invalid element name, line 1, column 13 (<string>, line 1)'
-    )
+        validate_html(inspect.cleandoc('''
+            <no-html>
+                <foo>
+                    <bar>
+                        <h1>Test</h1>
+                        <p> >broken< </p>
+                        <p>the end</p>
+                    <bar>
+                </foo>
+            </no-html>
+        '''))
+    error_message = str(exc_info.value)
+    print(error_message)
+    assert error_message == inspect.cleandoc('''
+        StartTag: invalid element name, line 5, column 25
+        --------------------------------------------------------------------------------
+        02     <foo>
+        03         <bar>
+        04             <h1>Test</h1>
+        05             <p> >broken< </p>
+        ----------------------------^
+        06             <p>the end</p>
+        07         <bar>
+        08     </foo>
+        --------------------------------------------------------------------------------
+    ''')
 
     # Our helpful error message if requirements missing?
 

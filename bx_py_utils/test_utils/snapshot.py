@@ -230,7 +230,9 @@ def assert_html_snapshot(
     diff_func: Callable = text_unified_diff,
     self_file_path: Union[pathlib.Path, str] = None,
     validate: bool = True,
+    validate_kwargs: dict = None,
     pretty_format: bool = True,
+    pretty_kwargs: dict = None,
 ):
     """
     Assert "html" string via snapshot file with validate and pretty format
@@ -238,10 +240,14 @@ def assert_html_snapshot(
     assert isinstance(got, str)
 
     if validate:
-        validate_html(got)
+        if validate_kwargs is None:
+            validate_kwargs = {}
+        validate_html(got, **validate_kwargs)
 
     if pretty_format:
-        got = pretty_format_html(got)
+        if pretty_kwargs is None:
+            pretty_kwargs = {}
+        got = pretty_format_html(got, **pretty_kwargs)
 
     assert_text_snapshot(
         root_dir=root_dir,
