@@ -124,6 +124,12 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`MockedBoto3Session()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mock_boto3session.py#L4-L46) - Mock for `boto3.session.Session()`
 
+#### bx_py_utils.test_utils.mocks3
+
+A simple mock for Boto3's S3 modules.
+
+* [`PseudoS3Client()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mocks3.py#L39-L113) - Simulates a boto3 S3 client object in tests
+
 #### bx_py_utils.test_utils.requests_mock_assertion
 
 * [`assert_json_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L30-L45) - Check the requests mock history. In this case all requests must be JSON.
