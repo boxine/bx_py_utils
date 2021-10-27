@@ -128,7 +128,7 @@ Please take a look into the sources and tests for deeper informations.
 
 A simple mock for Boto3's S3 modules.
 
-* [`PseudoS3Client()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mocks3.py#L39-L113) - Simulates a boto3 S3 client object in tests
+* [`PseudoS3Client()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mocks3.py#L39-L145) - Simulates a boto3 S3 client object in tests
 
 #### bx_py_utils.test_utils.requests_mock_assertion
 

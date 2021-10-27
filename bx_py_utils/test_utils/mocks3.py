@@ -88,10 +88,6 @@ class PseudoS3Client:
             Fileobj=buf, Bucket=Bucket, Key=Key, ExtraArgs=ExtraArgs, Callback=Callback,
             Config=Config)
 
-    def mock_set_content(self, Bucket, Key, content: bytes):
-        assert isinstance(content, bytes)
-        self.buckets[Bucket][Key] = content
-
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_object
     def delete_object(self, Bucket, Key):
         del self.buckets[Bucket][Key]
@@ -111,6 +107,42 @@ class PseudoS3Client:
     def get_paginator(self, operation_name):
         assert operation_name == 'list_objects_v2', f'Unsupported operation name {operation_name}'
         return PseudoBotoPaginator(self._list_objects_v2)
+
+    # Non-standard functions, prefixed by "mock_" (can be used in test code, but not main code)
+    # or "debug_" (should never be committed)
+    def mock_set_content(self, Bucket, Key, content: bytes):
+        assert isinstance(content, bytes)
+        self.buckets[Bucket][Key] = content
+
+    def mock_get_content(self, Bucket, Key):
+        return self.buckets[Bucket][Key]
+
+    def debug_long_repr(self, max_string_length=20):
+        res = '<MockS3\n'
+        for bucket_name, objects in sorted(self.buckets.items()):
+            res += f'{bucket_name}\n'
+            for key, content in sorted(objects.items()):
+                try:
+                    content_str = content.decode('utf-8')
+                    if len(content_str) > max_string_length:
+                        content_repr = repr(content_str[:max_string_length - 3])[:-1] + '...'
+                    else:
+                        content_repr = repr(content_str)
+                except ValueError:
+                    # Binary content
+                    content_repr = repr(content)
+                    if len(content_repr) > max_string_length:
+                        content_repr = content_repr[:max_string_length - 3][:-1] + '...'
+
+                if content == b'':
+                    content_repr = ''
+
+                res += f'  {key:20} => [{len(content_repr)} bytes] {content_repr}\n'
+        res += '>\n'
+        return res
+
+    def debug_print(self):
+        print(self.debug_long_repr())
 
 
 class PseudoBoto3:
