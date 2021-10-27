@@ -1,0 +1,11 @@
+<MockS3
+a-bucket
+  a-key                => [21 bytes] '<?xml?><a complic...
+  binary               => [19 bytes] b'\xf0\x00\xf0\x...
+  empty                => [0 bytes] 
+  png                  => [19 bytes] b'\x89PNG\r\n\x1...
+  short                => [7 bytes] 'short'
+  short-binary         => [16 bytes] b's\x00\xf0hort'
+b-bucket
+  very-long-key-that-is-way-too-long => [19 bytes] 'but short content'
+>
