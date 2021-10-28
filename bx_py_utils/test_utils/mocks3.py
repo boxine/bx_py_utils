@@ -48,21 +48,28 @@ class PseudoS3Client:
         for bucket_name in init_buckets:
             self.buckets[bucket_name] = {}
 
-    def download_file(self, bucket, s3_key, local_file):
-        bucket = self.buckets[bucket]
-        storage = getattr(bucket, 'bucket_storage', bucket)
-        if s3_key not in storage:
-            raise self.exceptions.NoSuchKey(s3_key)
-        with open(local_file, 'wb') as f:
-            f.write(storage[s3_key])
+    # non-standard variable names for Boto3 compatibility
+    def download_file(self, Bucket, Key, Filename):
+        bucket = self.buckets[Bucket]
+        if Key not in bucket:
+            raise self.exceptions.NoSuchKey(Key)
+        with open(Filename, 'wb') as f:
+            f.write(bucket[Key])
+
+    # non-standard variable names for Boto3 compatibility
+    def download_fileobj(self, Bucket, Key, Fileobj):
+        bucket = self.buckets[Bucket]
+        if Key not in bucket:
+            raise self.exceptions.NoSuchKey(Key)
+        Fileobj.write(bucket[Key])
 
     # non-standard variable names for Boto3 compatibility
     def get_object(self, *, Bucket, Key):
-        storage = self.buckets[Bucket]
-        if Key not in storage:
+        bucket = self.buckets[Bucket]
+        if Key not in bucket:
             raise self.exceptions.NoSuchKey(Key)
 
-        content = storage[Key]
+        content = bucket[Key]
         return {
             'Body': PseudoBotoIO(content),
             'ContentLength': len(content),
