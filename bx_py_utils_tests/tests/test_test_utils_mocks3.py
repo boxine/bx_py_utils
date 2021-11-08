@@ -4,7 +4,7 @@ import tempfile
 from unittest import TestCase
 
 from bx_py_utils.test_utils.mocks3 import PseudoS3Client
-from bx_py_utils.test_utils.snapshot import assert_text_snapshot
+from bx_py_utils.test_utils.snapshot import assert_snapshot, assert_text_snapshot
 
 
 class S3MockTest(TestCase):
@@ -55,5 +55,29 @@ class S3MockTest(TestCase):
         with self.assertRaises(s3.exceptions.NoSuchKey):
             s3.get_object(Bucket='buck', Key='png404')
 
-        # Mock function
+        # Mock
         self.assertEqual(s3.mock_get_content('buck', 'png'), content)
+
+    def test_listb_ucket(self):
+        s3 = PseudoS3Client(init_buckets=('buck',))
+        s3.mock_set_content('buck', 'foo/bar/baz', b'123')
+        s3.mock_set_content('buck', 'xxx', b'456')
+        s3.mock_set_content('buck', 'foo/zzz', b'last.')
+        s3.mock_set_content('buck', 'foo/aaa', b'first!')
+
+        paginator = s3.get_paginator('list_objects_v2')
+
+        # List without prefix
+        res = []
+        for page in paginator.paginate(Bucket='buck'):
+            res.extend(page['Contents'])
+        assert_snapshot(got=res)
+
+        # List with prefix
+        res = []
+        for page in paginator.paginate(Bucket='buck', Prefix='foo/'):
+            res.extend(page['Contents'])
+        assert_snapshot(got=res)
+
+        # Mock function
+        self.assertEqual(s3.mock_list_files('buck'), ['foo/aaa', 'foo/bar/baz', 'foo/zzz', 'xxx'])

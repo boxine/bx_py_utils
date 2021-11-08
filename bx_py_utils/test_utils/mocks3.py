@@ -107,6 +107,7 @@ class PseudoS3Client:
         keys = bucket.keys()
         if Prefix is not None:
             keys = (k for k in keys if k.startswith(Prefix))
+        keys = sorted(keys)
         yield {
             'Contents': [{'Key': k, 'Size': len(bucket[k])} for k in keys],
         }
@@ -123,6 +124,9 @@ class PseudoS3Client:
 
     def mock_get_content(self, Bucket, Key):
         return self.buckets[Bucket][Key]
+
+    def mock_list_files(self, Bucket):
+        return sorted(self.buckets[Bucket].keys())
 
     def debug_long_repr(self, max_string_length=20):
         res = '<MockS3\n'
