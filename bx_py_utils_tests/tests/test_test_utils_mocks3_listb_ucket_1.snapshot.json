@@ -1,0 +1,18 @@
+[
+    {
+        "Key": "foo/aaa",
+        "Size": 6
+    },
+    {
+        "Key": "foo/bar/baz",
+        "Size": 3
+    },
+    {
+        "Key": "foo/zzz",
+        "Size": 5
+    },
+    {
+        "Key": "xxx",
+        "Size": 3
+    }
+]
