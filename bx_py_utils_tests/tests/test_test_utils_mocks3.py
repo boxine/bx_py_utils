@@ -58,7 +58,7 @@ class S3MockTest(TestCase):
         # Mock
         self.assertEqual(s3.mock_get_content('buck', 'png'), content)
 
-    def test_listb_ucket(self):
+    def test_list_bucket(self):
         s3 = PseudoS3Client(init_buckets=('buck',))
         s3.mock_set_content('buck', 'foo/bar/baz', b'123')
         s3.mock_set_content('buck', 'xxx', b'456')
