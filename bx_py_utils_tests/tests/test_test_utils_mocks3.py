@@ -81,3 +81,11 @@ class S3MockTest(TestCase):
 
         # Mock function
         self.assertEqual(s3.mock_list_files('buck'), ['foo/aaa', 'foo/bar/baz', 'foo/zzz', 'xxx'])
+
+    def test_upload_fileobj_closed_file(self):
+        s3 = PseudoS3Client(init_buckets=('foo',))
+        with tempfile.TemporaryFile() as temp_file:
+            assert not temp_file.closed
+            s3.upload_fileobj(Fileobj=temp_file, Bucket='foo', Key='bar')
+            assert temp_file.closed
+
