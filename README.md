@@ -54,6 +54,12 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`print_exc_plus()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/error_handling.py#L14-L72) - Print traceback information with a listing of all the local variables in each frame.
 
+### bx_py_utils.file_utils
+
+* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L7-L11) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
+* [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L26-L49) - Generates a temp file with the given filename **without** any random name sequence.
+* [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L14-L23) - Check file size of given file object. Raise EmptyFileError for empty files or return size
+
 ### bx_py_utils.graphql_introspection
 
 * [`introspection_query()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/graphql_introspection.py#L5-L25) - Generate GraphQL introspection query with variable nested depth.
