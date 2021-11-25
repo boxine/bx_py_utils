@@ -87,6 +87,10 @@ class PseudoS3Client:
         if Callback:
             Callback(len(contents))
 
+        # boto3 closes file objects, see:
+        # https://github.com/boto/s3transfer/issues/80
+        Fileobj.close()
+
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.upload_file
     def upload_file(self, Filename, Bucket, Key, *, ExtraArgs=None, Callback=None, Config=None):
         contents = pathlib.Path(Filename).read_bytes()
