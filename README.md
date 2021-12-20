@@ -147,10 +147,10 @@ A simple mock for Boto3's S3 modules.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L223-L261) - Assert "html" string via snapshot file with validate and pretty format
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L186-L220) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L151-L183) - Assert given data serialized to JSON snapshot file.
-* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L115-L148) - Assert "text" string via snapshot file
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L230-L268) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L192-L227) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L156-L189) - Assert given data serialized to JSON snapshot file.
+* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L119-L153) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time
 
@@ -161,6 +161,18 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 * [`cutout()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/text_tools.py#L1-L36) - Mark a point in a long text by line no + column with context lines around.
 
 [comment]: <> (✂✂✂ auto generated end ✂✂✂)
+
+
+## Notes about snapshot
+
+Quick hint about snapshot. If you have many snapshots in your project and you need to change many with a code change, then you can run the tests without a snapshot change leading to an error, by set `RAISE_SNAPSHOT_ERRORS=0` in your environment.
+
+e.g.:
+
+```bash
+RAISE_SNAPSHOT_ERRORS=0 poetry run pytest
+RAISE_SNAPSHOT_ERRORS=0 python3 -m unittest
+```
 
 
 ## Backwards-incompatible changes
