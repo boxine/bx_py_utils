@@ -1,7 +1,10 @@
 """
     Assert complex output via auto updated snapshot files with nice diff error messages.
+
+    To update all snapshot files, run your tests with RAISE_SNAPSHOT_ERRORS=0 in environment.
 """
 import json
+import os
 import pathlib
 import pprint
 import re
@@ -35,6 +38,7 @@ from bx_py_utils.test_utils.assertion import (
 )
 
 
+RAISE_SNAPSHOT_ERRORS = os.environ.get('RAISE_SNAPSHOT_ERRORS') not in ('0', 'false')
 SELF_FILE_PATH = pathlib.Path(__file__)
 _AUTO_SNAPSHOT_NAME_COUNTER = Counter()
 _UNIFY_NEWLINES_RE = r'\r?\n'
@@ -140,12 +144,13 @@ def assert_text_snapshot(
         if re.sub(_UNIFY_NEWLINES_RE, '', got) == re.sub(_UNIFY_NEWLINES_RE, '', expected):
             raise AssertionError(f'Differing newlines: Expected {expected!r}, got {got!r}')
 
-        # display error message with diff:
-        assert_text_equal(
-            got, expected,
-            fromfile=fromfile, tofile=tofile,
-            diff_func=diff_func
-        )
+        if RAISE_SNAPSHOT_ERRORS:
+            # display error message with diff:
+            assert_text_equal(
+                got, expected,
+                fromfile=fromfile, tofile=tofile,
+                diff_func=diff_func
+            )
 
 
 def assert_snapshot(
@@ -175,12 +180,13 @@ def assert_snapshot(
     if got != expected:
         _write_json(got, snapshot_file)
 
-        # display error message with diff:
-        assert_equal(
-            got, expected,
-            fromfile=fromfile, tofile=tofile,
-            diff_func=diff_func
-        )
+        if RAISE_SNAPSHOT_ERRORS:
+            # display error message with diff:
+            assert_equal(
+                got, expected,
+                fromfile=fromfile, tofile=tofile,
+                diff_func=diff_func
+            )
 
 
 def assert_py_snapshot(
@@ -212,12 +218,13 @@ def assert_py_snapshot(
     if got_str != expected_str:
         snapshot_file.write_text(got_str)
 
-        # display error message with diff:
-        assert_equal(
-            got_str, expected_str,
-            fromfile=fromfile, tofile=tofile,
-            diff_func=diff_func
-        )
+        if RAISE_SNAPSHOT_ERRORS:
+            # display error message with diff:
+            assert_equal(
+                got_str, expected_str,
+                fromfile=fromfile, tofile=tofile,
+                diff_func=diff_func
+            )
 
 
 def assert_html_snapshot(
