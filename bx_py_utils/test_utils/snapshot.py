@@ -136,6 +136,8 @@ def assert_text_snapshot(
         expected = snapshot_file.read_bytes().decode('utf-8')
     except (FileNotFoundError, OSError):
         snapshot_file.write_bytes(got.encode('utf-8'))
+        if not RAISE_SNAPSHOT_ERRORS:
+            return
         raise
 
     if got != expected:
@@ -175,6 +177,8 @@ def assert_snapshot(
             expected = json.load(snapshot_handle)
     except (ValueError, OSError, FileNotFoundError):
         _write_json(got, snapshot_file)
+        if not RAISE_SNAPSHOT_ERRORS:
+            return
         raise
 
     if got != expected:
@@ -213,6 +217,8 @@ def assert_py_snapshot(
         expected_str = snapshot_file.read_text()
     except FileNotFoundError:
         snapshot_file.write_text(got_str)
+        if not RAISE_SNAPSHOT_ERRORS:
+            return
         raise
 
     if got_str != expected_str:
