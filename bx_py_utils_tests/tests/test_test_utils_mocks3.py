@@ -1,5 +1,6 @@
 import io
 import pathlib
+import re
 import tempfile
 from unittest import TestCase
 
@@ -89,3 +90,17 @@ class S3MockTest(TestCase):
             s3.upload_fileobj(Fileobj=temp_file, Bucket='foo', Key='bar')
             assert temp_file.closed
 
+    def test_head_object(self):
+        s3 = PseudoS3Client(init_buckets=('a-bucket',))
+        s3.mock_set_content('a-bucket', 'a-key', b'foobar')
+
+        res = s3.head_object('a-bucket', 'a-key')
+        self.assertEqual(res['ContentLength'], 6)
+
+        expected_message = (
+            'An error occurred (404) when calling the HeadObject operation: Not Found')
+        with self.assertRaisesRegex(s3.exceptions.ClientError, re.escape(expected_message)):
+            s3.head_object('a-bucket', 'no-such-key')
+
+        with self.assertRaisesRegex(s3.exceptions.ClientError, re.escape(expected_message)):
+            s3.head_object('b-bucket', 'no-such-bucket')

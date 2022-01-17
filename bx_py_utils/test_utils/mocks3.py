@@ -13,12 +13,33 @@ class PseudoBotoPaginator:
 
 
 class PseudoS3Exceptions:
-    class NoSuchKey(BaseException):
-        def __init__(self, key):
-            self.key = key
+    try:
+        from botocore.exceptions import NoSuchKey
+    except ImportError:
+        class NoSuchKey(BaseException):
+            def __init__(self, key):
+                self.key = key
 
-        def __repr__(self):
-            return f'PseudoNoSuchKey({self.key!r})'
+            def __repr__(self):
+                return f'PseudoNoSuchKey({self.key!r})'
+
+    try:
+        from botocore.exceptions import ClientError
+    except ImportError:
+        class ClientError(BaseException):
+            def __init__(self, error_response, operation_name):
+                self.response = error_response  # Not error_reponse!
+                self.operation_name = operation_name
+
+            def __repr__(self):
+                return f'ClientError({repr(str(self))})'
+
+            def __str__(self):
+                error_code = self.response['Error']['Code']
+                error_message = self.response['Error']['Message']
+                return (
+                    f'An error occurred ({error_code}) when calling the {self.operation_name} '
+                    f'operation: {error_message}')
 
 
 class PseudoBotoIO:
@@ -73,6 +94,34 @@ class PseudoS3Client:
         return {
             'Body': PseudoBotoIO(content),
             'ContentLength': len(content),
+        }
+
+    # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.head_object
+    def head_object(self, Bucket, Key):
+        try:
+            bucket = self.buckets[Bucket]
+            content = bucket[Key]
+        except KeyError as err:
+            raise self.exceptions.ClientError(
+                error_response={
+                    'Error': {
+                        'Code': '404',
+                        # Real message is only: 'Not Found'
+                        'Message': f'Not Found (PseudoS3Client KeyError: {err})'
+                    }
+                },
+                operation_name='HeadObject',
+            )
+
+        # File found: return a halfway plausible result ;)
+        return {
+            'AcceptRanges': 'bytes',
+            'ContentLength': len(content),
+            'ContentType': 'application/octet-stream',
+            'ETag': '"00000000000000000000000000000000"',
+            'LastModified': None,
+            'Metadata': {},
+            'ResponseMetadata': {}
         }
 
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.upload_fileobj
