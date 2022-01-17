@@ -28,7 +28,6 @@ def test_validate_html():
             </no-html>
         '''))
     error_message = str(exc_info.value)
-    print(error_message)
     assert error_message == inspect.cleandoc('''
         StartTag: invalid element name, line 5, column 25
         --------------------------------------------------------------------------------
