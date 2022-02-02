@@ -194,7 +194,7 @@ class PseudoS3Client:
                         content_repr = repr(content_str)
                 except ValueError:
                     # Binary content
-                    content_repr = repr(content)
+                    content_repr = repr(content[:max_string_length])
                     if len(content_repr) > max_string_length:
                         content_repr = content_repr[:max_string_length - 3][:-1] + '...'
 
