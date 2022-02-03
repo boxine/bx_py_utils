@@ -87,7 +87,7 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
 
     module_path = ModulePath()
 
-    module_names = extract.parse_specs(modules=modules)
+    module_names = extract.walk_specs(modules)
     parts = []
     for module_name in sorted(module_names):
         module_obj = extract.load_module(module_name)
