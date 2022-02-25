@@ -12,7 +12,7 @@ _ANONYMIZATION_TRANS = str.maketrans(
 _RE_OTHER = re.compile(r'[^xX_\.\s/-]')
 
 
-def anonymize(value: str) -> str:
+def anonymize(value: str, handle_email: bool = True) -> str:
     """
     Anonymize the given string with special handling for eMail addresses.
 
@@ -22,10 +22,12 @@ def anonymize(value: str) -> str:
     'Txxx_xx_x_Xxxx_###_Xxx_Xxx_______Xxd'
     >>> anonymize('a.mail-address@test.tld')
     'a_xxxx_xxxxxxs@test.tld'
+    >>> anonymize('a.mail-address@test.tld', handle_email=False)
+    'a_xxxx_xxxxxxx_xxxx_xxd'
     """
     assert isinstance(value, str)
 
-    if '@' in value:
+    if handle_email and '@' in value:
         value, at, domain = value.partition('@')
         if len(value) < 2:
             return value + at + domain
