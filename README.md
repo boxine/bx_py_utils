@@ -20,7 +20,7 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.anonymize
 
-* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L15-L41) - Anonymize the given string with special handling for eMail addresses.
+* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L15-L43) - Anonymize the given string with special handling for eMail addresses.
 
 ### bx_py_utils.auto_doc
 
