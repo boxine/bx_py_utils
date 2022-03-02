@@ -11,7 +11,7 @@ import re
 from collections import Counter
 from typing import Any, Callable, Optional, Union
 
-from bx_py_utils.html_utils import pretty_format_html, validate_html
+from bx_py_utils.html_utils import get_html_elements, pretty_format_html, validate_html
 
 
 try:
@@ -246,9 +246,13 @@ def assert_html_snapshot(
     validate_kwargs: dict = None,
     pretty_format: bool = True,
     pretty_kwargs: dict = None,
+    query_selector: str = None,
+    query_selector_kwargs: dict = None
 ):
     """
     Assert "html" string via snapshot file with validate and pretty format
+    Use "query_selector" to limit the snapshot to one or more elements. If the selector does not
+    find any elements, an ElementsNotFoundError is raised.
     """
     assert isinstance(got, str)
 
@@ -261,6 +265,11 @@ def assert_html_snapshot(
         if pretty_kwargs is None:
             pretty_kwargs = {}
         got = pretty_format_html(got, **pretty_kwargs)
+
+    if query_selector:
+        if query_selector_kwargs is None:
+            query_selector_kwargs = {}
+        got = get_html_elements(got, query_selector, **query_selector_kwargs)
 
     assert_text_snapshot(
         root_dir=root_dir,

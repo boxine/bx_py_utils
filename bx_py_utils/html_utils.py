@@ -41,6 +41,13 @@ class InvalidHtml(AssertionError):
         )
 
 
+class ElementsNotFoundError(AssertionError):
+    """
+    Happens if requested HTML elements cannot be found
+    """
+    pass
+
+
 def validate_html(data, **parser_kwargs):
     """
     Validate a HTML document via XMLParser (Needs 'lxml' package)
@@ -66,10 +73,7 @@ def validate_html(data, **parser_kwargs):
         raise InvalidHtml(data, err)
 
 
-def pretty_format_html(data, parser='html.parser', **bs_kwargs):
-    """
-    Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
-    """
+def get_beautiful_soup_instance(data, parser='html.parser', **bs_kwargs):
     assert isinstance(data, str)
 
     if BeautifulSoup is None:
@@ -77,7 +81,28 @@ def pretty_format_html(data, parser='html.parser', **bs_kwargs):
             'This feature needs "beautifulsoup4", please add it to you requirements'
         )
 
-    soup = BeautifulSoup(data, parser, **bs_kwargs)
+    return BeautifulSoup(data, parser, **bs_kwargs)
+
+
+def pretty_format_html(data, parser='html.parser', **bs_kwargs):
+    """
+    Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
+    """
+    soup = get_beautiful_soup_instance(data, parser, **bs_kwargs)
     return soup.prettify(
         formatter=None  # Do not perform any substitution
     )
+
+
+def get_html_elements(data, query_selector, parser='html.parser', **bs_kwargs):
+    """
+    Returns the selected HTML elements as string
+    """
+    soup = get_beautiful_soup_instance(data, parser, **bs_kwargs)
+    selected_elements = soup.select(query_selector)
+
+    if not selected_elements:
+        raise ElementsNotFoundError(
+            f'The query selector {query_selector} did not match any element in the HTML document')
+
+    return '\n'.join(str(tag) for tag in selected_elements)

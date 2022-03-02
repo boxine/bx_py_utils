@@ -71,9 +71,11 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.html_utils
 
+* [`ElementsNotFoundError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L44-L48) - Happens if requested HTML elements cannot be found
 * [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L18-L41) - XMLSyntaxError with better error messages: used in validate_html()
-* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L69-L83) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
-* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L44-L66) - Validate a HTML document via XMLParser (Needs 'lxml' package)
+* [`get_html_elements()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L97-L108) - Returns the selected HTML elements as string
+* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L87-L94) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
+* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L51-L73) - Validate a HTML document via XMLParser (Needs 'lxml' package)
 
 #### bx_py_utils.humanize.pformat
 
@@ -147,7 +149,7 @@ A simple mock for Boto3's S3 modules.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L236-L274) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L236-L283) - Assert "html" string via snapshot file with validate and pretty format
 * [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L196-L233) - Assert complex python objects vio PrettyPrinter() snapshot file.
 * [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L158-L193) - Assert given data serialized to JSON snapshot file.
 * [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L119-L155) - Assert "text" string via snapshot file
