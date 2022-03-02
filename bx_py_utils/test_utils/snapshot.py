@@ -261,15 +261,15 @@ def assert_html_snapshot(
             validate_kwargs = {}
         validate_html(got, **validate_kwargs)
 
-    if pretty_format:
-        if pretty_kwargs is None:
-            pretty_kwargs = {}
-        got = pretty_format_html(got, **pretty_kwargs)
-
     if query_selector:
         if query_selector_kwargs is None:
             query_selector_kwargs = {}
         got = get_html_elements(got, query_selector, **query_selector_kwargs)
+
+    if pretty_format:
+        if pretty_kwargs is None:
+            pretty_kwargs = {}
+        got = pretty_format_html(got, **pretty_kwargs)
 
     assert_text_snapshot(
         root_dir=root_dir,
