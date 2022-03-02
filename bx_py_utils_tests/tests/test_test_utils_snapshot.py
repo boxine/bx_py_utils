@@ -10,7 +10,7 @@ import pytest
 
 import bx_py_utils
 from bx_py_utils import html_utils
-from bx_py_utils.path import assert_is_file
+from bx_py_utils.html_utils import ElementsNotFoundError
 from bx_py_utils.test_utils import snapshot
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
 from bx_py_utils.test_utils.datetime import parse_dt
@@ -331,3 +331,23 @@ def test_assert_html_snapshot_without_lxml():
     assert str(cm.value) == (
         'This feature needs "lxml", please add it to you requirements'
     )
+
+def test_assert_html_snapshot_by_css_selector():
+    html = '''
+        <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
+         \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
+        <h1>This is a Heading</h1> \r\n  \r\n
+        <p \r\n >This is a paragraph.</p> \r\n  \r\n
+        <div class="test-me"><b>some Content 1</b></div>
+        <div class="test-me"><i>some Content 2</i></div>
+        </body> \r\n  \r\n </html>
+    '''
+    assert_html_snapshot(got=html, query_selector='div.test-me')
+
+    try:
+        assert_html_snapshot(got=html, query_selector='div.not-found')
+        raise AssertionError('Expected ElementsNotFoundError, no Error was raised')
+    except ElementsNotFoundError:
+        pass
+    except Exception as err:
+        raise AssertionError('Expected ElementsNotFoundError, other Error was raised: ', err)
