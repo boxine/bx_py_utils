@@ -105,4 +105,4 @@ def get_html_elements(data, query_selector, parser='html.parser', **bs_kwargs):
         raise ElementsNotFoundError(
             f'The query selector {query_selector} did not match any element in the HTML document')
 
-    return '\n'.join(str(tag) for tag in selected_elements)
+    return ''.join(str(tag) for tag in selected_elements)
