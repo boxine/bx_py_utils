@@ -8,6 +8,7 @@ import os
 import pathlib
 import pprint
 import re
+import uuid
 from collections import Counter
 from typing import Any, Callable, Optional, Union
 
@@ -155,21 +156,43 @@ def assert_text_snapshot(
             )
 
 
+def _convert_non_json(obj):
+    if isinstance(obj, (str, int, float, bool)):
+        return obj
+    if obj is None:
+        return obj
+    if isinstance(obj, dict):
+        return {k: _convert_non_json(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [_convert_non_json(v) for v in obj]
+    elif isinstance(obj, set):
+        return sorted(_convert_non_json(v) for v in obj)
+    elif isinstance(obj, uuid.UUID):
+        return str(obj)
+    else:
+        raise f'Unsupported non-JSON object {obj!r} of {type(obj).__name__}'
+
+
 def assert_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
-    got: Optional[Union[dict, list]] = None,
+    got: Optional[Union[dict, list]] = None,  # None for backwards compatibility
     extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = pformat_unified_diff,
     self_file_path: Union[pathlib.Path, str] = None,
+    support_non_json=False,
 ):
     """
     Assert given data serialized to JSON snapshot file.
     """
-    assert got is None or isinstance(got, (dict, list)), \
+    assert got is not None, 'Forgot to pass in got= argument'
+    assert isinstance(got, (dict, list)) or (support_non_json and isinstance(got, set)), \
         f'Not JSON-serializable: {got!r} is not a dict or list, but a {type(got).__name__}'
+
+    if support_non_json:
+        got = _convert_non_json(got)
 
     snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:

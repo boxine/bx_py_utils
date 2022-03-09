@@ -102,6 +102,47 @@ def test_assert_snapshot():
         )
 
 
+def test_assert_snapshot_non_json():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        data = {
+            'two uuids in a set': {
+                UUID('89fae6c1-8cd4-47e1-833d-84b341b30ee3'),
+                UUID('08a26b1c-317b-4209-a31e-654a0d79d3c2')
+            },
+            'a dict': {'in a list': [42, 12, None]},
+        }
+        with pytest.raises(FileNotFoundError):
+            assert_snapshot(tmp_dir, 'non_json', got=data, support_non_json=True)
+
+        assert_snapshot(tmp_dir, 'non_json', got=data, support_non_json=True)
+
+        data['two uuids in a set'].add(UUID('49af7ecf-faa3-41c0-9fbc-bad2848d2d26'))
+        with pytest.raises(AssertionError) as exc_info:
+            assert_snapshot(tmp_dir, 'non_json', got=data, support_non_json=True)
+        assert exc_info.value.args[0] == (
+            'Objects are not equal:\n'
+            '--- got\n'
+            '\n'
+            '+++ expected\n'
+            '\n'
+            '@@ -8,7 +8,6 @@\n'
+            '\n'
+            '     },\n'
+            '     "two uuids in a set": [\n'
+            '         "08a26b1c-317b-4209-a31e-654a0d79d3c2",\n'
+            '-        "49af7ecf-faa3-41c0-9fbc-bad2848d2d26",\n'
+            '         "89fae6c1-8cd4-47e1-833d-84b341b30ee3"\n'
+            '     ]\n'
+            ' }'
+        )
+
+        # Test set as root
+        set_data = {9, 7, 3}
+        with pytest.raises(FileNotFoundError):
+            assert_snapshot(tmp_dir, 'set_data', got=set_data, support_non_json=True)
+        assert_snapshot(tmp_dir, 'set_data', got=set_data, support_non_json=True)
+
+
 def test_assert_text_snapshot():
     with tempfile.TemporaryDirectory() as tmp_dir:
         TEXT = 'this is\nmultiline "text"\none\ntwo\nthree\nfour'
