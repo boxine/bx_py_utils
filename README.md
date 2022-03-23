@@ -132,6 +132,10 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`MockedBoto3Session()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mock_boto3session.py#L4-L46) - Mock for `boto3.session.Session()`
 
+#### bx_py_utils.test_utils.mock_uuid
+
+* [`MockUUIDGenerator()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mock_uuid.py#L5-L25) - Helper to mock `uuid.uuid4()` with reproducible results (e.g. for snapshot tests)
+
 #### bx_py_utils.test_utils.mocks3
 
 A simple mock for Boto3's S3 modules.
