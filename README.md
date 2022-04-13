@@ -105,12 +105,12 @@ Please take a look into the sources and tests for deeper informations.
 
 #### bx_py_utils.test_utils.assertion
 
-* [`assert_equal()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L52-L65) - Check if the two objects are the same. Display a nice diff, using `pformat()`
-* [`assert_text_equal()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L68-L83) - Check if the two text strings are the same. Display a error message with a diff.
-* [`pformat_ndiff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L14-L24) - Generate a `ndiff` from two objects, using `pformat()`
-* [`pformat_unified_diff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L45-L49) - Generate a unified diff from two objects, using `pformat()`
-* [`text_ndiff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L6-L11) - Generate a `ndiff` between two text strings.
-* [`text_unified_diff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L38-L42) - Generate a unified diff between two text strings.
+* [`assert_equal()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L63-L76) - Check if the two objects are the same. Display a nice diff, using `pformat()`
+* [`assert_text_equal()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L79-L94) - Check if the two text strings are the same. Display a error message with a diff.
+* [`pformat_ndiff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L15-L25) - Generate a `ndiff` from two objects, using `pformat()`
+* [`pformat_unified_diff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L46-L60) - Generate a unified diff from two objects, using `pformat()`
+* [`text_ndiff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L7-L12) - Generate a `ndiff` between two text strings.
+* [`text_unified_diff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L39-L43) - Generate a unified diff between two text strings.
 
 #### bx_py_utils.test_utils.datetime
 
@@ -153,9 +153,9 @@ A simple mock for Boto3's S3 modules.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L236-L283) - Assert "html" string via snapshot file with validate and pretty format
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L196-L233) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L158-L193) - Assert given data serialized to JSON snapshot file.
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L239-L286) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L199-L236) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L158-L196) - Assert given data serialized to JSON snapshot file.
 * [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L119-L155) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time

@@ -1,6 +1,6 @@
 import datetime
-import inspect
 import pathlib
+import re
 import tempfile
 from decimal import Decimal
 from unittest.mock import patch
@@ -99,6 +99,34 @@ def test_assert_snapshot():
             assert_snapshot(tmp_dir, 'invalid_type', {1, 2})
         assert exc_info.value.args[0] == (
             'Not JSON-serializable: {1, 2} is not a dict or list, but a set'
+        )
+
+
+def test_assert_snapshot_with_tuple():
+    """
+    assert_snapshot() should not been used, if objects contains tuple()
+    Test that the diff indicates the problem.
+    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with pytest.raises(FileNotFoundError) as excinfo:
+            assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
+        assert 'snap.snapshot.json' in str(excinfo.value)
+
+        written_json = (pathlib.Path(tmp_dir) / 'snap.snapshot.json').read_text()
+        written_json = re.sub(r'\s+', '', written_json)
+        # The tuple() are "converted" to lists:
+        assert written_json == '[["foo",42],1,1.5]'
+
+        # tuple() doesn't work with assert_snapshot():
+        with pytest.raises(AssertionError) as exc_info:
+            assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
+        assert exc_info.value.args[0] == (
+            'Objects are not equal:\n'
+            '--- got\n\n'
+            '+++ expected\n\n'
+            '@@ -1 +1 @@\n\n'
+            "-[('foo', 42), 1, 1.5]\n"
+            "+[['foo', 42], 1, 1.5]"
         )
 
 
@@ -331,6 +359,7 @@ def test_assert_html_snapshot_without_lxml():
     assert str(cm.value) == (
         'This feature needs "lxml", please add it to you requirements'
     )
+
 
 def test_assert_html_snapshot_by_css_selector():
     html = '''
