@@ -167,6 +167,9 @@ def assert_snapshot(
 ):
     """
     Assert given data serialized to JSON snapshot file.
+
+    Note: You can't assert objects that contains tuple() !
+          Use assert_py_snapshot() in this case.
     """
     assert got is None or isinstance(got, (dict, list)), \
         f'Not JSON-serializable: {got!r} is not a dict or list, but a {type(got).__name__}'

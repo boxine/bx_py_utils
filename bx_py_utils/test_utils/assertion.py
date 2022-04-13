@@ -1,4 +1,5 @@
 import difflib
+import pprint
 
 from bx_py_utils.humanize.pformat import pformat
 
@@ -45,8 +46,18 @@ def text_unified_diff(txt1, txt2, fromfile: str = 'got', tofile: str = 'expected
 def pformat_unified_diff(obj1, obj2, fromfile: str = 'got', tofile: str = 'expected'):
     """
     Generate a unified diff from two objects, using `pformat()`
+    Fallback to pprint.pformat() if JSON is equal
     """
-    return _unified_diff(pformat(obj1), pformat(obj2), fromfile=fromfile, tofile=tofile)
+    obj1_pformat = pformat(obj1)
+    obj2_pformat = pformat(obj2)
+    if obj1 != obj2 and obj1_pformat == obj2_pformat:
+        # The python objects are not equal, but the JSON representation are equal!
+        # This can happen if tuple() are used: JSON will convert them to lists.
+        # Work-a-round: Generate the diff with pformat:
+        obj1_pformat = pprint.pformat(obj1, width=120)
+        obj2_pformat = pprint.pformat(obj2, width=120)
+
+    return _unified_diff(obj1_pformat, obj2_pformat, fromfile=fromfile, tofile=tofile)
 
 
 def assert_equal(
