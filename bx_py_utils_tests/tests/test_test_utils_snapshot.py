@@ -241,6 +241,25 @@ def test_assert_py_snapshot():
         )
 
 
+def test_deep_assert_py_snapshot():
+    import datetime
+    events = [{
+        'foo': 'bar',
+    }, {
+        'event': 'file_meta_already_set',
+        'levelname': 'DEBUG',
+        'meta_dict': {
+            'hash_value': '1_bf2c891b7f386cf1efe9815bbf4d5a43e7b6bc9d43c9db02282e8598',
+            'origin_s3_path': 'transcoding/1_bf2c891b7f386cf1efe9815bbf4d5a43e7b6bc9d43c9db02282e8598/tunesitem_on_creative_tonie_tunes_generic_chapter2.mp3',
+            'size': 8433,
+            'uploaded_dt': datetime.datetime(2000, 1, 1, 0, 17, tzinfo=datetime.timezone.utc),
+            'url': 'https://test-bucket.s3.domain.tld/transcoding/1_bf2c891b7f386cf1efe9815bbf4d5a43e7b6bc9d43c9db02282e8598/tunesitem_on_creative_tonie_tunes_generic_chapter2.mp3',
+        },
+    }]
+
+    assert_py_snapshot(got=events)
+
+
 def test_auto_source_names():
     root_dir, snapshot_name = _get_caller_names()
     assert root_dir == SELF_PATH
