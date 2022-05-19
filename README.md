@@ -56,9 +56,13 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.file_utils
 
-* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L7-L11) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
-* [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L26-L49) - Generates a temp file with the given filename **without** any random name sequence.
-* [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L14-L23) - Check file size of given file object. Raise EmptyFileError for empty files or return size
+* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L16-L20) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
+* [`FileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L8-L13) - Base error class for all 'file_utils' exceptions.
+* [`FileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L78-L103) - Context Manager for generate different hashes from file content while processing a file.
+* [`FileSizeError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L23-L37) - File size is not the same as the expected size.
+* [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L52-L75) - Generates a temp file with the given filename **without** any random name sequence.
+* [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L106-L165) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
+* [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L40-L49) - Check file size of given file object. Raise EmptyFileError for empty files or return size
 
 ### bx_py_utils.graphql_introspection
 
