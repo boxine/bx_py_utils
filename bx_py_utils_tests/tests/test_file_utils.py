@@ -2,7 +2,14 @@ import io
 from pathlib import Path
 from unittest import TestCase
 
-from bx_py_utils.file_utils import EmptyFileError, NamedTemporaryFile2, get_and_assert_file_size
+from bx_py_utils.file_utils import (
+    EmptyFileError,
+    FileHasher,
+    FileSizeError,
+    NamedTemporaryFile2,
+    TempFileHasher,
+    get_and_assert_file_size,
+)
 
 
 class TempFileUtilsTestCase(TestCase):
@@ -47,3 +54,54 @@ class TempFileUtilsTestCase(TestCase):
 
         assert temp1_path.exists() is False
         assert temp1_path.parent.exists() is False  # created temp directory removed, too?
+
+    def test_file_hasher(self):
+        with FileHasher() as file_hasher:
+            assert file_hasher.bytes_processed == 0
+            file_hasher(b'123')
+        assert file_hasher.bytes_processed == 3
+        assert file_hasher.hexdigest_dict() == {
+            'md5': '202cb962ac59075b964b07152d234b70',
+            'sha1': '40bd001563085fc35165329ea1ff5c5ecbdbbeef',
+            'sha3_224': '602bdc204140db016bee5374895e5568ce422fabe17e064061d80097',
+        }
+
+        with FileHasher(hash_names=('md5',)) as file_hasher:
+            file_hasher(b'12')
+            assert file_hasher.bytes_processed == 2
+            file_hasher(b'3')
+            assert file_hasher.bytes_processed == 3
+        assert file_hasher.hexdigest_dict() == {'md5': '202cb962ac59075b964b07152d234b70'}
+
+        with self.assertRaises(ValueError) as err:
+            FileHasher(hash_names=('Bam!',))
+        msg = str(err.exception)
+        assert msg == 'unsupported hash type Bam!'
+
+    def test_temp_file_hasher(self):
+        with TempFileHasher(file_name='foo.bar', expected_files_size=3) as tfh:
+            tfh.write(b'123')
+
+            file_object = tfh.temp_file.file_object
+            path = Path(file_object.name)
+            assert path.name == 'foo.bar'
+
+            assert tfh.closed is False
+            assert tfh.tell() == tfh.hasher.bytes_processed == 3
+
+        assert tfh.closed is True
+        assert tfh.hasher.hexdigest_dict() == {
+            'md5': '202cb962ac59075b964b07152d234b70',
+            'sha1': '40bd001563085fc35165329ea1ff5c5ecbdbbeef',
+            'sha3_224': '602bdc204140db016bee5374895e5568ce422fabe17e064061d80097',
+        }
+
+        with self.assertRaises(FileSizeError) as err:
+            with TempFileHasher(
+                file_name='foo.bar', hash_names=('md5',), expected_files_size=99
+            ) as tfh:
+                tfh.write(b'12')
+                tfh.write(b'3')
+            assert tfh.hasher.hexdigest_dict() == {'md5': '202cb962ac59075b964b07152d234b70'}
+        msg = str(err.exception)
+        assert msg == "File 'foo.bar' is 3 Bytes in size, but should be 99 Bytes!"
