@@ -19,6 +19,7 @@ from bx_py_utils.test_utils.snapshot import (
     _AUTO_SNAPSHOT_NAME_COUNTER,
     _get_caller_names,
     _get_snapshot_file,
+    assert_binary_snapshot,
     assert_html_snapshot,
     assert_py_snapshot,
     assert_snapshot,
@@ -238,6 +239,24 @@ def test_assert_py_snapshot():
             "     'time': datetime.time(3, 4, 5),\n"
             "-    'uuid': '00000000-0000-0000-1111-000000000001'}\n"
             "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}"
+        )
+
+
+def test_assert_binary_snapshot():
+    expected = b'\xAB\x00'
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with pytest.raises(FileNotFoundError):
+            assert_binary_snapshot(tmp_dir, 'binary-snap', expected)
+
+        assert_binary_snapshot(tmp_dir, 'binary-snap', expected)
+
+        got = b'\xAB\xFF\x00\xCC'
+        with pytest.raises(AssertionError) as exc_info:
+            assert_binary_snapshot(tmp_dir, 'binary-snap', got)
+        assert exc_info.value.args[0] == (
+            'Objects are not equal:\n'
+            'expected: 2 Bytes, MD5 45aa1f1c9622b4a0f817b177a1b84f78\n'
+            'got: 4 Bytes, MD5 02df4e34a310564c0bb6245c432eb15e'
         )
 
 
