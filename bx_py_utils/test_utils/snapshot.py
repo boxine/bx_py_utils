@@ -3,6 +3,7 @@
 
     To update all snapshot files, run your tests with RAISE_SNAPSHOT_ERRORS=0 in environment.
 """
+import hashlib
 import json
 import os
 import pathlib
@@ -284,3 +285,51 @@ def assert_html_snapshot(
         diff_func=diff_func,
         self_file_path=self_file_path,
     )
+
+
+def _binary_str(data):
+    return f'{len(data)} Bytes, MD5 {hashlib.md5(data).hexdigest()}'
+
+
+def binary_diff(got, expected, fromfile, tofile):
+    expected_repr = _binary_str(expected)
+    got_repr = _binary_str(got)
+    return (
+        f'{tofile}: {expected_repr}\n'
+        f'{fromfile}: {got_repr}'
+    )
+
+
+def assert_binary_snapshot(
+    root_dir: Union[pathlib.Path, str] = None,
+    snapshot_name: str = None,
+    got: str = None,
+    extension: str = '.bin',
+    fromfile: str = 'got',
+    tofile: str = 'expected',
+    diff_func: Callable = binary_diff,
+    self_file_path: Union[pathlib.Path, str] = None,
+):
+    """
+    Assert binary data via snapshot file
+    """
+    assert isinstance(got, bytes)
+
+    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
+    try:
+        expected = snapshot_file.read_bytes()
+    except (FileNotFoundError, OSError):
+        snapshot_file.write_bytes(got)
+        if not RAISE_SNAPSHOT_ERRORS:
+            return
+        raise
+
+    if got != expected:
+        snapshot_file.write_bytes(got)
+
+        if RAISE_SNAPSHOT_ERRORS:
+            assert_equal(
+                got, expected,
+                fromfile=fromfile, tofile=tofile,
+                diff_func=diff_func
+            )
