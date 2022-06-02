@@ -39,9 +39,18 @@ class S3MockTest(TestCase):
             assert not not_found_path.exists()
 
         # download_fileobj
+        class Callback:
+            def __init__(self):
+                self.total_bytes = 0
+
+            def __call__(self, byte_count):
+                self.total_bytes += byte_count
+
+        callback = Callback()
         buf = io.BytesIO()
-        s3.download_fileobj(Bucket='buck', Key='png', Fileobj=buf)
+        s3.download_fileobj(Bucket='buck', Key='png', Fileobj=buf, Callback=callback)
         self.assertEqual(buf.getvalue(), content)
+        self.assertEqual(callback.total_bytes, len(content))
 
         not_found_buf = io.BytesIO()
         with self.assertRaises(s3.exceptions.NoSuchKey):
