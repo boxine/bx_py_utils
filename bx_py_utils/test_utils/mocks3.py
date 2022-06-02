@@ -78,11 +78,15 @@ class PseudoS3Client:
             f.write(bucket[Key])
 
     # non-standard variable names for Boto3 compatibility
-    def download_fileobj(self, Bucket, Key, Fileobj):
+    def download_fileobj(self, Bucket, Key, Fileobj, ExtraArgs=None, Callback=None, Config=None):
         bucket = self.buckets[Bucket]
-        if Key not in bucket:
+        storage = getattr(bucket, 'bucket_storage', bucket)
+        if Key not in storage:
             raise self.exceptions.NoSuchKey(Key)
-        Fileobj.write(bucket[Key])
+        content = storage[Key]
+        Fileobj.write(content)
+        if Callback:
+            Callback(len(content))
 
     # non-standard variable names for Boto3 compatibility
     def get_object(self, *, Bucket, Key):
