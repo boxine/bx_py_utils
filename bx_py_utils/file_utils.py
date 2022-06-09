@@ -107,6 +107,10 @@ class TempFileHasher:
     """
     File like context manager that combines NamedTemporaryFile2 and FileHasher.
     Can also check the file size.
+
+    Note:
+        seek() is not implemented,
+        because the on-the-fly hash calculation requires a linear writing
     """
 
     def __init__(
@@ -132,9 +136,6 @@ class TempFileHasher:
     def write(self, data):
         self.temp_file.file_object.write(data)
         self.hasher(data)
-
-    def seek(self, *args, **kwargs):
-        self.temp_file.file_object.seek(*args, **kwargs)
 
     def tell(self):
         return self.temp_file.file_object.tell()
