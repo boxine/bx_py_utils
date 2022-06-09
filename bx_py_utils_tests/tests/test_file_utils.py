@@ -80,6 +80,7 @@ class TempFileUtilsTestCase(TestCase):
 
     def test_temp_file_hasher(self):
         with TempFileHasher(file_name='foo.bar', expected_files_size=3) as tfh:
+            assert not hasattr(tfh, 'seek')  # seek() should not be supported!
             tfh.write(b'123')
 
             file_object = tfh.temp_file.file_object
