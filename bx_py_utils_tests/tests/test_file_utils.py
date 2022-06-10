@@ -80,7 +80,6 @@ class TempFileUtilsTestCase(TestCase):
 
     def test_temp_file_hasher(self):
         with TempFileHasher(file_name='foo.bar', expected_files_size=3) as tfh:
-            assert not hasattr(tfh, 'seek')  # seek() should not be supported!
             tfh.write(b'123')
 
             file_object = tfh.temp_file.file_object
@@ -106,3 +105,33 @@ class TempFileUtilsTestCase(TestCase):
             assert tfh.hasher.hexdigest_dict() == {'md5': '202cb962ac59075b964b07152d234b70'}
         msg = str(err.exception)
         assert msg == "File 'foo.bar' is 3 Bytes in size, but should be 99 Bytes!"
+
+        # Avoid wrong hashes by non-linear writing:
+
+        with self.assertRaises(FileSizeError) as size_err:
+            with TempFileHasher(
+                file_name='foo.bar', hash_names=('md5',), expected_files_size=99
+            ) as tfh:
+                tfh.write(b'123')
+                assert tfh.tell() == tfh.hasher.bytes_processed == 3
+
+                # Seeking back and forth is ok, until we are at the end of the file:
+                tfh.seek(2)
+                tfh.seek(3)
+                assert tfh.tell() == tfh.hasher.bytes_processed == 3
+                tfh.write(b'foobar')
+
+                # Seeking back and "overwrite" will result in wrong hashes -> error
+                tfh.seek(2)
+                assert tfh.tell() == 2 and tfh.hasher.bytes_processed == 9
+                with self.assertRaises(RuntimeError) as write_err:
+                    tfh.write(b'456')
+
+        msg = str(write_err.exception)
+        assert msg == (
+            'Avoid non-linear writing to "foo.bar",'
+            ' because this will result in incorrect hashes!'
+        )
+
+        msg = str(size_err.exception)
+        assert msg == "File 'foo.bar' is 9 Bytes in size, but should be 99 Bytes!"

@@ -107,10 +107,6 @@ class TempFileHasher:
     """
     File like context manager that combines NamedTemporaryFile2 and FileHasher.
     Can also check the file size.
-
-    Note:
-        seek() is not implemented,
-        because the on-the-fly hash calculation requires a linear writing
     """
 
     def __init__(
@@ -134,8 +130,21 @@ class TempFileHasher:
         return self.temp_file.file_object.read(*args)
 
     def write(self, data):
+        if self.tell() != self.hasher.bytes_processed:
+            # We are not at the end of the file!
+            raise RuntimeError(
+                f'Avoid non-linear writing to "{self.file_name}",'
+                f' because this will result in incorrect hashes!'
+            )
         self.temp_file.file_object.write(data)
         self.hasher(data)
+
+    def seek(self, *args, **kwargs):
+        """
+        Note: Going back and forward is ok as long as you jump back to the end of the file
+              before the next write !
+        """
+        self.temp_file.file_object.seek(*args, **kwargs)
 
     def tell(self):
         return self.temp_file.file_object.tell()
@@ -153,6 +162,8 @@ class TempFileHasher:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.temp_file.__exit__(exc_type, exc_val, exc_tb)
         self.hasher.__exit__(exc_type, exc_val, exc_tb)
+        if exc_type:
+            raise
 
         bytes_processed = self.hasher.bytes_processed
         if self.avoid_empty_files and not bytes_processed:
