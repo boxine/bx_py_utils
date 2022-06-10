@@ -11,14 +11,19 @@ authors = [
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Topic :: Software Development :: Libraries :: Python Modules',
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
     'Intended Audience :: Developers',
 ]
 license = 'MIT'
 keywords=['utilities']
+include = ['LICENSE', 'README.md']
 readme='README.md'
 
 [tool.poetry.dependencies]
-python = '>=3.6,<4.0.0'
+python = '>=3.7,<4.0.0'  # Enforce 3.8 in the future
 
 [tool.poetry.dev-dependencies]
 boto3 = "*"  # needed for e.g.: bx_py_utils/aws/ stuff!
@@ -27,9 +32,10 @@ tox = '*'
 pytest = '*'
 pytest-randomly = '*'
 pytest-cov = '*'
+pytest-django = '*'
+pytest-darker = '*'  # https://github.com/akaihola/pytest-darker
+darker = '*'  # https://github.com/akaihola/darker
 flake8 = '*'
-flynt = '*'
-autopep8 = '*'
 isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 beautifulsoup4 = "*"
@@ -49,28 +55,35 @@ requires = ['poetry>=0.12']
 build-backend = 'poetry.masonry.api'
 
 
-[tool.autopep8]
-# https://github.com/hhatto/autopep8#pyprojecttoml
-max_line_length = 120
-exclude="*/htmlcov/*,*/migrations/*,*/volumes/*"
+[tool.darker]
+src = ['.']
+revision = "origin/master..."
+line_length = 100
+verbose = true
+skip_string_normalization = true
+diff = false
+check = false
+stdout = false
+isort = true
+lint = [
+    "flake8",
+]
+log_level = "INFO"
 
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
 atomic=true
+profile='black'
 line_length=120
-case_sensitive=false
 skip_glob=["*/htmlcov/*","*/migrations/*"]
-multi_line_output=3
-include_trailing_comma=true
 known_first_party=["bx_py_utils", "bx_py_utils_tests"]
-no_lines_before="LOCALFOLDER"
-default_section="THIRDPARTY"
-sections=["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
 lines_after_imports=2
+
 
 [tool.coverage.run]
 omit=[".*"]
+
 
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/latest/customize.html#pyproject-toml
@@ -89,6 +102,7 @@ addopts = """
     --cov-report term-missing
     --no-cov-on-fail
     --showlocals
+    --darker
     --doctest-modules
     --failed-first
     --last-failed-no-failures all
@@ -102,13 +116,14 @@ addopts = """
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{37,38,39}
+envlist = py{38,39,310}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
-install_dev_deps=True
+whitelist_externals =
+    poetry
 commands =
     python --version
-    python -m pytest
+    poetry run pytest
 """
