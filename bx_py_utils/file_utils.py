@@ -1,5 +1,6 @@
 import hashlib
 import io
+import re
 import tempfile
 from pathlib import Path
 from typing import BinaryIO, Iterable
@@ -175,3 +176,10 @@ class TempFileHasher:
                 current_size=bytes_processed,
                 expected_size=self.expected_files_size,
             )
+
+
+def safe_filename(input_str):
+    """
+    Makes an arbitrary input suitable to be used as a filename.
+    """
+    return re.sub(r'[^-_. \w]+', '_', input_str)

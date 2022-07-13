@@ -56,13 +56,14 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.file_utils
 
-* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L16-L20) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
-* [`FileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L8-L13) - Base error class for all 'file_utils' exceptions.
-* [`FileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L78-L103) - Context Manager for generate different hashes from file content while processing a file.
-* [`FileSizeError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L23-L37) - File size is not the same as the expected size.
-* [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L52-L75) - Generates a temp file with the given filename **without** any random name sequence.
-* [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L106-L177) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
-* [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L40-L49) - Check file size of given file object. Raise EmptyFileError for empty files or return size
+* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L17-L21) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
+* [`FileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L9-L14) - Base error class for all 'file_utils' exceptions.
+* [`FileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L79-L104) - Context Manager for generate different hashes from file content while processing a file.
+* [`FileSizeError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L24-L38) - File size is not the same as the expected size.
+* [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L53-L76) - Generates a temp file with the given filename **without** any random name sequence.
+* [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L107-L178) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
+* [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L41-L50) - Check file size of given file object. Raise EmptyFileError for empty files or return size
+* [`safe_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L181-L185) - Makes an arbitrary input suitable to be used as a filename.
 
 ### bx_py_utils.graphql_introspection
 
