@@ -62,6 +62,14 @@ def test_pretty_format_html():
     ''')
     assert html == '<h1>\n X\n</h1>\n<p>\n <strong>\n  Test\n </strong>\n</p>\n'
 
+    assert pretty_format_html("<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>") == (
+        '<code>\n' " &lt;script&gt;alert('XSS')&lt;/script&gt;\n" '</code>'
+    )
+
+    assert pretty_format_html('<p>&lt;XSS énc🕳d&#128065;ng&gt; a&#97;&#x61;</p>') == (
+        '<p>\n &lt;XSS énc🕳d👁ng&gt; aaa\n</p>'
+    )
+
     # Our helpful error message if requirements missing?
 
     with patch.object(html_utils, 'BeautifulSoup', None), \
