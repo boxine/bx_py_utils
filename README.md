@@ -2,6 +2,11 @@
 
 Various Python utility functions
 
+[![pytest](https://github.com/boxine/bx_py_utils/actions/workflows/pythonapp.yml/badge.svg?branch=master)](https://github.com/boxine/bx_py_utils/actions/workflows/pythonapp.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_py_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_py_utils)
+
+[![bx_py_utils @ PyPi](https://img.shields.io/pypi/v/bx_py_utils?label=bx_py_utils%20%40%20PyPi)](https://pypi.org/project/bx_py_utils/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bx_py_utils)](https://gitlab.com/boxine/bx_py_utils/-/blob/main/pyproject.toml)
+[![License MIT](https://img.shields.io/pypi/l/bx_py_utils)](https://gitlab.com/boxine/bx_py_utils/-/blob/main/LICENSE)
 
 ## Quickstart
 
