@@ -1,7 +1,8 @@
+import os
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
-from bx_py_utils.environ import cgroup_memory_usage
+from bx_py_utils.environ import OverrideEnviron, cgroup_memory_usage
 
 
 class DockerTestCase(TestCase):
@@ -19,3 +20,24 @@ class DockerTestCase(TestCase):
                 usage = cgroup_memory_usage(unit=unit)
             m.assert_called_once_with('/sys/fs/cgroup/memory/memory.usage_in_bytes', 'r')
             assert usage == value
+
+
+class OverrideEnvironTestCase(TestCase):
+    def test_basic(self):
+        old_value = os.environ.get('LOGNAME')
+
+        with OverrideEnviron(LOGNAME='foo'):
+            self.assertEqual(os.environ['LOGNAME'], 'foo')
+
+            with OverrideEnviron(LOGNAME='bar'):
+                self.assertEqual(os.environ['LOGNAME'], 'bar')
+
+                with OverrideEnviron(LOGNAME=None, FOO='bar'):
+                    self.assertNotIn('LOGNAME', os.environ)
+                    self.assertEqual(os.environ['FOO'], 'bar')
+
+                self.assertNotIn('FOO', os.environ)
+                self.assertEqual(os.environ['LOGNAME'], 'bar')
+            self.assertEqual(os.environ['LOGNAME'], 'foo')
+
+        self.assertEqual(os.environ.get('LOGNAME'), old_value)

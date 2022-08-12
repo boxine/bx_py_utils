@@ -1,3 +1,6 @@
+import os
+
+
 _conversion_powers = {
     'KB': 1,
     'MB': 2,
@@ -23,3 +26,28 @@ def cgroup_memory_usage(unit='B', cgroup_mem_file='/sys/fs/cgroup/memory/memory.
         return usage_bytes
 
     return usage_bytes / 1024 ** _conversion_powers[unit]
+
+
+class OverrideEnviron:
+    """
+    Context manager to change 'os.environ' temporarily.
+    Set variable value to None to remove the variable.
+    """
+
+    def __init__(self, **overrides):
+        self.overrides = overrides
+
+    def __enter__(self):
+        self._origin_env = os.environ.copy()
+        for k, v in self.overrides.items():
+            if v is None:
+                # delete
+                if k in os.environ:
+                    del os.environ[k]
+            else:
+                os.environ[k] = v
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type:
+            raise
+        os.environ = self._origin_env
