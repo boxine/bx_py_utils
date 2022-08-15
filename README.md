@@ -114,6 +114,14 @@ Please take a look into the sources and tests for deeper informations.
 * [`FrameNotFound()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/stack_info.py#L8-L13) - Base class for lookup errors.
 * [`last_frame_outside_path()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/stack_info.py#L16-L44) - Returns the stack frame that is the direct successor of given "file_path".
 
+### bx_py_utils.string_utils
+
+* [`compare_sentences()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L67-L90) - Calculates the Levenshtein distance between text1 and text2. With filter functionality.
+* [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L106-L116) - Replace line endings to unix-style.
+* [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L40-L64) - Extract words from a text. With filter functionality.
+* [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L8-L37) - Calculates the Levenshtein distance between two strings.
+* [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L93-L103) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
+
 #### bx_py_utils.test_utils.assertion
 
 * [`assert_equal()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L63-L76) - Check if the two objects are the same. Display a nice diff, using `pformat()`
