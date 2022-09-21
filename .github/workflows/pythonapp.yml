@@ -31,6 +31,12 @@ jobs:
       with:
         python-version: '${{ matrix.python-version }}'
 
+    - name: Setup Github Cache
+      uses: actions/cache@v3
+      with:
+        key: dot-cache-${{ matrix.os }}-${{ matrix.python-version }}
+        path: ~/.cache/
+
     - name: 'Install package'
       run: |
         make install-poetry
