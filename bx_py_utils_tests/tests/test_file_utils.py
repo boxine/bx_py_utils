@@ -7,7 +7,9 @@ from bx_py_utils.file_utils import (
     FileHasher,
     FileSizeError,
     NamedTemporaryFile2,
+    OverlongFilenameError,
     TempFileHasher,
+    cut_filename,
     get_and_assert_file_size,
     safe_filename,
 )
@@ -137,8 +139,49 @@ class TempFileUtilsTestCase(TestCase):
         msg = str(size_err.exception)
         assert msg == "File 'foo.bar' is 9 Bytes in size, but should be 99 Bytes!"
 
-
-class FileFunctionTestCase(TestCase):
     def test_safe_filename(self):
         strange_name = '<XSS>"\' ättémpt-er😈 #1|/(\r\n2){}\t[].svg'
         assert safe_filename(strange_name) == '_XSS_ ättémpt-er_ _1_2_.svg'
+
+    def test_cut_filename(self):
+        long_filename = '1234567890_this_is_a_very_very_long_file_name_01234567890.wav'
+        self.assertEqual(len(long_filename), 61)
+
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=61),
+            long_filename,
+        )
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=60),
+            '1234567890_this_is_a_very_very_long_file_name_0123456789.wav',
+        )
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=59),
+            '1234567890_this_is_a_very_very_long_file_name_012345678.wav',
+        )
+
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=14, min_name_len=9),
+            '1234567890.wav',
+        )
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=13, min_name_len=9),
+            '123456789.wav',
+        )
+        self.assertEqual(
+            cut_filename(file_name=long_filename, max_length=5),
+            '1.wav',
+        )
+        with self.assertRaises(OverlongFilenameError) as err:
+            cut_filename(file_name=long_filename, max_length=12, min_name_len=9)
+        error_msg = str(err.exception)
+        self.assertEqual(
+            error_msg,
+            f"File name {long_filename!r} can not be shortened to 12 characters.",
+        )
+
+        # Only the last suffix will be keep:
+        self.assertEqual(
+            cut_filename(file_name='1234567890_foobar.ext1.ext2', max_length=15),
+            '1234567890.ext2',
+        )
