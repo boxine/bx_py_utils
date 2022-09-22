@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 import bx_py_utils
-from bx_py_utils.auto_doc import ModulePath, assert_readme, generate_modules_doc
+from bx_py_utils.auto_doc import FnmatchExclude, ModulePath, assert_readme, generate_modules_doc
 
 
 BASE_PATH = Path(bx_py_utils.__file__).parent
@@ -30,7 +30,7 @@ def test_generate_modules_doc_with_links():
         link_template='https://test.tld/blob/master/{path}#L{start}-L{end}',
     )
     assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L111-L151)'
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L115-L157)'
         ' - Check'
     ) in doc_block
 
@@ -41,6 +41,7 @@ def test_auto_doc_in_readme():
     assert_readme(
         readme_path=readme_path,
         modules=['bx_py_utils'],
+        exclude_func=FnmatchExclude('test_*.py'),
         start_marker_line='[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
         end_marker_line='[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
         start_level=2,
@@ -49,15 +50,30 @@ def test_auto_doc_in_readme():
 
 
 def test_old_link_template_pattern():
-    with pytest.deprecated_call(match=(
-        '"lnum" in "link_template" will be removed in the future. Change it to "start"'
-    )):
-        doc_block = generate_modules_doc(
+    with pytest.raises(AssertionError) as cm:
+        generate_modules_doc(
             modules=['bx_py_utils.auto_doc'],
-            start_level=0,
             link_template='https://test.tld/blob/master/{path}#L{lnum}',
         )
-        assert doc_block
-    assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L111) - Check'
-    ) in doc_block
+    assert str(cm.value) == 'Please change "lnum" in "link_template" to {start}, {end}'
+
+
+def test_FnmatchExclude():
+    file_list = ('foo.py', 'bar.py', 'foobar.py', 'test.py')
+
+    exclude_func = FnmatchExclude('*bar.py')
+    assert [item for item in file_list if exclude_func(item)] == ['foo.py', 'test.py']
+
+    exclude_func = FnmatchExclude('f*.py')
+    assert [item for item in file_list if exclude_func(item)] == ['bar.py', 'test.py']
+
+    exclude_func = FnmatchExclude('f*.py', 'test.*')
+    assert [item for item in file_list if exclude_func(item)] == ['bar.py']
+
+
+def test_exclude_func():
+    doc_block = generate_modules_doc(
+        modules=['bx_py_utils'],
+        exclude_func=FnmatchExclude('*.py'),  # Exclude all files
+    )
+    assert doc_block == ''  # No files -> no doc

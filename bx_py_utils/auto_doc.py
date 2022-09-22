@@ -1,7 +1,7 @@
+import fnmatch
 import importlib
 import inspect
 import re
-import warnings
 from pathlib import Path
 
 from pdoc import extract
@@ -32,15 +32,17 @@ def get_code_location(obj):
     return start, start + len(lines) - 1
 
 
-def generate_modules_doc(modules, start_level=1, link_template=None):
+def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, link_template=None):
     """
     Generate a list of function/class information via pdoc.
+
+    :param modules: module specifications for pdoc.extract.walk_specs()
+    :param exclude_func: A callable to filter the files
+    :param start_level: Markdown "#" min. count
+    :param link_template: String that can generate a URL with: {path}, {start}, {end} placeholder
     """
     if link_template and 'lnum' in link_template:
-        warnings.warn(
-            '"lnum" in "link_template" will be removed in the future. Change it to "start"',
-            DeprecationWarning
-        )
+        raise AssertionError('Please change "lnum" in "link_template" to {start}, {end}')
 
     def first_doc_line(doc_string):
         try:
@@ -67,7 +69,6 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
                 start, end = get_code_location(obj=pdoc_item.obj)
                 link = link_template.format(
                     path=path,
-                    lnum=start,  # TODO: Obsolete, will be removed in the future!
                     start=start,
                     end=end,
                 )
@@ -81,6 +82,9 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
     parts = []
     for module_name in sorted(module_names):
         module_obj = extract.load_module(module_name)
+        if exclude_func is not None and not exclude_func(module_obj.__file__):
+            # This file should be excluded
+            continue
 
         base_path = module_path.get_base_path(module_name=module_name)
         module_root_path = base_path.parent
@@ -111,6 +115,7 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
 def assert_readme(
     readme_path: Path,
     modules: list,
+    exclude_func: callable = None,
     start_marker_line: str = '[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
     end_marker_line: str = '[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
     start_level: int = 1,
@@ -128,6 +133,7 @@ def assert_readme(
 
     doc_block = generate_modules_doc(
         modules=modules,
+        exclude_func=exclude_func,
         start_level=start_level,
         link_template=link_template,
     )
@@ -149,3 +155,20 @@ def assert_readme(
 
         # display error message with diff:
         assert_text_equal(old_readme, new_readme)
+
+
+class FnmatchExclude:
+    """
+    Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
+    """
+
+    def __init__(self, *patterns):
+        self.patterns = patterns
+
+    def __call__(self, file_path: str) -> bool:
+        assert isinstance(file_path, str)
+        for pattern in self.patterns:
+            assert isinstance(pattern, str)
+            if fnmatch.fnmatch(file_path, pattern):
+                return False  # ignore this file for auto docs
+        return True  # include this file
