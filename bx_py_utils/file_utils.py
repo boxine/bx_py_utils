@@ -183,3 +183,54 @@ def safe_filename(input_str):
     Makes an arbitrary input suitable to be used as a filename.
     """
     return re.sub(r'[^-_. \w]+', '_', input_str)
+
+
+class OverlongFilenameError(AssertionError):
+    """
+    cut_filename() error: The file name can not be shortened, because sterm is to short.
+    """
+
+    pass
+
+
+def cut_filename(file_name: str, max_length: int, min_name_len: int = 1) -> str:
+    """
+    Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
+
+    :param file_name: The source file name to cut
+    :param max_length: The maximum length of the entire file name.
+    :param min_name_len: Mininmal length of the "stem" part (file name without suffix)
+
+    e.g.:
+
+    >>> cut_filename('0123456789_a_very_very_long_file_name.wav', max_length=11)
+    '0123456.wav'
+    >>> cut_filename('0123456789_a_very_very_long_file_name.wav', max_length=10)
+    '012345.wav'
+    """
+    if len(file_name) <= max_length:
+        return file_name
+
+    assert min_name_len >= 1
+
+    path = Path(file_name)
+
+    suffix = path.suffix
+    suffix_len = len(suffix)
+
+    stem = path.stem
+    cut_length = max_length - suffix_len
+    if cut_length < min_name_len:
+        raise OverlongFilenameError(
+            f'File name {file_name!r} can not be shortened to {max_length} characters.'
+        )
+    cut_stem = stem[:cut_length]
+
+    try:
+        cut_path = path.with_stem(cut_stem)  # new in Python 3.9
+    except AttributeError:
+        cut_path = path.with_name(cut_stem + suffix)
+
+    result = str(cut_path)
+    assert len(result) == max_length
+    return result
