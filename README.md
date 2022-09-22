@@ -29,9 +29,9 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.auto_doc
 
-* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L121-L163) - Check and update README file with generate_modules_doc()
-* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L43-L118) - Generate a list of function/class information via pdoc.
-* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L35-L40) - Return start and end line number for an object via inspect.
+* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L111-L151) - Check and update README file with generate_modules_doc()
+* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L35-L108) - Generate a list of function/class information via pdoc.
+* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L27-L32) - Return start and end line number for an object via inspect.
 
 #### bx_py_utils.aws.client_side_cert_manager
 

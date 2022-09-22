@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 
 import pytest
@@ -16,10 +15,6 @@ def test_module_path():
 
 
 def test_generate_modules_doc_without_links():
-    if sys.version_info < (3, 7):
-        # pdoc is not compatible with Python 3.6
-        return
-
     doc_block = generate_modules_doc(
         modules=['bx_py_utils.auto_doc'],
         start_level=0,
@@ -29,26 +24,18 @@ def test_generate_modules_doc_without_links():
 
 
 def test_generate_modules_doc_with_links():
-    if sys.version_info < (3, 7):
-        # pdoc is not compatible with Python 3.6
-        return
-
     doc_block = generate_modules_doc(
         modules=['bx_py_utils.auto_doc'],
         start_level=0,
         link_template='https://test.tld/blob/master/{path}#L{start}-L{end}',
     )
     assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L121-L163)'
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L111-L151)'
         ' - Check'
     ) in doc_block
 
 
 def test_auto_doc_in_readme():
-    if sys.version_info < (3, 7):
-        # pdoc is not compatible with Python 3.6
-        return
-
     readme_path = BASE_PATH.parent / 'README.md'
 
     assert_readme(
@@ -62,10 +49,6 @@ def test_auto_doc_in_readme():
 
 
 def test_old_link_template_pattern():
-    if sys.version_info < (3, 7):
-        # pdoc is not compatible with Python 3.6
-        return
-
     with pytest.deprecated_call(match=(
         '"lnum" in "link_template" will be removed in the future. Change it to "start"'
     )):
@@ -76,5 +59,5 @@ def test_old_link_template_pattern():
         )
         assert doc_block
     assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L121) - Check'
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L111) - Check'
     ) in doc_block
