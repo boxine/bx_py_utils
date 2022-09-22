@@ -1,19 +1,11 @@
 import importlib
 import inspect
 import re
-import sys
 import warnings
 from pathlib import Path
 
-
-try:
-    from pdoc import extract
-    from pdoc.doc import Module
-except ImportError:
-    if sys.version_info >= (3, 7):
-        # pdoc is not compatible with Python 3.6
-        raise
-
+from pdoc import extract
+from pdoc.doc import Module
 
 from bx_py_utils.test_utils.assertion import assert_text_equal
 
@@ -44,8 +36,6 @@ def generate_modules_doc(modules, start_level=1, link_template=None):
     """
     Generate a list of function/class information via pdoc.
     """
-    assert sys.version_info >= (3, 7), 'pdoc is not compatible with Python 3.6'
-
     if link_template and 'lnum' in link_template:
         warnings.warn(
             '"lnum" in "link_template" will be removed in the future. Change it to "start"',
@@ -130,8 +120,6 @@ def assert_readme(
     Check and update README file with generate_modules_doc()
     The automatic generated documentation list will be "replace" between the given markers.
     """
-    assert sys.version_info >= (3, 7), 'pdoc is not compatible with Python 3.6'
-
     assert readme_path.is_file()
     old_readme = readme_path.read_text()
 

@@ -40,12 +40,7 @@ isort = '*'
 poetry-publish = "*"  # https://github.com/jedie/poetry-publish
 beautifulsoup4 = "*"
 lxml = "*"
-
-# pdoc > 0.4.1 needs Python 3.7, but we still support 3.6,
-# so we must install pdoc only with 3.7 or newer, to get a up-to-date version.
-# The result is, that we can't generate the docs with Python 3.6, but this
-# seems not to be a show stopper ;)
-pdoc = { version = "*", python = ">=3.7" }  # https://pdoc.dev/
+pdoc = "*"  # https://pdoc.dev/
 
 [tool.poetry.scripts]
 publish = "bx_py_utils_tests.publish:publish"
@@ -97,7 +92,6 @@ norecursedirs = ".* __pycache__ coverage* dist htmlcov"
 #    --full-trace
 #    -p no:warnings
 addopts = """
-    --import-mode=importlib
     --cov=.
     --cov-report term-missing
     --no-cov-on-fail
