@@ -144,6 +144,7 @@ Please take a look into the sources and tests for deeper informations.
 
 #### bx_py_utils.test_utils.log_utils
 
+* [`NoLogs()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/log_utils.py#L14-L31) - Context manager to Suppress all logger outputs
 * [`RaiseLogUsage()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/log_utils.py#L4-L11) - A log handler, that raise an error on every log output.
 
 #### bx_py_utils.test_utils.mock_aws_secret_manager
