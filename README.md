@@ -112,6 +112,10 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`processify()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/processify.py#L12-L53) - Decorator to run a function as a process.
 
+### bx_py_utils.rison
+
+* [`rison_dumps()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/rison.py#L4-L31) - Encode as RISON, a URL-safe encoding format.
+
 ### bx_py_utils.stack_info
 
 * [`FrameNotFound()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/stack_info.py#L8-L13) - Base class for lookup errors.
