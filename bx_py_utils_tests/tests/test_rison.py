@@ -11,6 +11,7 @@ class RISONTest(TestCase):
         self.assertEqual(rison_dumps(None), '!n')
         self.assertEqual(rison_dumps(''), "''")
         self.assertEqual(rison_dumps('ab'), 'ab')  # no quoting necessary!
+        self.assertEqual(rison_dumps('now-2d'), 'now-2d')  # no quoting here either!
         self.assertEqual(rison_dumps('a b'), '\'a b\'')
         self.assertEqual(
             rison_dumps('a\'b\\c"d!e!!f'), "'a!'b\\c\"d!!e!!!!f'"
