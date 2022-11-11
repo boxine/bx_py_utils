@@ -130,7 +130,7 @@ def assert_text_snapshot(
     """
     Assert "text" string via snapshot file
     """
-    assert isinstance(got, str)
+    assert isinstance(got, str), f'Got {got!r} of type {type(got).__name__}, but expected a str'
 
     snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
     try:

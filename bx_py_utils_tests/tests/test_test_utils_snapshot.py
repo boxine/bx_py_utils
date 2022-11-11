@@ -208,6 +208,10 @@ def test_assert_text_snapshot():
             '''Differing newlines: Expected 'a\\nnewline', got 'a\\r\\nnewline\''''
         )
 
+        with pytest.raises(AssertionError) as exc_info:
+            assert_text_snapshot(tmp_dir, snapshot_name='type_error', got=None)
+        assert exc_info.value.args[0] == 'Got None of type NoneType, but expected a str'
+
 
 def test_assert_py_snapshot():
     example = {
