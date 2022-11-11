@@ -8,6 +8,14 @@ from bx_py_utils.test_utils.mocks3 import PseudoS3Client
 from bx_py_utils.test_utils.snapshot import assert_snapshot, assert_text_snapshot
 
 
+class CountingCallback:
+    def __init__(self):
+        self.total_bytes = 0
+
+    def __call__(self, byte_count):
+        self.total_bytes += byte_count
+
+
 class S3MockTest(TestCase):
     def test_debug_long_repr(self):
         s3 = PseudoS3Client(init_buckets=('b-bucket', 'a-bucket'))
@@ -30,7 +38,9 @@ class S3MockTest(TestCase):
         # download_file
         with tempfile.TemporaryDirectory() as tmp_dir:
             existing_path = pathlib.Path(tmp_dir) / 'existing'
-            s3.download_file('buck', 'png', str(existing_path))
+            callback = CountingCallback()
+            s3.download_file('buck', 'png', str(existing_path), Callback=callback)
+            self.assertEqual(callback.total_bytes, len(content))
             self.assertEqual(existing_path.read_bytes(), content)
 
             not_found_path = pathlib.Path(tmp_dir) / 'not-found'
@@ -39,14 +49,7 @@ class S3MockTest(TestCase):
             assert not not_found_path.exists()
 
         # download_fileobj
-        class Callback:
-            def __init__(self):
-                self.total_bytes = 0
-
-            def __call__(self, byte_count):
-                self.total_bytes += byte_count
-
-        callback = Callback()
+        callback = CountingCallback()
         buf = io.BytesIO()
         s3.download_fileobj(Bucket='buck', Key='png', Fileobj=buf, Callback=callback)
         self.assertEqual(buf.getvalue(), content)
