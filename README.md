@@ -29,10 +29,11 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.auto_doc
 
-* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L160-L174) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
-* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L115-L157) - Check and update README file with generate_modules_doc()
-* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L35-L112) - Generate a list of function/class information via pdoc.
-* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L27-L32) - Return start and end line number for an object via inspect.
+* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L176-L190) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
+* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L149-L173) - Check and update README file with generate_modules_doc()
+* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L116-L146) - Check and update README file: Asset that "text_block" is present between the markers.
+* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L36-L113) - Generate a list of function/class information via pdoc.
+* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L28-L33) - Return start and end line number for an object via inspect.
 
 #### bx_py_utils.aws.client_side_cert_manager
 

@@ -7,6 +7,7 @@ from pathlib import Path
 from pdoc import extract
 from pdoc.doc import Module
 
+from bx_py_utils.path import assert_is_file
 from bx_py_utils.test_utils.assertion import assert_text_equal
 
 
@@ -112,6 +113,39 @@ def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, 
     return ''.join(parts)
 
 
+def assert_readme_block(
+    readme_path: Path,
+    text_block: str,
+    start_marker_line: str = '[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
+    end_marker_line: str = '[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
+):
+    """
+    Check and update README file: Asset that "text_block" is present between the markers.
+    """
+    assert_is_file(readme_path)
+    old_readme = readme_path.read_text()
+
+    assert (
+        start_marker_line in old_readme
+    ), f'Start marker {start_marker_line!r} not found in: {readme_path}'
+    assert (
+        end_marker_line in old_readme
+    ), f'End marker {end_marker_line!r} not found in: {readme_path}'
+
+    doc_block = f'{start_marker_line}\n{text_block}\n{end_marker_line}'
+
+    start = re.escape(start_marker_line)
+    end = re.escape(end_marker_line)
+
+    new_readme, sub_count = re.subn(f'{start}(.*?){end}', doc_block, old_readme, flags=re.DOTALL)
+    assert sub_count == 1
+    if old_readme != new_readme:
+        readme_path.write_text(new_readme)
+
+        # display error message with diff:
+        assert_text_equal(old_readme, new_readme)
+
+
 def assert_readme(
     readme_path: Path,
     modules: list,
@@ -125,36 +159,18 @@ def assert_readme(
     Check and update README file with generate_modules_doc()
     The automatic generated documentation list will be "replace" between the given markers.
     """
-    assert readme_path.is_file()
-    old_readme = readme_path.read_text()
-
-    assert start_marker_line in old_readme
-    assert end_marker_line in old_readme
-
     doc_block = generate_modules_doc(
         modules=modules,
         exclude_func=exclude_func,
         start_level=start_level,
         link_template=link_template,
     )
-
-    doc_block = f'{start_marker_line}\n{doc_block}\n{end_marker_line}'
-
-    start = re.escape(start_marker_line)
-    end = re.escape(end_marker_line)
-
-    new_readme, sub_count = re.subn(
-        f'{start}(.*?){end}',
-        doc_block,
-        old_readme,
-        flags=re.DOTALL
+    assert_readme_block(
+        readme_path=readme_path,
+        text_block=doc_block,
+        start_marker_line=start_marker_line,
+        end_marker_line=end_marker_line,
     )
-    assert sub_count == 1
-    if old_readme != new_readme:
-        readme_path.write_text(new_readme)
-
-        # display error message with diff:
-        assert_text_equal(old_readme, new_readme)
 
 
 class FnmatchExclude:

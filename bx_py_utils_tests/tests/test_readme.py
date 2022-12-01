@@ -30,8 +30,7 @@ def test_generate_modules_doc_with_links():
         link_template='https://test.tld/blob/master/{path}#L{start}-L{end}',
     )
     assert (
-        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L115-L157)'
-        ' - Check'
+        '* [`assert_readme()`](https://test.tld/blob/master/bx_py_utils/auto_doc.py#L'
     ) in doc_block
 
 
