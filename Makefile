@@ -1,28 +1,31 @@
 SHELL := /bin/bash
 MAX_LINE_LENGTH := 119
-POETRY_VERSION := $(shell poetry --version 2>/dev/null)
 
 help: ## List all commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 check-poetry:
-	@if [[ "${POETRY_VERSION}" == *"Poetry"* ]] ; \
+	@if [[ "$(shell poetry --version 2>/dev/null)" == *"Poetry"* ]] ; \
 	then \
-		echo "Found ${POETRY_VERSION}, ok." ; \
+		echo "Poetry found, ok." ; \
 	else \
 		echo 'Please install poetry first, with e.g.:' ; \
 		echo 'make install-poetry' ; \
 		exit 1 ; \
 	fi
 
-install-poetry: ## install or update poetry via pip
-	pip3 install -U poetry
+install-poetry:  ## install or update poetry
+	curl -sSL https://install.python-poetry.org | python3 -
 
-install: check-poetry ## install via poetry
+install: check-poetry  ## install project via poetry
+	python3 -m venv .venv
 	poetry install
 
-update: check-poetry ## Update the dependencies as according to the pyproject.toml file
-	poetry update
+update: check-poetry  ## update the sources and installation and generate "conf/requirements.txt"
+	python3 -m venv .venv
+	poetry self update
+	poetry update -v
+	poetry install
 
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
@@ -52,6 +55,9 @@ pytest-ci: check-poetry ## Run pytest with CI settings
 	poetry run pytest -c pytest-ci.ini
 
 test: pytest
+
+mypy:  ## Run mypy
+	poetry run mypy .
 
 publish: ## Release new version to PyPi
 	poetry run publish

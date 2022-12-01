@@ -1,1 +1,4 @@
-__version__ = '71'
+from importlib.metadata import version
+
+
+__version__ = version('bx_py_utils')
