@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "71"
+version = "72"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
@@ -76,7 +76,7 @@ log_level = "INFO"
 atomic=true
 profile="black"
 line_length=120
-skip_glob=["*/htmlcov/*","*/migrations/*"]
+skip_glob=[".*","*/htmlcov/*","*/migrations/*"]
 known_first_party=["bx_py_utils", "bx_py_utils_tests"]
 lines_after_imports=2
 
@@ -120,7 +120,7 @@ skip_missing_interpreters = True
 
 [testenv]
 passenv = *
-whitelist_externals =
+allowlist_externals =
     poetry
 commands =
     python --version

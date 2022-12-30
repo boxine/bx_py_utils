@@ -3,6 +3,7 @@ import pathlib
 import re
 import tempfile
 from decimal import Decimal
+from unittest import TestCase
 from unittest.mock import patch
 from uuid import UUID
 
@@ -10,6 +11,7 @@ import pytest
 
 import bx_py_utils
 from bx_py_utils import html_utils
+from bx_py_utils.environ import OverrideEnviron
 from bx_py_utils.html_utils import ElementsNotFoundError
 from bx_py_utils.test_utils import snapshot
 from bx_py_utils.test_utils.assertion import pformat_ndiff, text_ndiff
@@ -403,3 +405,22 @@ def test_assert_html_snapshot_by_css_selector():
         pass
     except Exception as err:
         raise AssertionError('Expected ElementsNotFoundError, other Error was raised: ', err)
+
+
+class SnapshotTestCase(TestCase):
+    def test_raise_snapshot_errors(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = pathlib.Path(temp_dir)
+            snapshot_path = temp_path / 'snap.snapshot.json'
+            self.assertFalse(snapshot_path.exists())
+
+            with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'):
+                assert_snapshot(root_dir=temp_path, snapshot_name='snap', got=[])
+            self.assertTrue(snapshot_path.is_file())
+            snapshot_path.unlink()
+
+            with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='1'), self.assertRaises(
+                FileNotFoundError
+            ) as cm:
+                assert_snapshot(root_dir=temp_path, snapshot_name='snap', got=[])
+            self.assertIn('No such file or directory', str(cm.exception))

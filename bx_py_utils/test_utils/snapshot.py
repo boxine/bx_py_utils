@@ -39,10 +39,13 @@ from bx_py_utils.test_utils.assertion import (
 )
 
 
-RAISE_SNAPSHOT_ERRORS = os.environ.get('RAISE_SNAPSHOT_ERRORS') not in ('0', 'false')
 SELF_FILE_PATH = pathlib.Path(__file__)
 _AUTO_SNAPSHOT_NAME_COUNTER = Counter()
 _UNIFY_NEWLINES_RE = r'\r?\n'
+
+
+def raise_snapshot_errors():
+    return os.environ.get('RAISE_SNAPSHOT_ERRORS') not in ('0', 'false')
 
 
 def _write_json(obj, snapshot_file):
@@ -137,7 +140,7 @@ def assert_text_snapshot(
         expected = snapshot_file.read_bytes().decode('utf-8')
     except (FileNotFoundError, OSError):
         snapshot_file.write_bytes(got.encode('utf-8'))
-        if not RAISE_SNAPSHOT_ERRORS:
+        if not raise_snapshot_errors():
             return
         raise
 
@@ -147,7 +150,7 @@ def assert_text_snapshot(
         if re.sub(_UNIFY_NEWLINES_RE, '', got) == re.sub(_UNIFY_NEWLINES_RE, '', expected):
             raise AssertionError(f'Differing newlines: Expected {expected!r}, got {got!r}')
 
-        if RAISE_SNAPSHOT_ERRORS:
+        if raise_snapshot_errors():
             # display error message with diff:
             assert_text_equal(
                 got, expected,
@@ -181,14 +184,14 @@ def assert_snapshot(
             expected = json.load(snapshot_handle)
     except (ValueError, OSError, FileNotFoundError):
         _write_json(got, snapshot_file)
-        if not RAISE_SNAPSHOT_ERRORS:
+        if not raise_snapshot_errors():
             return
         raise
 
     if got != expected:
         _write_json(got, snapshot_file)
 
-        if RAISE_SNAPSHOT_ERRORS:
+        if raise_snapshot_errors():
             # display error message with diff:
             assert_equal(
                 got, expected,
@@ -221,14 +224,14 @@ def assert_py_snapshot(
         expected_str = snapshot_file.read_text()
     except FileNotFoundError:
         snapshot_file.write_text(got_str)
-        if not RAISE_SNAPSHOT_ERRORS:
+        if not raise_snapshot_errors():
             return
         raise
 
     if got_str != expected_str:
         snapshot_file.write_text(got_str)
 
-        if RAISE_SNAPSHOT_ERRORS:
+        if raise_snapshot_errors():
             # display error message with diff:
             assert_equal(
                 got_str, expected_str,
@@ -320,14 +323,14 @@ def assert_binary_snapshot(
         expected = snapshot_file.read_bytes()
     except (FileNotFoundError, OSError):
         snapshot_file.write_bytes(got)
-        if not RAISE_SNAPSHOT_ERRORS:
+        if not raise_snapshot_errors():
             return
         raise
 
     if got != expected:
         snapshot_file.write_bytes(got)
 
-        if RAISE_SNAPSHOT_ERRORS:
+        if raise_snapshot_errors():
             assert_equal(
                 got, expected,
                 fromfile=fromfile, tofile=tofile,

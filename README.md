@@ -181,11 +181,11 @@ A simple mock for Boto3's S3 modules.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`assert_binary_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L303-L335) - Assert binary data via snapshot file
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L240-L287) - Assert "html" string via snapshot file with validate and pretty format
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L200-L237) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L159-L197) - Assert given data serialized to JSON snapshot file.
-* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L120-L156) - Assert "text" string via snapshot file
+* [`assert_binary_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L306-L338) - Assert binary data via snapshot file
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L243-L290) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L203-L240) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L162-L200) - Assert given data serialized to JSON snapshot file.
+* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L123-L159) - Assert "text" string via snapshot file
 
 #### bx_py_utils.test_utils.time
 
