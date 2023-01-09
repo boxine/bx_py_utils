@@ -139,6 +139,10 @@ Please take a look into the sources and tests for deeper informations.
 * [`text_ndiff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L7-L12) - Generate a `ndiff` between two text strings.
 * [`text_unified_diff()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/assertion.py#L39-L43) - Generate a unified diff between two text strings.
 
+#### bx_py_utils.test_utils.context_managers
+
+* [`MassContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L1-L23) - A context manager that enter/exit a list of mocks.
+
 #### bx_py_utils.test_utils.datetime
 
 * [`parse_dt()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/datetime.py#L4-L15) - Helper for easy generate a `datetime` instance via string.
@@ -169,6 +173,10 @@ Please take a look into the sources and tests for deeper informations.
 A simple mock for Boto3's S3 modules.
 
 * [`PseudoS3Client()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/mocks3.py#L60-L218) - Simulates a boto3 S3 client object in tests
+
+#### bx_py_utils.test_utils.redirect
+
+* [`RedirectOut()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/redirect.py#L7-L34) - Redirect stdout + stderr into a buffer (with optional strip the output)
 
 #### bx_py_utils.test_utils.requests_mock_assertion
 
