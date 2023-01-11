@@ -1,13 +1,7 @@
 from unittest import TestCase
 from uuid import UUID
 
-from bx_py_utils.string_utils import (
-    compare_sentences,
-    ensure_lf,
-    get_words,
-    levenshtein_distance,
-    uuid_from_text,
-)
+from bx_py_utils.string_utils import compare_sentences, ensure_lf, get_words, levenshtein_distance, uuid_from_text
 
 
 class StringUtilsTestCase(TestCase):

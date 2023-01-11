@@ -4,5 +4,7 @@
 [flake8]
 # Max line length of 119 is the same as the Django project:
 exclude = .*, dist, htmlcov
-#ignore = E402
 max-line-length = 119
+
+# See: https://black.readthedocs.io/en/stable/faq.html#why-are-flake8-s-e203-and-w503-violated
+ignore = E203

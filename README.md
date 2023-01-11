@@ -2,7 +2,7 @@
 
 Various Python utility functions
 
-[![pytest](https://github.com/boxine/bx_py_utils/actions/workflows/pythonapp.yml/badge.svg?branch=master)](https://github.com/boxine/bx_py_utils/actions/workflows/pythonapp.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_py_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_py_utils)
+[![test](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_py_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_py_utils)
 
 [![bx_py_utils @ PyPi](https://img.shields.io/pypi/v/bx_py_utils?label=bx_py_utils%20%40%20PyPi)](https://pypi.org/project/bx_py_utils/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/bx_py_utils)](https://gitlab.com/boxine/bx_py_utils/-/blob/main/pyproject.toml)
@@ -25,7 +25,7 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.anonymize
 
-* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L15-L43) - Anonymize the given string with special handling for eMail addresses.
+* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L15-L38) - Anonymize the given string with special handling for eMail addresses.
 
 ### bx_py_utils.auto_doc
 
@@ -199,6 +199,10 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 
 * [`MockTimeMonotonicGenerator()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/time.py#L1-L19) - Helper to mock `time.monotonic()` in tests.
 
+#### bx_py_utils.test_utils.unittest_utils
+
+* [`assert_no_flat_tests_functions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L8-L22) - Check if there exists normal test functions (That will not be executed by normal unittests)
+
 ### bx_py_utils.text_tools
 
 * [`cutout()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/text_tools.py#L1-L36) - Mark a point in a long text by line no + column with context lines around.
@@ -213,10 +217,13 @@ Quick hint about snapshot. If you have many snapshots in your project and you ne
 e.g.:
 
 ```bash
-RAISE_SNAPSHOT_ERRORS=0 poetry run pytest
 RAISE_SNAPSHOT_ERRORS=0 python3 -m unittest
 ```
 
+Renew all snapshot files with:
+```bash
+make update-test-snapshot-files
+```
 
 ## Backwards-incompatible changes
 
@@ -237,22 +244,20 @@ To start developing e.g.:
 ~$ git clone https://github.com/boxine/bx_py_utils.git
 ~$ cd bx_py_utils
 ~/bx_py_utils$ make
-help                 List all commands
-install-poetry       install or update poetry
-install              install via poetry
-update               Update the dependencies as according to the pyproject.toml file
-lint                 Run code formatters and linter
-fix-code-style       Fix code formatting
-tox-listenvs         List all tox test environments
-tox                  Run pytest via tox with all environments
-tox-py37             Run pytest via tox with *python v3.7*
-tox-py38             Run pytest via tox with *python v3.8*
-tox-py39             Run pytest via tox with *python v3.9*
-tox-py310            Run pytest via tox with *python v3.10*
-pytest               Run pytest
-pytest-ci            Run pytest with CI settings
-publish              Release new version to PyPi
-clean                Remove created files from the test project
+install-poetry             install or update poetry
+install                    install project via poetry
+update                     update the sources and installation and generate "conf/requirements.txt"
+lint                       Run code formatters and linter
+fix-code-style             Fix code formatting
+tox-listenvs               List all tox test environments
+tox                        Run tests via tox with all environments
+test                       Run tests
+coverage                   Run tests with coverage
+update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
+mypy                       Run mypy
+safety                     Run https://github.com/pyupio/safety
+publish                    Release new version to PyPi
+clean                      Remove created files from the test project
 ```
 
 

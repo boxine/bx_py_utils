@@ -7,8 +7,6 @@ from unittest import TestCase
 from unittest.mock import patch
 from uuid import UUID
 
-import pytest
-
 import bx_py_utils
 from bx_py_utils import html_utils
 from bx_py_utils.environ import OverrideEnviron
@@ -32,382 +30,383 @@ from bx_py_utils.test_utils.snapshot import (
 SELF_PATH = pathlib.Path(__file__).parent
 
 
-def test_get_snapshot_file():
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        snapshot_file = _get_snapshot_file(
-            root_dir=tmp_dir, snapshot_name='foo_bar', extension='.123'
-        )
-        assert snapshot_file == pathlib.Path(tmp_dir) / 'foo_bar.snapshot.123'
-        assert not snapshot_file.is_file()
+class SnapshotTestCase(TestCase):
+    def test_get_snapshot_file(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            snapshot_file = _get_snapshot_file(root_dir=tmp_dir, snapshot_name='foo_bar', extension='.123')
+            assert snapshot_file == pathlib.Path(tmp_dir) / 'foo_bar.snapshot.123'
+            assert not snapshot_file.is_file()
 
-        snapshot_file = _get_snapshot_file(
-            root_dir=tmp_dir, snapshot_name='foobar.snapshot', extension='.txt'
-        )
-        assert snapshot_file == pathlib.Path(tmp_dir) / 'foobar.snapshot.txt'
-        assert not snapshot_file.is_file()
+            snapshot_file = _get_snapshot_file(root_dir=tmp_dir, snapshot_name='foobar.snapshot', extension='.txt')
+            assert snapshot_file == pathlib.Path(tmp_dir) / 'foobar.snapshot.txt'
+            assert not snapshot_file.is_file()
 
+    def test_assert_snapshot(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError) as cm:
+                assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 5}])
+            error_message = str(cm.exception)
+            self.assertIn('No such file or directory', error_message)
+            self.assertIn(tmp_dir, error_message)
+            self.assertIn('snap.snapshot.json', error_message)
 
-def test_assert_snapshot():
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with pytest.raises(FileNotFoundError) as excinfo:
             assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 5}])
-        assert 'No such file or directory' in str(excinfo.value)
-        assert tmp_dir in str(excinfo.value)
-        assert 'snap.snapshot.json' in str(excinfo.value)
 
-        assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 5}])
+            # ndiff error message:
 
-        # ndiff error message:
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 23}], diff_func=pformat_ndiff)
+            self.assertEqual(
+                str(exc_info.exception),
+                'Objects are not equal:\n'
+                '  [\n'
+                '      {\n'
+                '-         "bär": 23,\n'
+                '?                ^^\n'
+                '\n'
+                '+         "bär": 5,\n'
+                '?                ^\n'
+                '\n'
+                '          "foo": 42\n'
+                '      }\n'
+                '  ]',
+            )
 
-        with pytest.raises(AssertionError) as exc_info:
-            assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 23}], diff_func=pformat_ndiff)
-        assert exc_info.value.args[0] == (
-            'Objects are not equal:\n'
-            '  [\n'
-            '      {\n'
-            '-         "bär": 23,\n'
-            '?                ^^\n'
-            '\n'
-            '+         "bär": 5,\n'
-            '?                ^\n'
-            '\n'
-            '          "foo": 42\n'
-            '      }\n'
-            '  ]'
-        )
+            # unified diff error message:
 
-        # unified diff error message:
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 123}])
+            self.assertEqual(
+                str(exc_info.exception),
+                'Objects are not equal:\n'
+                '--- got\n'
+                '\n'
+                '+++ expected\n'
+                '\n'
+                '@@ -1,6 +1,6 @@\n'
+                '\n'
+                ' [\n'
+                '     {\n'
+                '-        "bär": 123,\n'
+                '+        "bär": 23,\n'
+                '         "foo": 42\n'
+                '     }\n'
+                ' ]',
+            )
 
-        with pytest.raises(AssertionError) as exc_info:
-            assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 123}])
-        assert exc_info.value.args[0] == (
-            'Objects are not equal:\n'
-            '--- got\n'
-            '\n'
-            '+++ expected\n'
-            '\n'
-            '@@ -1,6 +1,6 @@\n'
-            '\n'
-            ' [\n'
-            '     {\n'
-            '-        "bär": 123,\n'
-            '+        "bär": 23,\n'
-            '         "foo": 42\n'
-            '     }\n'
-            ' ]'
-        )
+            # invalid type
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_snapshot(tmp_dir, 'invalid_type', {1, 2})
+            self.assertEqual(
+                str(exc_info.exception),
+                'Not JSON-serializable: {1, 2} is not a dict or list, but a set',
+            )
 
-        # invalid type
-        with pytest.raises(AssertionError) as exc_info:
-            assert_snapshot(tmp_dir, 'invalid_type', {1, 2})
-        assert exc_info.value.args[0] == (
-            'Not JSON-serializable: {1, 2} is not a dict or list, but a set'
-        )
+    def test_assert_snapshot_with_tuple(self):
+        """
+        assert_snapshot() should not been used, if objects contains tuple()
+        Test that the diff indicates the problem.
+        """
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError) as cm:
+                assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
+            assert 'snap.snapshot.json' in str(cm.exception)
 
+            written_json = (pathlib.Path(tmp_dir) / 'snap.snapshot.json').read_text()
+            written_json = re.sub(r'\s+', '', written_json)
+            # The tuple() are "converted" to lists:
+            assert written_json == '[["foo",42],1,1.5]'
 
-def test_assert_snapshot_with_tuple():
-    """
-    assert_snapshot() should not been used, if objects contains tuple()
-    Test that the diff indicates the problem.
-    """
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with pytest.raises(FileNotFoundError) as excinfo:
-            assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
-        assert 'snap.snapshot.json' in str(excinfo.value)
+            # tuple() doesn't work with assert_snapshot(self):
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
+            self.assertEqual(
+                str(exc_info.exception),
+                'Objects are not equal:\n'
+                '--- got\n\n'
+                '+++ expected\n\n'
+                '@@ -1 +1 @@\n\n'
+                "-[('foo', 42), 1, 1.5]\n"
+                "+[['foo', 42], 1, 1.5]",
+            )
 
-        written_json = (pathlib.Path(tmp_dir) / 'snap.snapshot.json').read_text()
-        written_json = re.sub(r'\s+', '', written_json)
-        # The tuple() are "converted" to lists:
-        assert written_json == '[["foo",42],1,1.5]'
+    def test_assert_text_snapshot(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            TEXT = 'this is\nmultiline "text"\none\ntwo\nthree\nfour'
+            with self.assertRaises(FileNotFoundError):
+                assert_text_snapshot(tmp_dir, 'text', TEXT)
+            written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.txt').read_text()
+            assert written_text == TEXT
 
-        # tuple() doesn't work with assert_snapshot():
-        with pytest.raises(AssertionError) as exc_info:
-            assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
-        assert exc_info.value.args[0] == (
-            'Objects are not equal:\n'
-            '--- got\n\n'
-            '+++ expected\n\n'
-            '@@ -1 +1 @@\n\n'
-            "-[('foo', 42), 1, 1.5]\n"
-            "+[['foo', 42], 1, 1.5]"
-        )
-
-
-def test_assert_text_snapshot():
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        TEXT = 'this is\nmultiline "text"\none\ntwo\nthree\nfour'
-        with pytest.raises(FileNotFoundError):
             assert_text_snapshot(tmp_dir, 'text', TEXT)
-        written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.txt').read_text()
-        assert written_text == TEXT
 
-        assert_text_snapshot(tmp_dir, 'text', TEXT)
+            # Error message with ndiff:
 
-        # Error message with ndiff:
-
-        with pytest.raises(AssertionError) as exc_info:
-            assert_text_snapshot(
-                tmp_dir, 'text', 'this is:\nmultiline "text"\none\ntwo\nthree\nfour',
-                diff_func=text_ndiff
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_text_snapshot(
+                    tmp_dir,
+                    'text',
+                    'this is:\nmultiline "text"\none\ntwo\nthree\nfour',
+                    diff_func=text_ndiff,
+                )
+            written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.txt').read_text()
+            assert written_text == 'this is:\nmultiline "text"\none\ntwo\nthree\nfour'
+            self.assertEqual(
+                str(exc_info.exception),
+                'Text not equal:\n'
+                '- this is:\n'
+                '?        -\n'
+                '\n'
+                '+ this is\n'
+                '  multiline "text"\n'
+                '  one\n'
+                '  two\n'
+                '  three\n'
+                '  four',
             )
-        written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.txt').read_text()
-        assert written_text == 'this is:\nmultiline "text"\none\ntwo\nthree\nfour'
-        assert exc_info.value.args[0] == (
-            'Text not equal:\n'
-            '- this is:\n'
-            '?        -\n'
-            '\n'
-            '+ this is\n'
-            '  multiline "text"\n'
-            '  one\n'
-            '  two\n'
-            '  three\n'
-            '  four'
-        )
 
-        # Error message with unified diff:
+            # Error message with unified diff:
 
-        with pytest.raises(AssertionError) as exc_info:
-            assert_text_snapshot(
-                tmp_dir, 'text',
-                'This is:\nmultiline "text"\none\ntwo\nthree\nfour',
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_text_snapshot(
+                    tmp_dir,
+                    'text',
+                    'This is:\nmultiline "text"\none\ntwo\nthree\nfour',
+                )
+            self.assertEqual(
+                str(exc_info.exception),
+                'Text not equal:\n'
+                '--- got\n'
+                '\n'
+                '+++ expected\n'
+                '\n'
+                '@@ -1,4 +1,4 @@\n'
+                '\n'
+                '-This is:\n'
+                '+this is:\n'
+                ' multiline "text"\n'
+                ' one\n'
+                ' two',
             )
-        assert exc_info.value.args[0] == (
-            'Text not equal:\n'
-            '--- got\n'
-            '\n'
-            '+++ expected\n'
-            '\n'
-            '@@ -1,4 +1,4 @@\n'
-            '\n'
-            '-This is:\n'
-            '+this is:\n'
-            ' multiline "text"\n'
-            ' one\n'
-            ' two'
-        )
 
-        assert_text_snapshot(tmp_dir, 'text', 'This is:\nmultiline "text"\none\ntwo\nthree\nfour')
+            assert_text_snapshot(tmp_dir, 'text', 'This is:\nmultiline "text"\none\ntwo\nthree\nfour')
 
-        with pytest.raises(FileNotFoundError):
-            assert_text_snapshot(tmp_dir, 'text', TEXT, extension='.test2')
-        written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.test2').read_text()
-        assert written_text == TEXT
+            with self.assertRaises(FileNotFoundError):
+                assert_text_snapshot(tmp_dir, 'text', TEXT, extension='.test2')
+            written_text = (pathlib.Path(tmp_dir) / 'text.snapshot.test2').read_text()
+            assert written_text == TEXT
 
-        # Newlines
-        UNIX_TEXT = 'a\nnewline'
-        WINDOWS_TEXT = 'a\r\nnewline'
-        with pytest.raises(FileNotFoundError):
-            assert_text_snapshot(tmp_dir, 'newlines', UNIX_TEXT)
-        written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
-        assert written_bytes == UNIX_TEXT.encode('utf-8')
+            # Newlines
+            UNIX_TEXT = 'a\nnewline'
+            WINDOWS_TEXT = 'a\r\nnewline'
+            with self.assertRaises(FileNotFoundError):
+                assert_text_snapshot(tmp_dir, 'newlines', UNIX_TEXT)
+            written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
+            assert written_bytes == UNIX_TEXT.encode('utf-8')
 
-        with pytest.raises(AssertionError) as exc_info:
-            assert_text_snapshot(tmp_dir, 'newlines', WINDOWS_TEXT)
-        written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
-        assert written_bytes == WINDOWS_TEXT.encode('utf-8')
-        assert exc_info.value.args[0] == (
-            '''Differing newlines: Expected 'a\\nnewline', got 'a\\r\\nnewline\''''
-        )
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_text_snapshot(tmp_dir, 'newlines', WINDOWS_TEXT)
+            written_bytes = (pathlib.Path(tmp_dir) / 'newlines.snapshot.txt').read_bytes()
+            assert written_bytes == WINDOWS_TEXT.encode('utf-8')
+            self.assertEqual(
+                str(exc_info.exception),
+                '''Differing newlines: Expected 'a\\nnewline', got 'a\\r\\nnewline\'''',
+            )
 
-        with pytest.raises(AssertionError) as exc_info:
-            assert_text_snapshot(tmp_dir, snapshot_name='type_error', got=None)
-        assert exc_info.value.args[0] == 'Got None of type NoneType, but expected a str'
+            with self.assertRaises(AssertionError) as cm:
+                assert_text_snapshot(tmp_dir, snapshot_name='type_error', got=None)
+            self.assertEqual(
+                cm.exception.args,
+                ('Got None of type NoneType, but expected a str',),
+            )
 
+    def test_assert_py_snapshot(self):
+        example = {
+            'uuid': UUID('00000000-0000-0000-1111-000000000001'),
+            'datetime': parse_dt('2020-01-01T00:00:00+0000'),
+            'date': datetime.date(2000, 1, 2),
+            'time': datetime.time(3, 4, 5),
+            'decimal': Decimal('3.14'),
+        }
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError):
+                assert_py_snapshot(tmp_dir, 'snap', example)
 
-def test_assert_py_snapshot():
-    example = {
-        'uuid': UUID('00000000-0000-0000-1111-000000000001'),
-        'datetime': parse_dt('2020-01-01T00:00:00+0000'),
-        'date': datetime.date(2000, 1, 2),
-        'time': datetime.time(3, 4, 5),
-        'decimal': Decimal('3.14')
-    }
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with pytest.raises(FileNotFoundError):
             assert_py_snapshot(tmp_dir, 'snap', example)
 
-        assert_py_snapshot(tmp_dir, 'snap', example)
+            example['uuid'] = '00000000-0000-0000-1111-000000000001'
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_py_snapshot(tmp_dir, 'snap', example)
+            self.assertEqual(
+                str(exc_info.exception),
+                "Objects are not equal:\n"
+                "--- got\n"
+                "\n"
+                "+++ expected\n"
+                "\n"
+                "@@ -2,4 +2,4 @@\n"
+                "\n"
+                "     'datetime': datetime.datetime(2020, 1, 1, 0, 0, tzinfo=datetime.timezone.utc),\n"
+                "     'decimal': Decimal('3.14'),\n"
+                "     'time': datetime.time(3, 4, 5),\n"
+                "-    'uuid': '00000000-0000-0000-1111-000000000001'}\n"
+                "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}",
+            )
 
-        example['uuid'] = '00000000-0000-0000-1111-000000000001'
-        with pytest.raises(AssertionError) as exc_info:
-            assert_py_snapshot(tmp_dir, 'snap', example)
-        assert exc_info.value.args[0] == (
-            "Objects are not equal:\n"
-            "--- got\n"
-            "\n"
-            "+++ expected\n"
-            "\n"
-            "@@ -2,4 +2,4 @@\n"
-            "\n"
-            "     'datetime': datetime.datetime(2020, 1, 1, 0, 0, tzinfo=datetime.timezone.utc),\n"
-            "     'decimal': Decimal('3.14'),\n"
-            "     'time': datetime.time(3, 4, 5),\n"
-            "-    'uuid': '00000000-0000-0000-1111-000000000001'}\n"
-            "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}"
-        )
+    def test_assert_binary_snapshot(self):
+        expected = b'\xAB\x00'
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with self.assertRaises(FileNotFoundError):
+                assert_binary_snapshot(tmp_dir, 'binary-snap', expected)
 
-
-def test_assert_binary_snapshot():
-    expected = b'\xAB\x00'
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with pytest.raises(FileNotFoundError):
             assert_binary_snapshot(tmp_dir, 'binary-snap', expected)
 
-        assert_binary_snapshot(tmp_dir, 'binary-snap', expected)
+            got = b'\xAB\xFF\x00\xCC'
+            with self.assertRaises(AssertionError) as exc_info:
+                assert_binary_snapshot(tmp_dir, 'binary-snap', got)
+            self.assertEqual(
+                str(exc_info.exception),
+                'Objects are not equal:\n'
+                'expected: 2 Bytes, MD5 45aa1f1c9622b4a0f817b177a1b84f78\n'
+                'got: 4 Bytes, MD5 02df4e34a310564c0bb6245c432eb15e',
+            )
 
-        got = b'\xAB\xFF\x00\xCC'
-        with pytest.raises(AssertionError) as exc_info:
-            assert_binary_snapshot(tmp_dir, 'binary-snap', got)
-        assert exc_info.value.args[0] == (
-            'Objects are not equal:\n'
-            'expected: 2 Bytes, MD5 45aa1f1c9622b4a0f817b177a1b84f78\n'
-            'got: 4 Bytes, MD5 02df4e34a310564c0bb6245c432eb15e'
+    def test_auto_source_names(self):
+        root_dir, snapshot_name = _get_caller_names()
+        assert root_dir == SELF_PATH
+
+        # Name of this file + name of this test function + sequential number
+        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+
+        # Call it again -> sequential number =+ 1 ???
+
+        root_dir, snapshot_name = _get_caller_names()
+        assert root_dir == SELF_PATH
+        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_2.snapshot'
+
+        # set own root_dir
+        own_root_dir = pathlib.Path(bx_py_utils.__file__).parent
+        root_dir, snapshot_name = _get_caller_names(root_dir=own_root_dir)
+        assert root_dir == own_root_dir
+        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+
+        # Set not existing root_dir:
+        with self.assertRaises(NotADirectoryError) as cm:
+            _get_caller_names(root_dir='/foo/bar')
+        self.assertEqual(
+            cm.exception.args,
+            ('Directory does not exists: "/foo/bar"',),
         )
 
+        # set own snapshot name
+        root_dir, snapshot_name = _get_caller_names(snapshot_name='foo_bar')
+        assert root_dir == SELF_PATH
+        assert snapshot_name == 'foo_bar'
 
-def test_auto_source_names():
-    root_dir, snapshot_name = _get_caller_names()
-    assert root_dir == SELF_PATH
+        # not valid snapshot name
+        with self.assertRaises(AssertionError) as cm:
+            _get_caller_names(snapshot_name='Foo Bar!')
+        self.assertEqual(
+            cm.exception.args,
+            ("Invalid snapshot name 'Foo Bar!'",),
+        )
 
-    # Name of this file + name of this test function + sequential number
-    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+    def test_assert_py_snapshot_auto_names(self):
+        snapshot_filename1 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_1.snapshot.txt'
+        snapshot_filename2 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_2.snapshot.txt'
+        snapshot_path1 = SELF_PATH / snapshot_filename1
+        snapshot_path2 = SELF_PATH / snapshot_filename2
 
-    # Call it again -> sequential number =+ 1 ???
+        example = [1, 2, 3]
 
-    root_dir, snapshot_name = _get_caller_names()
-    assert root_dir == SELF_PATH
-    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_2.snapshot'
+        with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
+            with self.assertRaises(FileNotFoundError):
+                assert_py_snapshot(got=example)
 
-    # set own root_dir
-    own_root_dir = pathlib.Path(bx_py_utils.__file__).parent
-    root_dir, snapshot_name = _get_caller_names(root_dir=own_root_dir)
-    assert root_dir == own_root_dir
-    assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+            assert snapshot_path1.is_file()
 
-    # Set not existing root_dir:
-    with pytest.raises(NotADirectoryError) as cm:
-        _get_caller_names(root_dir='/foo/bar')
-    assert str(cm.value) == 'Directory does not exists: "/foo/bar"'
+            # Check created files: Is that only our expected files?
+            new_files = file_watcher.get_new_items()
+            assert new_files == {snapshot_path1}
 
-    # set own snapshot name
-    root_dir, snapshot_name = _get_caller_names(snapshot_name='foo_bar')
-    assert root_dir == SELF_PATH
-    assert snapshot_name == 'foo_bar'
+            # We would like to check the same file ;)
+            _AUTO_SNAPSHOT_NAME_COUNTER.clear()
 
-    # not valid snapshot name
-    with pytest.raises(AssertionError) as cm:
-        _get_caller_names(snapshot_name='Foo Bar!')
-    assert str(cm.value) == "Invalid snapshot name 'Foo Bar!'"
-
-
-def test_assert_py_snapshot_auto_names():
-    snapshot_filename1 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_1.snapshot.txt'
-    snapshot_filename2 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_2.snapshot.txt'
-    snapshot_path1 = SELF_PATH / snapshot_filename1
-    snapshot_path2 = SELF_PATH / snapshot_filename2
-
-    example = [1, 2, 3]
-
-    with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
-        with pytest.raises(FileNotFoundError):
             assert_py_snapshot(got=example)
 
-        assert snapshot_path1.is_file()
+            # Will a second test file created?
 
-        # Check created files: Is that only our expected files?
-        new_files = file_watcher.get_new_items()
-        assert new_files == {snapshot_path1}
+            with self.assertRaises(FileNotFoundError):
+                assert_py_snapshot(got=example)
 
-        # We would like to check the same file ;)
-        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+            assert snapshot_path1.is_file()
+            assert snapshot_path2.is_file()
 
-        assert_py_snapshot(got=example)
+            # Check created files: Is that only our expected files?
+            new_files = file_watcher.get_new_items()
+            assert new_files == {snapshot_path1, snapshot_path2}
 
-        # Will a second test file created?
+    def test_assert_text_snapshot_auto_names(self):
+        snapshot_path = SELF_PATH / ('test_test_utils_snapshot_assert_text_snapshot_auto_names_1.snapshot.txt')
+        example = 'Foo Bar!'
+        with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
+            with self.assertRaises(FileNotFoundError):
+                assert_text_snapshot(got=example)
 
-        with pytest.raises(FileNotFoundError):
-            assert_py_snapshot(got=example)
+            # Check created files: Is that only our expected files?
+            new_files = file_watcher.get_new_items()
+            assert new_files == {snapshot_path}
 
-        assert snapshot_path1.is_file()
-        assert snapshot_path2.is_file()
+            # We would like to check the same file ;)
+            _AUTO_SNAPSHOT_NAME_COUNTER.clear()
 
-        # Check created files: Is that only our expected files?
-        new_files = file_watcher.get_new_items()
-        assert new_files == {snapshot_path1, snapshot_path2}
-
-
-def test_assert_text_snapshot_auto_names():
-    snapshot_path = SELF_PATH / (
-        'test_test_utils_snapshot_assert_text_snapshot_auto_names_1.snapshot.txt'
-    )
-    example = 'Foo Bar!'
-    with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
-        with pytest.raises(FileNotFoundError):
             assert_text_snapshot(got=example)
 
-        # Check created files: Is that only our expected files?
-        new_files = file_watcher.get_new_items()
-        assert new_files == {snapshot_path}
+            # We would like to check the same file ;)
+            _AUTO_SNAPSHOT_NAME_COUNTER.clear()
 
-        # We would like to check the same file ;)
-        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+            # We can specify the path used to get the caller stack frame:
+            assert_text_snapshot(got=example, self_file_path=pathlib.Path(snapshot.__file__))
 
-        assert_text_snapshot(got=example)
+    def test_assert_html_snapshot(self):
+        html = '''
+            <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
+             \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
+            <h1>This is a Heading</h1> \r\n  \r\n
+            <p \r\n >This is a paragraph.</p> \r\n  \r\n
+            </body> \r\n  \r\n </html>
+        '''
+        assert_html_snapshot(got=html)
 
-        # We would like to check the same file ;)
-        _AUTO_SNAPSHOT_NAME_COUNTER.clear()
+    def test_assert_html_snapshot_without_lxml(self):
+        with patch.object(html_utils, 'html', None), self.assertRaises(ModuleNotFoundError) as cm:
+            assert_html_snapshot(got='')
 
-        # We can specify the path used to get the caller stack frame:
-        assert_text_snapshot(
-            got=example,
-            self_file_path=pathlib.Path(snapshot.__file__)
+        self.assertEqual(
+            cm.exception.args,
+            ('This feature needs "lxml", please add it to you requirements',),
         )
 
+    def test_assert_html_snapshot_by_css_selector(self):
+        html = '''
+            <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
+             \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
+            <h1>This is a Heading</h1> \r\n  \r\n
+            <p \r\n >This is a paragraph.</p> \r\n  \r\n
+            <div class="test-me"><b>some Content 1</b></div>
+            <div class="test-me"><i>some Content 2</i></div>
+            </body> \r\n  \r\n </html>
+        '''
+        assert_html_snapshot(got=html, query_selector='div.test-me')
 
-def test_assert_html_snapshot():
-    html = '''
-        <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
-         \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
-        <h1>This is a Heading</h1> \r\n  \r\n
-        <p \r\n >This is a paragraph.</p> \r\n  \r\n
-        </body> \r\n  \r\n </html>
-    '''
-    assert_html_snapshot(got=html)
+        try:
+            assert_html_snapshot(got=html, query_selector='div.not-found')
+            raise AssertionError('Expected ElementsNotFoundError, no Error was raised')
+        except ElementsNotFoundError:
+            pass
+        except Exception as err:
+            raise AssertionError('Expected ElementsNotFoundError, other Error was raised: ', err)
 
-
-def test_assert_html_snapshot_without_lxml():
-    with patch.object(html_utils, 'html', None), \
-            pytest.raises(ModuleNotFoundError) as cm:
-        assert_html_snapshot(got='')
-
-    assert str(cm.value) == (
-        'This feature needs "lxml", please add it to you requirements'
-    )
-
-
-def test_assert_html_snapshot_by_css_selector():
-    html = '''
-        <!DOCTYPE html> \r\n <html> \r\n  \r\n <head>
-         \r\n  \r\n <title \r\n >Page Title</title></head> \r\n  \r\n <body>
-        <h1>This is a Heading</h1> \r\n  \r\n
-        <p \r\n >This is a paragraph.</p> \r\n  \r\n
-        <div class="test-me"><b>some Content 1</b></div>
-        <div class="test-me"><i>some Content 2</i></div>
-        </body> \r\n  \r\n </html>
-    '''
-    assert_html_snapshot(got=html, query_selector='div.test-me')
-
-    try:
-        assert_html_snapshot(got=html, query_selector='div.not-found')
-        raise AssertionError('Expected ElementsNotFoundError, no Error was raised')
-    except ElementsNotFoundError:
-        pass
-    except Exception as err:
-        raise AssertionError('Expected ElementsNotFoundError, other Error was raised: ', err)
-
-
-class SnapshotTestCase(TestCase):
     def test_raise_snapshot_errors(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = pathlib.Path(temp_dir)
@@ -419,8 +418,6 @@ class SnapshotTestCase(TestCase):
             self.assertTrue(snapshot_path.is_file())
             snapshot_path.unlink()
 
-            with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='1'), self.assertRaises(
-                FileNotFoundError
-            ) as cm:
+            with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='1'), self.assertRaises(FileNotFoundError) as exc_info:
                 assert_snapshot(root_dir=temp_path, snapshot_name='snap', got=[])
-            self.assertIn('No such file or directory', str(cm.exception))
+            self.assertIn('No such file or directory', str(exc_info.exception))
