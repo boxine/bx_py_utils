@@ -1,8 +1,10 @@
 SHELL := /bin/bash
 MAX_LINE_LENGTH := 119
 
-help: ## List all commands
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+all: help
+
+help:
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9 -]+:.*?## / {printf "\033[36m%-22s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 check-poetry:
 	@if [[ "$(shell poetry --version 2>/dev/null)" == *"Poetry"* ]] ; \
@@ -29,9 +31,13 @@ update: check-poetry  ## update the sources and installation and generate "conf/
 
 lint: ## Run code formatters and linter
 	poetry run darker --diff --check
+	poetry run isort --check-only .
+	poetry run flake8 .
 
 fix-code-style: ## Fix code formatting
 	poetry run darker
+	poetry run black --verbose --safe --line-length=${MAX_LINE_LENGTH} --skip-string-normalization .
+	poetry run isort .
 
 tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
