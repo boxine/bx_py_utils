@@ -15,11 +15,11 @@ PACKAGE_ROOT = Path(bx_py_utils.__file__).parent.parent
 
 def publish():
     """
-        Publish to PyPi
-        Call this via:
-            $ make publish
+    Publish to PyPi
+    Call this via:
+        $ make publish
     """
-    verbose_check_call('make', 'pytest')  # don't publish if tests fail
+    verbose_check_call('make', 'test')  # don't publish if tests fail
     verbose_check_call('make', 'fix-code-style')  # don't publish if code style wrong
 
     poetry_publish(package_root=PACKAGE_ROOT, version=bx_py_utils.__version__)

@@ -32,12 +32,7 @@ def anonymize(value: str, handle_email: bool = True) -> str:
         if len(value) < 2:
             return value + at + domain
 
-        return (
-            value[:1] +
-            _RE_OTHER.sub('@', value[1:-1].translate(_ANONYMIZATION_TRANS)) +
-            value[-1:] +
-            at + domain
-        )
+        return value[:1] + _RE_OTHER.sub('@', value[1:-1].translate(_ANONYMIZATION_TRANS)) + value[-1:] + at + domain
 
     value = f'{value[:1]}{value[1:-1].translate(_ANONYMIZATION_TRANS)}{value[-1:]}'
     return value

@@ -1,35 +1,35 @@
+from unittest import TestCase
+
 from bx_py_utils.error_handling import print_exc_plus
+from bx_py_utils.test_utils.redirect import RedirectOut
 
 
-def test_print_exc_plus(capsys):
-    test_message = 'Only a Test'
-    try:
-        raise AssertionError(test_message)
-    except BaseException:
-        print_exc_plus()
+class ErrorHandlingTestCase(TestCase):
+    def test_print_exc_plus(self):
+        test_message = 'Only a Test'
 
-    captured = capsys.readouterr()
-    assert captured.out == ''
+        with RedirectOut() as buffer:
+            try:
+                raise AssertionError(test_message)
+            except BaseException:
+                print_exc_plus()
 
-    output = captured.err
+            self.assertEqual(buffer.stdout, '')
+            output = buffer.stderr
+            self.assertIn('Locals by frame, most recent call first:', output)
+            self.assertIn('/bx_py_utils_tests/tests/test_error_handling.py", line', output)
+            self.assertIn("test_message = 'Only a Test'", output)
 
-    assert 'Locals by frame, most recent call first:' in output
-    assert '/bx_py_utils_tests/tests/test_error_handling.py", line' in output
-    assert "test_message = 'Only a Test'" in output
+    def test_print_exc_plus_max_chars(self):
+        with RedirectOut() as buffer:
+            try:
+                x = '12345678901234567890'
+                raise AssertionError(x)
+            except BaseException:
+                print_exc_plus(max_chars=15)
 
-
-def test_print_exc_plus_max_chars(capsys):
-    try:
-        x = '12345678901234567890'
-        raise AssertionError(x)
-    except BaseException:
-        print_exc_plus(max_chars=15)
-
-    captured = capsys.readouterr()
-    assert captured.out == ''
-
-    output = captured.err
-
-    assert 'Locals by frame, most recent call first:' in output
-    assert '/bx_py_utils_tests/tests/test_error_handling.py", line' in output
-    assert "x = '12345678901..." in output
+            self.assertEqual(buffer.stdout, '')
+            output = buffer.stderr
+            self.assertIn('Locals by frame, most recent call first:', output)
+            self.assertIn('/bx_py_utils_tests/tests/test_error_handling.py", line', output)
+            self.assertIn("x = '12345678901...", output)
