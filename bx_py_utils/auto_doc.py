@@ -4,8 +4,14 @@ import inspect
 import re
 from pathlib import Path
 
-from pdoc import extract
-from pdoc.doc import Module
+
+try:
+    from pdoc import extract
+    from pdoc.doc import Module
+except ImportError as err:
+    _pdoc_import_error = err
+else:
+    _pdoc_import_error = None
 
 from bx_py_utils.path import assert_is_file
 from bx_py_utils.test_utils.assertion import assert_text_equal
@@ -44,6 +50,9 @@ def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, 
     """
     if link_template and 'lnum' in link_template:
         raise AssertionError('Please change "lnum" in "link_template" to {start}, {end}')
+
+    if _pdoc_import_error is not None:
+        raise ImportError(f'{_pdoc_import_error} (Hint: Install "pdoc" package)')
 
     def first_doc_line(doc_string):
         try:
