@@ -74,8 +74,8 @@ log_level = "INFO"
 atomic=true
 profile="black"
 line_length=120
-skip_glob=[".*","*/htmlcov/*","*/migrations/*"]
 known_first_party=["bx_py_utils", "bx_py_utils_tests"]
+skip_glob=['.*', '*/htmlcov/*']
 lines_after_imports=2
 
 
@@ -85,25 +85,24 @@ source = ['.']
 omit = ['.*', '*/tests/*']
 command_line = "-m unittest --locals --verbose"
 
+[tool.coverage.report]
+skip_empty = true
+fail_under = 45
+
 
 [tool.tox]
 # https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{39,310,311}
+envlist = py{311,310,39}
 skip_missing_interpreters = True
 
 [testenv]
 passenv = *
 allowlist_externals = make
-deps =
-    lxml
-    beautifulsoup4
-    requests
-    requests-mock
-    pdoc
-    boto3
+commands_pre =
+    make install
 commands =
     make test
 """
@@ -125,6 +124,7 @@ cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
 cookiecutter_directory = "poetry-python"
 applied_migrations = [
     "cf44769", # 2023-01-11T08:15:06+01:00
+    "01611af", # 2023-01-25T09:47:16+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
