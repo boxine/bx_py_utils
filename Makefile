@@ -60,7 +60,7 @@ mypy:  ## Run mypy
 safety:  ## Run https://github.com/pyupio/safety
 	poetry run safety check --full-report
 
-publish: ## Release new version to PyPi
+publish: install  ## Release new version to PyPi
 	poetry run publish
 
 clean: ## Remove created files from the test project
