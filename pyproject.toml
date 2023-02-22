@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "75"
+version = "76rc1"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
@@ -40,7 +40,7 @@ flake8 = "*"  # https://github.com/pycqa/flake8
 EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
 safety = "*"  # https://github.com/pyupio/safety
 mypy = "*"  # https://github.com/python/mypy
-poetry-publish = "*"  # https://github.com/jedie/poetry-publish
+manageprojects = "*"  # https://github.com/jedie/manageprojects
 beautifulsoup4 = "*"
 lxml = "*"
 pdoc = "*"  # https://pdoc.dev/
@@ -58,11 +58,13 @@ src = ["."]
 revision = "origin/master..."
 line_length = 119
 verbose = true
+color = true
 skip_string_normalization = true
 diff = false
 check = false
 stdout = false
 isort = true
+flynt = true
 lint = [
     "flake8",
 ]
@@ -90,8 +92,7 @@ skip_empty = true
 fail_under = 45
 
 
-[tool.tox]
-# https://tox.readthedocs.io/en/latest/example/basic.html#pyproject-toml-tox-legacy-ini
+[tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
 legacy_tox_ini = """
 [tox]
 isolated_build = True
@@ -125,6 +126,7 @@ cookiecutter_directory = "poetry-python"
 applied_migrations = [
     "cf44769", # 2023-01-11T08:15:06+01:00
     "01611af", # 2023-01-25T09:47:16+01:00
+    "d970456", # 2023-02-20T16:19:35+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
