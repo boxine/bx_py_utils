@@ -49,6 +49,10 @@ test: ## Run tests
 
 coverage:  ## Run tests with coverage
 	poetry run coverage run
+	poetry run coverage combine --append
+	poetry run coverage report
+	poetry run coverage xml
+	poetry run coverage json
 
 update-test-snapshot-files:   ## Update all snapshot files (by remove and recreate all snapshot files)
 	find . -type f -name '*.snapshot.*' -delete

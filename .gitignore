@@ -1,33 +1,11 @@
 .*
+*.egg-info
+__pycache__
+/dist/
+/coverage.json
+/coverage.xml
+
 !.github
 !.editorconfig
 !.flake8
 !.gitignore
-!.isort.cfg
-!/.travis.yml
-!/.style.yapf
-!.coveralls.yml
-
-# from test projects:
-/bx_py_utils_tests/static/
-*.sqlite3
-
-# Coverage HTML Report files:
-htmlcov
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Distribution / packaging
-env/
-build/
-develop-eggs/
-dist/
-sdist/
-*.egg-info/
-.installed.cfg
-*.egg
-/publish.log
-

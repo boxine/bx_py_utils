@@ -2,11 +2,12 @@
 
 Various Python utility functions
 
-[![test](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml) [![Coverage Status on codecov.io](https://codecov.io/gh/boxine/bx_py_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/boxine/bx_py_utils)
-
+[![tests](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/boxine/bx_py_utils/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/github/boxine/bx_py_utils/branch/master/graph/badge.svg)](https://app.codecov.io/github/boxine/bx_py_utils)
 [![bx_py_utils @ PyPi](https://img.shields.io/pypi/v/bx_py_utils?label=bx_py_utils%20%40%20PyPi)](https://pypi.org/project/bx_py_utils/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/bx_py_utils)](https://gitlab.com/boxine/bx_py_utils/-/blob/main/pyproject.toml)
-[![License MIT](https://img.shields.io/pypi/l/bx_py_utils)](https://gitlab.com/boxine/bx_py_utils/-/blob/main/LICENSE)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bx_py_utils)](https://github.com/boxine/bx_py_utils/blob/master/pyproject.toml)
+[![License MIT](https://img.shields.io/pypi/l/bx_py_utils)](https://github.com/boxine/bx_py_utils/blob/master/LICENSE)
+
 
 ## Quickstart
 
