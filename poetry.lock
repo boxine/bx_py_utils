@@ -148,18 +148,18 @@ css = ["tinycss2 (>=1.1.0,<1.2)"]
 
 [[package]]
 name = "boto3"
-version = "1.26.102"
+version = "1.26.103"
 description = "The AWS SDK for Python"
 category = "dev"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.102-py3-none-any.whl", hash = "sha256:043f8981d10c4e7c48736df4381dac557b46c5b369b0a450d8f3d7f5fdd24db5"},
-    {file = "boto3-1.26.102.tar.gz", hash = "sha256:b00f416832bc59863b96175045d2ebe067d9222289bce677c48fd72c006eaaad"},
+    {file = "boto3-1.26.103-py3-none-any.whl", hash = "sha256:c02dd0c4bc5adf70f49361141dba61d8795433a1b60d24e0a8a6bee912b267ee"},
+    {file = "boto3-1.26.103.tar.gz", hash = "sha256:7fa84b8ca6fbb544e4093ad8d91729c61e3526040759c7c3dbaaa34f1862e0b0"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.102,<1.30.0"
+botocore = ">=1.29.103,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -168,14 +168,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.102"
+version = "1.29.103"
 description = "Low-level, data-driven core of boto 3."
 category = "dev"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.102-py3-none-any.whl", hash = "sha256:4bae8f502507da18ff37c61cb18745cfb11d87a61dd0ea27e346adadff92aa3f"},
-    {file = "botocore-1.29.102.tar.gz", hash = "sha256:58b11c630d2044ea732ba4c403d29fab51e954465f9b3f7099cbf5ac0ce7ab47"},
+    {file = "botocore-1.29.103-py3-none-any.whl", hash = "sha256:e020173473b254c913a03c16bef179751095a6331f113d5206ae7d47340abfc2"},
+    {file = "botocore-1.29.103.tar.gz", hash = "sha256:30bd3fffc878cd5724c0e9a18629210da7f1efbcb6e668213a79153cc2dfd474"},
 ]
 
 [package.dependencies]
@@ -589,6 +589,9 @@ files = [
 
 [package.dependencies]
 black = ">=21.5b1"
+flynt = {version = ">=0.76,<0.78", optional = true, markers = "extra == \"flynt\""}
+isort = {version = ">=5.0.1", optional = true, markers = "extra == \"isort\""}
+Pygments = {version = ">=2.4.0", optional = true, markers = "extra == \"color\""}
 toml = ">=0.10.0"
 
 [package.extras]
@@ -700,19 +703,19 @@ pyflakes = ">=3.0.0,<3.1.0"
 
 [[package]]
 name = "flynt"
-version = "0.78"
+version = "0.77"
 description = "CLI tool to convert a python project's %-formatted strings to f-strings."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "flynt-0.78-py3-none-any.whl", hash = "sha256:3a4cf278518f7dec3af52c94b5e7c395f623186503a684b2ba28705522871e74"},
-    {file = "flynt-0.78.tar.gz", hash = "sha256:15082167a538ea56b6ce4ca6874c22c739710759832dda78d8f43b6079b7e646"},
+    {file = "flynt-0.77-py3-none-any.whl", hash = "sha256:2863ac8ec19d6ec8d29e760546e6ced644baf6dff3c7cdc77e03abbd29b80f14"},
+    {file = "flynt-0.77.tar.gz", hash = "sha256:2bd1b37043ad88a3f3c3c34a76fc0b64d24e5f03d36ea6b48cb69cc642bff17e"},
 ]
 
 [package.dependencies]
 astor = "*"
-tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+tomli = ">=1.1.0"
 
 [package.extras]
 dev = ["build", "pre-commit", "pytest", "pytest-cov", "twine"]
@@ -1207,14 +1210,14 @@ files = [
 
 [[package]]
 name = "pdoc"
-version = "13.0.1"
+version = "13.1.0"
 description = "API Documentation for Python Projects"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pdoc-13.0.1-py3-none-any.whl", hash = "sha256:16a24914280ed318896ad798674e2b0d11832297fdea95632fa472e3d171e247"},
-    {file = "pdoc-13.0.1.tar.gz", hash = "sha256:4d84056847728203b8789ca8a8d0c8003f25002b3caef3365f6f21a1e4228a1b"},
+    {file = "pdoc-13.1.0-py3-none-any.whl", hash = "sha256:f44cb93e2508b2f2411f33bf3abbe4fcc1ef766bc61b7433eddd0860f430cea6"},
+    {file = "pdoc-13.1.0.tar.gz", hash = "sha256:074ae532b3df71c90df043303a83dcbc92a54e6e63ebf12f30bdd0c7b6f6dbb4"},
 ]
 
 [package.dependencies]
@@ -1939,4 +1942,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0.0"
-content-hash = "e868dbd9ed484cedd0bf34341b55f501f4ec0cc9501fd5caa0ada5e6347b3aeb"
+content-hash = "7e6478cf709256bbe3338ff0569125ecf80f45d566ed6e72c19ddc8f2784452b"
