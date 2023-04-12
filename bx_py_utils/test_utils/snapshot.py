@@ -54,9 +54,12 @@ def _write_json(obj, snapshot_file):
 
 
 def _get_caller_names(
-        root_dir: Union[pathlib.Path, str] = None,
-        snapshot_name: str = None,
-        self_file_path: Union[pathlib.Path, str] = None):
+    *,
+    root_dir: Union[pathlib.Path, str] = None,
+    snapshot_name: str = None,
+    name_suffix: str = None,
+    self_file_path: Union[pathlib.Path, str] = None,
+):
     """
     Helper to get snapshot directory and name by stack frame info, but only if not given.
 
@@ -68,9 +71,13 @@ def _get_caller_names(
         assert_is_dir(root_dir)
 
     if snapshot_name is not None:
-        assert re.match(r'^[-_.a-zA-Z0-9]+$', snapshot_name), (
-            f'Invalid snapshot name {snapshot_name!r}'
-        )
+        assert re.match(r'^[-_.a-zA-Z0-9]+$', snapshot_name), f'Invalid snapshot name: {snapshot_name!r}'
+
+    if name_suffix is not None:
+        assert re.match(r'^[-_.a-zA-Z0-9]+$', name_suffix), f'Invalid name suffix: {name_suffix!r}'
+
+    if snapshot_name and name_suffix:
+        raise AssertionError(f'Specify only name or suffix, not both: {snapshot_name=} {name_suffix=}')
 
     if not root_dir or not snapshot_name:
         # Set "root_dir" and "snapshot_name" if missing by stack frame info.
@@ -90,6 +97,8 @@ def _get_caller_names(
             test_func_name = removeprefix(test_func_name, 'test_')  # make it a little bit shorter
 
             snapshot_name = f'{caller_path.stem}_{test_func_name}'
+            if name_suffix:
+                snapshot_name = f'{snapshot_name}_{name_suffix}'
 
             # Add a counter to the snapshot name, to support more than one
             # snapshot calls in the same test ;)
@@ -103,14 +112,20 @@ def _get_caller_names(
 
 
 def _get_snapshot_file(
+    *,
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
+    name_suffix: str = None,
     extension: str = None,
     self_file_path: Union[pathlib.Path, str] = None,
 ):
     # Auto set dir/name via stask information, if not set:
-    root_dir, snapshot_name = _get_caller_names(root_dir, snapshot_name, self_file_path)
-
+    root_dir, snapshot_name = _get_caller_names(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
+        self_file_path=self_file_path,
+    )
     assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
 
     if not snapshot_name.endswith('.snapshot'):
@@ -124,6 +139,7 @@ def assert_text_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: str = None,
+    name_suffix: str = None,
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -135,7 +151,13 @@ def assert_text_snapshot(
     """
     assert isinstance(got, str), f'Got {got!r} of type {type(got).__name__}, but expected a str'
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
+    snapshot_file = _get_snapshot_file(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
+        extension=extension,
+        self_file_path=self_file_path,
+    )
     try:
         expected = snapshot_file.read_bytes().decode('utf-8')
     except (FileNotFoundError, OSError):
@@ -163,6 +185,7 @@ def assert_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: Optional[Union[dict, list]] = None,
+    name_suffix: str = None,
     extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -178,7 +201,13 @@ def assert_snapshot(
     assert got is None or isinstance(got, (dict, list)), \
         f'Not JSON-serializable: {got!r} is not a dict or list, but a {type(got).__name__}'
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
+    snapshot_file = _get_snapshot_file(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
+        extension=extension,
+        self_file_path=self_file_path,
+    )
     try:
         with snapshot_file.open('r') as snapshot_handle:
             expected = json.load(snapshot_handle)
@@ -204,6 +233,7 @@ def assert_py_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: Any = None,
+    name_suffix: str = None,
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -219,7 +249,13 @@ def assert_py_snapshot(
     """
     got_str = pprint.pformat(got, indent=4, width=120)
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
+    snapshot_file = _get_snapshot_file(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
+        extension=extension,
+        self_file_path=self_file_path,
+    )
     try:
         expected_str = snapshot_file.read_text()
     except FileNotFoundError:
@@ -244,6 +280,7 @@ def assert_html_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     got: str = None,
+    name_suffix: str = None,
     extension: str = '.html',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -281,6 +318,7 @@ def assert_html_snapshot(
     assert_text_snapshot(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
         got=got,
         extension=extension,
         fromfile=fromfile,
@@ -306,7 +344,8 @@ def binary_diff(got, expected, fromfile, tofile):
 def assert_binary_snapshot(
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
-    got: str = None,
+    got: bytes = None,
+    name_suffix: str = None,
     extension: str = '.bin',
     fromfile: str = 'got',
     tofile: str = 'expected',
@@ -318,7 +357,13 @@ def assert_binary_snapshot(
     """
     assert isinstance(got, bytes)
 
-    snapshot_file = _get_snapshot_file(root_dir, snapshot_name, extension, self_file_path)
+    snapshot_file = _get_snapshot_file(
+        root_dir=root_dir,
+        snapshot_name=snapshot_name,
+        name_suffix=name_suffix,
+        extension=extension,
+        self_file_path=self_file_path,
+    )
     try:
         expected = snapshot_file.read_bytes()
     except (FileNotFoundError, OSError):

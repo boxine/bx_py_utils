@@ -102,6 +102,14 @@ class SnapshotTestCase(TestCase):
                 'Not JSON-serializable: {1, 2} is not a dict or list, but a set',
             )
 
+        # Specify a name suffix:
+        with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'), tempfile.TemporaryDirectory() as tmp_dir:
+            assert_snapshot(tmp_dir, got=[1, 2, 3], name_suffix='suffix')
+            self.assertEqual(
+                [item.name for item in pathlib.Path(tmp_dir).iterdir()],
+                ['test_test_utils_snapshot_assert_snapshot_suffix_1.snapshot.json'],
+            )
+
     def test_assert_snapshot_with_tuple(self):
         """
         assert_snapshot() should not been used, if objects contains tuple()
@@ -220,6 +228,14 @@ class SnapshotTestCase(TestCase):
                 ('Got None of type NoneType, but expected a str',),
             )
 
+        # Specify a name suffix:
+        with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'), tempfile.TemporaryDirectory() as tmp_dir:
+            assert_text_snapshot(tmp_dir, got='foo', name_suffix='suffix')
+            self.assertEqual(
+                [item.name for item in pathlib.Path(tmp_dir).iterdir()],
+                ['test_test_utils_snapshot_assert_text_snapshot_suffix_1.snapshot.txt'],
+            )
+
     def test_assert_py_snapshot(self):
         example = {
             'uuid': UUID('00000000-0000-0000-1111-000000000001'),
@@ -253,6 +269,14 @@ class SnapshotTestCase(TestCase):
                 "+    'uuid': UUID('00000000-0000-0000-1111-000000000001')}",
             )
 
+        # Specify a name suffix:
+        with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'), tempfile.TemporaryDirectory() as tmp_dir:
+            assert_py_snapshot(tmp_dir, got={1: 2}, name_suffix='suffix')
+            self.assertEqual(
+                [item.name for item in pathlib.Path(tmp_dir).iterdir()],
+                ['test_test_utils_snapshot_assert_py_snapshot_suffix_1.snapshot.txt'],
+            )
+
     def test_assert_binary_snapshot(self):
         expected = b'\xAB\x00'
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -269,6 +293,14 @@ class SnapshotTestCase(TestCase):
                 'Objects are not equal:\n'
                 'expected: 2 Bytes, MD5 45aa1f1c9622b4a0f817b177a1b84f78\n'
                 'got: 4 Bytes, MD5 02df4e34a310564c0bb6245c432eb15e',
+            )
+
+        # Specify a name suffix:
+        with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'), tempfile.TemporaryDirectory() as tmp_dir:
+            assert_binary_snapshot(tmp_dir, got=b'foo', name_suffix='suffix')
+            self.assertEqual(
+                [item.name for item in pathlib.Path(tmp_dir).iterdir()],
+                ['test_test_utils_snapshot_assert_binary_snapshot_suffix_1.snapshot.bin'],
             )
 
     def test_auto_source_names(self):
@@ -300,15 +332,36 @@ class SnapshotTestCase(TestCase):
 
         # set own snapshot name
         root_dir, snapshot_name = _get_caller_names(snapshot_name='foo_bar')
-        assert root_dir == SELF_PATH
-        assert snapshot_name == 'foo_bar'
+        self.assertEqual(root_dir, SELF_PATH)
+        self.assertEqual(snapshot_name, 'foo_bar')
 
         # not valid snapshot name
         with self.assertRaises(AssertionError) as cm:
             _get_caller_names(snapshot_name='Foo Bar!')
         self.assertEqual(
             cm.exception.args,
-            ("Invalid snapshot name 'Foo Bar!'",),
+            ("Invalid snapshot name: 'Foo Bar!'",),
+        )
+
+        # Add a name suffix:
+        root_dir, snapshot_name = _get_caller_names(name_suffix='django42')
+        self.assertEqual(root_dir, SELF_PATH)
+        self.assertEqual(snapshot_name, 'test_test_utils_snapshot_auto_source_names_django42_1.snapshot')
+
+        # own name + suffix:
+        with self.assertRaises(AssertionError) as cm:
+            _get_caller_names(snapshot_name='foo', name_suffix='bar')
+        self.assertEqual(
+            cm.exception.args,
+            ("Specify only name or suffix, not both: snapshot_name='foo' name_suffix='bar'",),
+        )
+
+        # not valid suffix:
+        with self.assertRaises(AssertionError) as cm:
+            _get_caller_names(name_suffix='Foo Bar!')
+        self.assertEqual(
+            cm.exception.args,
+            ("Invalid name suffix: 'Foo Bar!'",),
         )
 
     def test_assert_py_snapshot_auto_names(self):
@@ -377,6 +430,14 @@ class SnapshotTestCase(TestCase):
             </body> \r\n  \r\n </html>
         '''
         assert_html_snapshot(got=html)
+
+        # Specify a name suffix:
+        with OverrideEnviron(RAISE_SNAPSHOT_ERRORS='0'), tempfile.TemporaryDirectory() as tmp_dir:
+            assert_html_snapshot(tmp_dir, got='<foo />', name_suffix='suffix')
+            self.assertEqual(
+                [item.name for item in pathlib.Path(tmp_dir).iterdir()],
+                ['test_test_utils_snapshot_assert_html_snapshot_suffix_1.snapshot.html'],
+            )
 
     def test_assert_html_snapshot_without_lxml(self):
         with patch.object(html_utils, 'html', None), self.assertRaises(ModuleNotFoundError) as cm:
