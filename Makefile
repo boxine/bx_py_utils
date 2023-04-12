@@ -42,7 +42,7 @@ tox-listenvs: check-poetry ## List all tox test environments
 	poetry run tox --listenvs
 
 tox: check-poetry ## Run tests via tox with all environments
-	poetry run tox
+	poetry run tox p
 
 test: ## Run tests
 	poetry run python -m unittest --verbose --locals

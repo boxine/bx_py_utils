@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "77"
+version = "78"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
