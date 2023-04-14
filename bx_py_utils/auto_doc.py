@@ -1,8 +1,9 @@
-import fnmatch
 import importlib
 import inspect
 import re
 from pathlib import Path
+
+from bx_py_utils.filename_matcher import filename_matcher
 
 
 try:
@@ -191,9 +192,4 @@ class FnmatchExclude:
         self.patterns = patterns
 
     def __call__(self, file_path: str) -> bool:
-        assert isinstance(file_path, str)
-        for pattern in self.patterns:
-            assert isinstance(pattern, str)
-            if fnmatch.fnmatch(file_path, pattern):
-                return False  # ignore this file for auto docs
-        return True  # include this file
+        return not filename_matcher(patterns=self.patterns, file_path=file_path)
