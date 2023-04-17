@@ -1,3 +1,4 @@
+import dataclasses
 import doctest
 import importlib
 import inspect
@@ -29,6 +30,13 @@ def assert_no_flat_tests_functions(path: Path):
         raise AssertionError(f'Flat test files found:\n{pprint.pformat(errors)}')
 
 
+@dataclasses.dataclass
+class DocTestResults:
+    passed: int = 0
+    failed: int = 0
+    skipped: int = 0
+
+
 class BaseDocTests(TestCase):
     """
     Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
@@ -45,7 +53,11 @@ class BaseDocTests(TestCase):
                 )
     """
 
-    def run_doctests(self, modules: tuple, verbose=False, recurse=True, exclude_empty=True, excludes=None):
+    def run_doctests(
+        self, modules: tuple, verbose=False, recurse=True, exclude_empty=True, excludes=None
+    ) -> DocTestResults:
+        results = DocTestResults()
+
         runner = doctest.DocTestRunner(verbose=verbose)
         finder = doctest.DocTestFinder(verbose=verbose, recurse=recurse, exclude_empty=exclude_empty)
 
@@ -53,19 +65,23 @@ class BaseDocTests(TestCase):
             self.assertTrue(inspect.ismodule(module), f'Not a module: {module}')
 
             for info in pkgutil.walk_packages(module.__path__, module.__name__ + '.'):
-                if excludes:
-                    module_finder = info.module_finder
-                    module_path = module_finder.path
-                    if not filename_matcher(patterns=excludes, file_path=module_path):
-                        with self.subTest(info.name):
-                            self.skipTest(reason=f'Skip DocTest in: {module_path}')
-                        continue
-
                 module = importlib.import_module(info.name)
                 tests: list[doctest.DocTest] = finder.find(obj=module)
                 for test in tests:
+                    if excludes:
+                        if filename_matcher(patterns=excludes, file_path=test.filename):
+                            results.skipped += 1
+                            with self.subTest(info.name):
+                                self.skipTest(reason=f'Skip DocTest in: {test.filename}')
+                            continue
+
                     with self.subTest(test.name):
                         with RedirectOut() as buffer:
                             result: doctest.TestResults = runner.run(test)
                         if result.failed:
+                            results.failed += 1
                             self.fail(buffer.stdout)
+                        else:
+                            results.passed += 1
+
+        return results

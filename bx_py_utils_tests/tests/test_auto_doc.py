@@ -7,7 +7,7 @@ from bx_py_utils.auto_doc import assert_readme_block
 from bx_py_utils.test_utils.assertion import assert_text_equal
 
 
-class AudoDocTestCase(TestCase):
+class AutoDocTestCase(TestCase):
     def test_assert_readme_block(self):
         text_block = inspect.cleandoc(
             '''
