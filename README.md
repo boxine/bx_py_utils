@@ -30,11 +30,11 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.auto_doc
 
-* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L185-L199) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
-* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L158-L182) - Check and update README file with generate_modules_doc()
-* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L125-L155) - Check and update README file: Asset that "text_block" is present between the markers.
-* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L42-L122) - Generate a list of function/class information via pdoc.
-* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L34-L39) - Return start and end line number for an object via inspect.
+* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L186-L195) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
+* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L159-L183) - Check and update README file with generate_modules_doc()
+* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L126-L156) - Check and update README file: Asset that "text_block" is present between the markers.
+* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L43-L123) - Generate a list of function/class information via pdoc.
+* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L35-L40) - Return start and end line number for an object via inspect.
 
 #### bx_py_utils.aws.client_side_cert_manager
 
@@ -75,6 +75,10 @@ Please take a look into the sources and tests for deeper informations.
 * [`cut_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L196-L236) - Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
 * [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L41-L50) - Check file size of given file object. Raise EmptyFileError for empty files or return size
 * [`safe_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L181-L185) - Makes an arbitrary input suitable to be used as a filename.
+
+### bx_py_utils.filename_matcher
+
+* [`filename_matcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/filename_matcher.py#L6-L22) - Enhance fnmatch that accept a list of patterns.
 
 ### bx_py_utils.graphql_introspection
 
@@ -202,8 +206,8 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 
 #### bx_py_utils.test_utils.unittest_utils
 
-* [`BaseDocTests()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L31-L61) - Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
-* [`assert_no_flat_tests_functions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L14-L28) - Check if there exists normal test functions (That will not be executed by normal unittests)
+* [`BaseDocTests()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L32-L71) - Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
+* [`assert_no_flat_tests_functions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L15-L29) - Check if there exists normal test functions (That will not be executed by normal unittests)
 
 ### bx_py_utils.text_tools
 
