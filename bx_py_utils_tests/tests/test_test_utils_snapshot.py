@@ -58,7 +58,7 @@ class SnapshotTestCase(TestCase):
                 assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 23}], diff_func=pformat_ndiff)
             self.assertEqual(
                 str(exc_info.exception),
-                'Objects are not equal:\n'
+                'snap\n'
                 '  [\n'
                 '      {\n'
                 '-         "bär": 23,\n'
@@ -78,7 +78,7 @@ class SnapshotTestCase(TestCase):
                 assert_snapshot(tmp_dir, 'snap', [{'foo': 42, 'bär': 123}])
             self.assertEqual(
                 str(exc_info.exception),
-                'Objects are not equal:\n'
+                'snap\n'
                 '--- got\n'
                 '\n'
                 '+++ expected\n'
@@ -130,7 +130,7 @@ class SnapshotTestCase(TestCase):
                 assert_snapshot(tmp_dir, 'snap', [('foo', 42), 1, 1.5])
             self.assertEqual(
                 str(exc_info.exception),
-                'Objects are not equal:\n'
+                'snap\n'
                 '--- got\n\n'
                 '+++ expected\n\n'
                 '@@ -1 +1 @@\n\n'
@@ -161,7 +161,7 @@ class SnapshotTestCase(TestCase):
             assert written_text == 'this is:\nmultiline "text"\none\ntwo\nthree\nfour'
             self.assertEqual(
                 str(exc_info.exception),
-                'Text not equal:\n'
+                'text\n'
                 '- this is:\n'
                 '?        -\n'
                 '\n'
@@ -183,7 +183,7 @@ class SnapshotTestCase(TestCase):
                 )
             self.assertEqual(
                 str(exc_info.exception),
-                'Text not equal:\n'
+                'text\n'
                 '--- got\n'
                 '\n'
                 '+++ expected\n'
@@ -255,7 +255,7 @@ class SnapshotTestCase(TestCase):
                 assert_py_snapshot(tmp_dir, 'snap', example)
             self.assertEqual(
                 str(exc_info.exception),
-                "Objects are not equal:\n"
+                "snap\n"
                 "--- got\n"
                 "\n"
                 "+++ expected\n"
@@ -290,7 +290,7 @@ class SnapshotTestCase(TestCase):
                 assert_binary_snapshot(tmp_dir, 'binary-snap', got)
             self.assertEqual(
                 str(exc_info.exception),
-                'Objects are not equal:\n'
+                'binary-snap\n'
                 'expected: 2 Bytes, MD5 45aa1f1c9622b4a0f817b177a1b84f78\n'
                 'got: 4 Bytes, MD5 02df4e34a310564c0bb6245c432eb15e',
             )
