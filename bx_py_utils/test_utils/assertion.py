@@ -1,5 +1,6 @@
 import difflib
 import pprint
+from typing import Any, Type
 
 from bx_py_utils.humanize.pformat import pformat
 
@@ -61,34 +62,34 @@ def pformat_unified_diff(obj1, obj2, fromfile: str = 'got', tofile: str = 'expec
 
 
 def assert_equal(
-        obj1,
-        obj2,
-        msg=None,
-        fromfile: str = 'got',
-        tofile: str = 'expected',
-        diff_func=pformat_unified_diff):
+    obj1,
+    obj2,
+    msg: Any = 'Objects are not equal:',
+    fromfile: str = 'got',
+    tofile: str = 'expected',
+    diff_func=pformat_unified_diff,
+    raise_cls: Type[Exception] = AssertionError,
+):
     """
     Check if the two objects are the same. Display a nice diff, using `pformat()`
     """
     if obj1 != obj2:
-        if not msg:
-            msg = 'Objects are not equal:'
-        raise AssertionError(f'{msg}\n{diff_func(obj1,obj2, fromfile=fromfile, tofile=tofile)}')
+        raise raise_cls(f'{msg}\n{diff_func(obj1,obj2, fromfile=fromfile, tofile=tofile)}')
 
 
 def assert_text_equal(
-        txt1,
-        txt2,
-        msg=None,
-        fromfile: str = 'got',
-        tofile: str = 'expected',
-        diff_func=text_unified_diff):
+    txt1,
+    txt2,
+    msg: Any = 'Text not equal:',
+    fromfile: str = 'got',
+    tofile: str = 'expected',
+    diff_func=text_unified_diff,
+    raise_cls: Type[Exception] = AssertionError,
+):
     """
-    Check if the two text strings are the same. Display a error message with a diff.
+    Check if the two text strings are the same. Display an error message with a diff.
     """
     assert isinstance(txt1, str)
     assert isinstance(txt2, str)
     if txt1 != txt2:
-        if not msg:
-            msg = 'Text not equal:'
-        raise AssertionError(f'{msg}\n{diff_func(txt1, txt2, fromfile=fromfile, tofile=tofile)}')
+        raise raise_cls(f'{msg}\n{diff_func(txt1, txt2, fromfile=fromfile, tofile=tofile)}')

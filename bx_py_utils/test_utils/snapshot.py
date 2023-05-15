@@ -44,6 +44,10 @@ _AUTO_SNAPSHOT_NAME_COUNTER = Counter()
 _UNIFY_NEWLINES_RE = r'\r?\n'
 
 
+class SnapshotChanged(AssertionError):
+    pass
+
+
 def raise_snapshot_errors():
     return os.environ.get('RAISE_SNAPSHOT_ERRORS') not in ('0', 'false')
 
@@ -177,7 +181,9 @@ def assert_text_snapshot(
             assert_text_equal(
                 got, expected,
                 fromfile=fromfile, tofile=tofile,
-                diff_func=diff_func
+                diff_func=diff_func,
+                msg=snapshot_name or snapshot_file,
+                raise_cls=SnapshotChanged,
             )
 
 
@@ -225,7 +231,9 @@ def assert_snapshot(
             assert_equal(
                 got, expected,
                 fromfile=fromfile, tofile=tofile,
-                diff_func=diff_func
+                diff_func=diff_func,
+                msg=snapshot_name or snapshot_file,
+                raise_cls=SnapshotChanged,
             )
 
 
@@ -272,7 +280,9 @@ def assert_py_snapshot(
             assert_equal(
                 got_str, expected_str,
                 fromfile=fromfile, tofile=tofile,
-                diff_func=diff_func
+                diff_func=diff_func,
+                msg=snapshot_name or snapshot_file,
+                raise_cls=SnapshotChanged,
             )
 
 
@@ -379,5 +389,7 @@ def assert_binary_snapshot(
             assert_equal(
                 got, expected,
                 fromfile=fromfile, tofile=tofile,
-                diff_func=diff_func
+                diff_func=diff_func,
+                msg=snapshot_name or snapshot_file,
+                raise_cls=SnapshotChanged,
             )
