@@ -185,10 +185,10 @@ A simple mock for Boto3's S3 modules.
 
 #### bx_py_utils.test_utils.requests_mock_assertion
 
-* [`assert_json_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L30-L45) - Check the requests mock history. In this case all requests must be JSON.
-* [`assert_json_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L48-L55) - Check requests mock history via snapshot. Accepts only JSON requests.
-* [`assert_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L58-L78) - Check the requests mock history. Accept mixed "text" and "JSON".
-* [`assert_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L81-L86) - Check requests mock history via snapshot. Accept mixed "text" and "JSON".
+* [`assert_json_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L29-L44) - Check the requests mock history. In this case all requests must be JSON.
+* [`assert_json_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L47-L54) - Check requests mock history via snapshot. Accepts only JSON requests.
+* [`assert_requests_mock()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L57-L77) - Check the requests mock history. Accept mixed "text" and "JSON".
+* [`assert_requests_mock_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/requests_mock_assertion.py#L80-L85) - Check requests mock history via snapshot. Accept mixed "text" and "JSON".
 
 #### bx_py_utils.test_utils.snapshot
 

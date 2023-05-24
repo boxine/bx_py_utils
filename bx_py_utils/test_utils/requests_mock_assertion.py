@@ -12,16 +12,15 @@ def build_requests_mock_history(mock, only_json=True):
         request_info = {
             'request': f'{request.method} {request.url}'
         }
-        try:
-            json_data = request.json()
-        except JSONDecodeError as err:
-            if only_json:
-                raise AssertionError(
-                    f'{request.method} {request.url} without valid JSON: {err} in:\n{err.doc!r}'
-                )
-            request_info['text'] = request.text
-        else:
-            request_info['json'] = json_data
+        if request.body:
+            try:
+                json_data = request.json()
+            except JSONDecodeError as err:
+                if only_json:
+                    raise AssertionError(f'{request.method} {request.url} without valid JSON: {err} in:\n{err.doc!r}')
+                request_info['text'] = request.text
+            else:
+                request_info['json'] = json_data
 
         history.append(request_info)
     return history
