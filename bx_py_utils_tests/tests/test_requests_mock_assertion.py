@@ -120,3 +120,10 @@ class RequestsMockAssertionTestCase(TestCase):
             requests.post('http://test.tld', json={'foo': 'two'})
 
         assert_requests_mock_snapshot(mock=m)
+
+    def test_assert_json_requests_mock_with_none(self):
+        with requests_mock.mock() as m:
+            m.get('http://test.tld')
+            requests.get('http://test.tld')
+
+        assert_json_requests_mock(mock=m, data=[{'request': 'GET http://test.tld/'}])
