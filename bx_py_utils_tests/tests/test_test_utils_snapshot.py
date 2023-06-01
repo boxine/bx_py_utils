@@ -18,12 +18,12 @@ from bx_py_utils.test_utils.filesystem_utils import FileWatcher
 from bx_py_utils.test_utils.snapshot import (
     _AUTO_SNAPSHOT_NAME_COUNTER,
     _get_caller_names,
-    _get_snapshot_file,
     assert_binary_snapshot,
     assert_html_snapshot,
     assert_py_snapshot,
     assert_snapshot,
     assert_text_snapshot,
+    get_snapshot_file,
 )
 
 
@@ -33,11 +33,11 @@ SELF_PATH = pathlib.Path(__file__).parent
 class SnapshotTestCase(TestCase):
     def test_get_snapshot_file(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
-            snapshot_file = _get_snapshot_file(root_dir=tmp_dir, snapshot_name='foo_bar', extension='.123')
+            snapshot_file = get_snapshot_file(root_dir=tmp_dir, snapshot_name='foo_bar', extension='.123')
             assert snapshot_file == pathlib.Path(tmp_dir) / 'foo_bar.snapshot.123'
             assert not snapshot_file.is_file()
 
-            snapshot_file = _get_snapshot_file(root_dir=tmp_dir, snapshot_name='foobar.snapshot', extension='.txt')
+            snapshot_file = get_snapshot_file(root_dir=tmp_dir, snapshot_name='foobar.snapshot', extension='.txt')
             assert snapshot_file == pathlib.Path(tmp_dir) / 'foobar.snapshot.txt'
             assert not snapshot_file.is_file()
 
