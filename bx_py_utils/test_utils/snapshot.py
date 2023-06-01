@@ -63,6 +63,7 @@ def _get_caller_names(
     snapshot_name: str = None,
     name_suffix: str = None,
     self_file_path: Union[pathlib.Path, str] = None,
+    extension_prefix: str = '.snapshot',
 ):
     """
     Helper to get snapshot directory and name by stack frame info, but only if not given.
@@ -82,6 +83,8 @@ def _get_caller_names(
 
     if snapshot_name and name_suffix:
         raise AssertionError(f'Specify only name or suffix, not both: {snapshot_name=} {name_suffix=}')
+
+    assert extension_prefix.startswith('.'), f'Invalid: {extension_prefix=}'
 
     if not root_dir or not snapshot_name:
         # Set "root_dir" and "snapshot_name" if missing by stack frame info.
@@ -110,30 +113,36 @@ def _get_caller_names(
             _AUTO_SNAPSHOT_NAME_COUNTER[counter_key] += 1
             call_count = _AUTO_SNAPSHOT_NAME_COUNTER[counter_key]
 
-            snapshot_name = f'{snapshot_name}_{call_count}.snapshot'
+            snapshot_name = f'{snapshot_name}_{call_count}{extension_prefix}'
 
     return root_dir, snapshot_name
 
 
-def _get_snapshot_file(
+def get_snapshot_file(
     *,
     root_dir: Union[pathlib.Path, str] = None,
     snapshot_name: str = None,
     name_suffix: str = None,
     extension: str = None,
     self_file_path: Union[pathlib.Path, str] = None,
-):
-    # Auto set dir/name via stask information, if not set:
+    extension_prefix: str = '.snapshot',
+) -> pathlib.Path:
+    """
+    Generate a file path use stack information to fill not provided path components.
+    Mainly useable to generate file path for snapshot tests.
+    """
+    # Auto set dir/name via stack information, if not set:
     root_dir, snapshot_name = _get_caller_names(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
         name_suffix=name_suffix,
         self_file_path=self_file_path,
+        extension_prefix=extension_prefix,
     )
     assert re.match(r'^[-_.a-zA-Z0-9]*$', extension), f'Invalid extension {extension!r}'
 
-    if not snapshot_name.endswith('.snapshot'):
-        snapshot_name += '.snapshot'
+    if not snapshot_name.endswith(extension_prefix):
+        snapshot_name += extension_prefix
 
     snapshot_file = pathlib.Path(root_dir) / f'{snapshot_name}{extension}'
     return snapshot_file
@@ -155,7 +164,7 @@ def assert_text_snapshot(
     """
     assert isinstance(got, str), f'Got {got!r} of type {type(got).__name__}, but expected a str'
 
-    snapshot_file = _get_snapshot_file(
+    snapshot_file = get_snapshot_file(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
         name_suffix=name_suffix,
@@ -207,7 +216,7 @@ def assert_snapshot(
     assert got is None or isinstance(got, (dict, list)), \
         f'Not JSON-serializable: {got!r} is not a dict or list, but a {type(got).__name__}'
 
-    snapshot_file = _get_snapshot_file(
+    snapshot_file = get_snapshot_file(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
         name_suffix=name_suffix,
@@ -257,7 +266,7 @@ def assert_py_snapshot(
     """
     got_str = pprint.pformat(got, indent=4, width=120)
 
-    snapshot_file = _get_snapshot_file(
+    snapshot_file = get_snapshot_file(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
         name_suffix=name_suffix,
@@ -367,7 +376,7 @@ def assert_binary_snapshot(
     """
     assert isinstance(got, bytes)
 
-    snapshot_file = _get_snapshot_file(
+    snapshot_file = get_snapshot_file(
         root_dir=root_dir,
         snapshot_name=snapshot_name,
         name_suffix=name_suffix,
