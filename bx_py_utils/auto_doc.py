@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from bx_py_utils.filename_matcher import filename_matcher
+from bx_py_utils.string_utils import startswith_prefixes
 
 
 try:
@@ -40,12 +41,19 @@ def get_code_location(obj):
     return start, start + len(lines) - 1
 
 
-def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, link_template=None):
+def generate_modules_doc(
+    modules,
+    exclude_func: callable = None,
+    exclude_prefixes: tuple[str, ...] = (),
+    start_level=1,
+    link_template=None,
+):
     """
     Generate a list of function/class information via pdoc.
 
     :param modules: module specifications for pdoc.extract.walk_specs()
     :param exclude_func: A callable to filter the files
+    :param exclude_prefixes: Exclude all DocStrings started with one of these prefixes
     :param start_level: Markdown "#" min. count
     :param link_template: String that can generate a URL with: {path}, {start}, {end} placeholder
     """
@@ -69,6 +77,9 @@ def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, 
 
             item_doc_line = first_doc_line(pdoc_item.docstring)
             if not item_doc_line:
+                continue
+
+            if startswith_prefixes(item_doc_line, prefixes=exclude_prefixes):
                 continue
 
             item_name = f'`{item_name}()`'
@@ -105,6 +116,8 @@ def generate_modules_doc(modules, exclude_func: callable = None, start_level=1, 
         # Collect information
 
         module_doc_line = first_doc_line(pdoc_module.docstring)
+        if startswith_prefixes(module_doc_line, prefixes=exclude_prefixes):
+            continue
 
         class_docs = list(get_doc_list(pdoc_list=pdoc_module.classes, root_path=module_root_path))
         func_docs = list(get_doc_list(pdoc_list=pdoc_module.functions, root_path=module_root_path))
@@ -160,6 +173,7 @@ def assert_readme(
     readme_path: Path,
     modules: list,
     exclude_func: callable = None,
+    exclude_prefixes: tuple[str, ...] = (),  # Exclude all DocStrings started with one of these prefixes
     start_marker_line: str = '[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
     end_marker_line: str = '[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
     start_level: int = 1,
@@ -172,6 +186,7 @@ def assert_readme(
     doc_block = generate_modules_doc(
         modules=modules,
         exclude_func=exclude_func,
+        exclude_prefixes=exclude_prefixes,
         start_level=start_level,
         link_template=link_template,
     )

@@ -114,3 +114,22 @@ def ensure_lf(text: str) -> str:
         text = text.replace('\r\n', '\n')
         text = text.replace('\r', '\n')
     return text
+
+
+def startswith_prefixes(text: str, prefixes: tuple[str, ...]) -> bool:
+    """
+    >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
+    True
+    >>> startswith_prefixes('barfoo', prefixes=('foo','bar'))
+    True
+    >>> startswith_prefixes(' barfoo', prefixes=('foo','bar'))
+    True
+    >>> startswith_prefixes('no match', prefixes=('foo','bar'))
+    False
+    """
+    if text:
+        text = text.lstrip()
+        for prefix in prefixes:
+            if text.startswith(prefix):
+                return True
+    return False
