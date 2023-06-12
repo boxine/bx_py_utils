@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "83"
+version = "84"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
@@ -129,6 +129,12 @@ allow_redefinition = true  # https://github.com/python/mypy/issues/7165
 show_error_codes = true
 plugins = []
 exclude = [".venv", "tests"]
+
+
+[tool.bx_py_utils.doc_write]
+search_paths = ['./bx_py_utils/', './bx_py_utils_tests/']
+output_base_path = '.' # Current work dir -> project root
+docstring_prefix = 'DocWrite:'
 
 
 [manageprojects] # https://github.com/jedie/manageprojects

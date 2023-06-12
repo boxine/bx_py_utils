@@ -30,11 +30,11 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.auto_doc
 
-* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L186-L195) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
-* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L159-L183) - Check and update README file with generate_modules_doc()
-* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L126-L156) - Check and update README file: Asset that "text_block" is present between the markers.
-* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L43-L123) - Generate a list of function/class information via pdoc.
-* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L35-L40) - Return start and end line number for an object via inspect.
+* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L201-L210) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
+* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L172-L198) - Check and update README file with generate_modules_doc()
+* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L139-L169) - Check and update README file: Asset that "text_block" is present between the markers.
+* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L44-L136) - Generate a list of function/class information via pdoc.
+* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L36-L41) - Return start and end line number for an object via inspect.
 
 #### bx_py_utils.aws.client_side_cert_manager
 
@@ -53,6 +53,11 @@ Please take a look into the sources and tests for deeper informations.
 
 * [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L4-L25) - nested dict `get()`
 * [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L28-L40) - Extract values from a dict, if they are present
+
+### bx_py_utils.doc_write
+
+Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/doc_write/README.md
+
 
 ### bx_py_utils.environ
 
@@ -111,12 +116,18 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.path
 
-* [`assert_is_dir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L5-L13) - Check if given path is a directory
-* [`assert_is_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L16-L26) - Check if given path is a file
+* [`ChangeCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L39-L54) - Context Manager change the "CWD" to an other directory.
+* [`MockCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L57-L76) - Context Manager to move the "CWD" to a temp directory.
+* [`assert_is_dir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L7-L15) - Check if given path is a directory
+* [`assert_is_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L18-L28) - Check if given path is a file
 
 ### bx_py_utils.processify
 
 * [`processify()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/processify.py#L12-L53) - Decorator to run a function as a process.
+
+### bx_py_utils.pyproject_toml
+
+* [`get_pyproject_config()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/pyproject_toml.py#L17-L41) - Get a config section from "pyproject.toml". The path can be optional specify.
 
 ### bx_py_utils.rison
 
@@ -133,6 +144,7 @@ Please take a look into the sources and tests for deeper informations.
 * [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L106-L116) - Replace line endings to unix-style.
 * [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L40-L64) - Extract words from a text. With filter functionality.
 * [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L8-L37) - Calculates the Levenshtein distance between two strings.
+* [`startswith_prefixes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L119-L135) - >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
 * [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L93-L103) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
 
 #### bx_py_utils.test_utils.assertion
