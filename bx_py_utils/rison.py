@@ -14,13 +14,13 @@ def rison_dumps(obj):
         return '!n'
 
     if isinstance(obj, str):
-        if re.match(r'^[a-zA-Z_][-a-zA-Z0-9_]+$', obj):
+        if re.match(r'^[a-zA-Z_.][-a-zA-Z0-9_.]+$', obj):
             return obj  # no quoting necessary!
 
         return "'" + re.sub(r"([!'])", r'!\1', obj) + "'"
 
     if isinstance(obj, dict):
-        return '(' + ','.join(rison_dumps(k) + ':' + rison_dumps(v) for k, v in obj.items()) + ')'
+        return '(' + ','.join(rison_dumps(k) + ':' + rison_dumps(v) for k, v in sorted(obj.items())) + ')'
 
     if isinstance(obj, (list, tuple)):
         return '!(' + ','.join(rison_dumps(v) for v in obj) + ')'
