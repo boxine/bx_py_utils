@@ -1,3 +1,5 @@
+import contextlib
+import io
 import logging
 from unittest import TestCase
 
@@ -25,3 +27,18 @@ class LogHandlerTestCase(TestCase):
             logger.info('After')
 
         self.assertEqual(logs.output, ['INFO:foobar:Before', 'INFO:foobar:After'])
+
+    def test_no_logs_no_stderr(self):
+        captured_logger = logging.getLogger('captured')
+
+        buf = io.StringIO()
+        with contextlib.redirect_stderr(buf):
+            with NoLogs('captured'):
+                captured_logger.warning('This should not be written anywhere')
+        self.assertEqual(buf.getvalue(), '')
+
+    def test_no_logs_real(self):
+        # Just for reference, actually use this (should see something on stderr if the above capturing fails)
+        real_logger = logging.getLogger('real')
+        with NoLogs('real'):
+            real_logger.warning('This should not be visible in stderr')

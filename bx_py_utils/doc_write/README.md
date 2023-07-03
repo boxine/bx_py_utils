@@ -66,11 +66,11 @@ Notes:
 
 ### Notes
 
+* The created created Markdown file is relative to `output_base_path` (defined in `pyproject.toml`)
+
+* Headlines will be sorted, so they appears ordered by the level.
+
 * All Doc-String without the `{prefix}` will be ignored.
 
 * The `{file-path}` must has the file extension `.md`
 Otherwise the DocString block will be ignored.
-
-* The created created Markdown file is relative to `output_base_path` (defined in `pyproject.toml`)
-
-* Headlines will be sorted, so they appears ordered by the level.
