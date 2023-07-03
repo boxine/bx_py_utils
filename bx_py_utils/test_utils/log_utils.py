@@ -22,7 +22,7 @@ class NoLogs:
     def __enter__(self):
         self.logger = logging.getLogger(self.logger_name)
         self.origin_handlers = self.logger.handlers
-        self.logger.handlers = []
+        self.logger.handlers = [logging.NullHandler()]
 
     def __exit__(self, exc_type, exc_value, tb):
         self.logger.handlers = self.origin_handlers
