@@ -2,10 +2,10 @@
 *.egg-info
 __pycache__
 /dist/
-/coverage.json
-/coverage.xml
+/coverage.*
 
 !.github
 !.editorconfig
 !.flake8
 !.gitignore
+!.gitkeep

@@ -220,7 +220,7 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 
 #### bx_py_utils.test_utils.unittest_utils
 
-* [`BaseDocTests()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L40-L87) - Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
+* [`BaseDocTests()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L40-L91) - Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
 * [`assert_no_flat_tests_functions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L16-L30) - Check if there exists normal test functions (That will not be executed by normal unittests)
 
 ### bx_py_utils.text_tools

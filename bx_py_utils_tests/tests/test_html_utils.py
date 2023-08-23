@@ -62,7 +62,7 @@ class HtmlUtilsTestCase(TestCase):
         )
 
     def test_pretty_format_html(self):
-        assert pretty_format_html('<p>Test</p>') == '<p>\n Test\n</p>'
+        self.assertEqual(pretty_format_html('<p>Test</p>'), '<p>\n Test\n</p>')
 
         html = pretty_format_html(
             '''
@@ -70,14 +70,16 @@ class HtmlUtilsTestCase(TestCase):
             <p><strong>Test</strong></p> \r\n \r\n
         '''
         )
-        assert html == '<h1>\n X\n</h1>\n<p>\n <strong>\n  Test\n </strong>\n</p>\n'
+        self.assertEqual(html, '<h1>\n X\n</h1>\n<p>\n <strong>\n  Test\n </strong>\n</p>')
 
-        assert pretty_format_html("<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>") == (
-            '<code>\n' " &lt;script&gt;alert('XSS')&lt;/script&gt;\n" '</code>'
+        self.assertEqual(
+            pretty_format_html("<code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>"),
+            ('<code>\n' " &lt;script&gt;alert('XSS')&lt;/script&gt;\n" '</code>'),
         )
 
-        assert pretty_format_html('<p>&lt;XSS énc🕳d&#128065;ng&gt; a&#97;&#x61;</p>') == (
-            '<p>\n &lt;XSS énc🕳d👁ng&gt; aaa\n</p>'
+        self.assertEqual(
+            pretty_format_html('<p>&lt;XSS énc🕳d&#128065;ng&gt; a&#97;&#x61;</p>'),
+            ('<p>\n &lt;XSS énc🕳d👁ng&gt; aaa\n</p>'),
         )
 
         # Our helpful error message if requirements missing?

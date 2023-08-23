@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "85"
+version = "86"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
@@ -38,6 +38,7 @@ flake8 = "*"  # https://github.com/pycqa/flake8
 EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
 safety = "*"  # https://github.com/pyupio/safety
 mypy = "*"  # https://github.com/python/mypy
+cli-base-utilities = "*"  # https://github.com/jedie/cli-base-utilities
 manageprojects = "*"  # https://github.com/jedie/manageprojects
 twine = "*"  # https://github.com/pypa/twine
 beautifulsoup4 = "*"
@@ -90,6 +91,7 @@ lines_after_imports=2
 branch = true
 parallel = true
 source = ['.']
+concurrency = ["multiprocessing"]
 command_line = "-m unittest --locals --verbose"
 
 [tool.coverage.report]
@@ -146,6 +148,7 @@ applied_migrations = [
     "cf44769", # 2023-01-11T08:15:06+01:00
     "01611af", # 2023-01-25T09:47:16+01:00
     "04d5a25", # 2023-03-07T16:25:36+01:00
+    "be3f649", # 2023-08-22T19:36:57+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
