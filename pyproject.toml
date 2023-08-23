@@ -38,6 +38,7 @@ flake8 = "*"  # https://github.com/pycqa/flake8
 EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
 safety = "*"  # https://github.com/pyupio/safety
 mypy = "*"  # https://github.com/python/mypy
+cli-base-utilities = "*"  # https://github.com/jedie/cli-base-utilities
 manageprojects = "*"  # https://github.com/jedie/manageprojects
 twine = "*"  # https://github.com/pypa/twine
 beautifulsoup4 = "*"
