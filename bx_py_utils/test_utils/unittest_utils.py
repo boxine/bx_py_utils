@@ -63,8 +63,12 @@ class BaseDocTests(TestCase):
 
         for module in modules:
             self.assertTrue(inspect.ismodule(module), f'Not a module: {module}')
-
             for info in pkgutil.walk_packages(module.__path__, module.__name__ + '.'):
+                module_finder = info.module_finder
+                module_path = module_finder.path
+                if filename_matcher(patterns=excludes, file_path=module_path):
+                    continue
+
                 module = importlib.import_module(info.name)
                 tests: list[doctest.DocTest] = finder.find(obj=module)
                 for test in tests:
