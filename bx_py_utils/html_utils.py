@@ -89,7 +89,7 @@ def pretty_format_html(data, parser='html.parser', **bs_kwargs):
     Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
     """
     soup = get_beautiful_soup_instance(data, parser, **bs_kwargs)
-    return soup.prettify()
+    return soup.prettify().rstrip()
 
 
 def get_html_elements(data, query_selector, parser='html.parser', **bs_kwargs):
