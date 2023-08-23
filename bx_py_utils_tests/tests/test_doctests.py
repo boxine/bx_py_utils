@@ -13,3 +13,10 @@ class DocTests(BaseDocTests):
         self.assertGreaterEqual(results.passed, 80)
         self.assertEqual(results.skipped, 1)  # doctest_skip.py
         self.assertLessEqual(results.failed, 0)  # Failing test in doctest_skip.py skipped?
+
+    def test_doctests_without_excludes(self):
+        results = self.run_doctests(
+            modules=(bx_py_utils.test_utils,),
+            excludes=None,  # <<< should be optional!
+        )
+        self.assertIsInstance(results, DocTestResults)
