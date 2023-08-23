@@ -83,7 +83,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.filename_matcher
 
-* [`filename_matcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/filename_matcher.py#L6-L22) - Enhance fnmatch that accept a list of patterns.
+* [`filename_matcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/filename_matcher.py#L6-L25) - Enhance fnmatch that accept a list of patterns.
 
 ### bx_py_utils.graphql_introspection
 
