@@ -43,7 +43,7 @@ def collect_docstrings(*, config: DocuwriteConfig) -> dict:
     regex = re.compile(config.docstring_prefix + r'\s*(.*?) (#{1,}.+?)\n+(.+)', re.DOTALL)
 
     storage = collections.defaultdict(dict)
-    for file_path in iter_file_path(file_paths=config.search_paths, rglob_pattern='*.py'):
+    for file_path in sorted(iter_file_path(file_paths=config.search_paths, rglob_pattern='*.py')):
         for doc_string in iter_docstrings(file_path=file_path):
             if not doc_string.startswith(config.docstring_prefix):
                 """DocWrite: bx_py_utils/doc_write/README.md ### Notes
