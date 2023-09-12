@@ -2,8 +2,8 @@
     Helper to publish this Project to PyPi
 """
 
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 from manageprojects.utilities.publish import publish_package
 

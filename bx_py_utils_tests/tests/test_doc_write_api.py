@@ -29,7 +29,7 @@ class DocuWriteApiTestCase(TestCase):
                 inspect.cleandoc(
                     """
                     '''TestDocs: test/README.md # Headline 1
-                    The Doc String 1
+                    The Doc String 2 (from foo)
                     '''
                     """
                 )
@@ -40,7 +40,7 @@ class DocuWriteApiTestCase(TestCase):
                 inspect.cleandoc(
                     """
                     '''TestDocs: test/README.md # Headline 1
-                    Merged Text to Headline 1
+                    Merged Text to Headline 1 (from bar)
                     '''
                     """
                 )
@@ -62,6 +62,7 @@ class DocuWriteApiTestCase(TestCase):
                 DocuwriteConfig(
                     base_path=temp_path,
                     search_paths=[
+                        # intentionally not in alphabetical order
                         temp_path / 'foo',
                         temp_path / 'bar',
                     ],
@@ -81,9 +82,9 @@ class DocuWriteApiTestCase(TestCase):
                     """
                     # Headline 1
 
-                    The Doc String 1
+                    Merged Text to Headline 1 (from bar)
 
-                    Merged Text to Headline 1
+                    The Doc String 2 (from foo)
 
                     ## Headline 2
 
