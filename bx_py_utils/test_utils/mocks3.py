@@ -164,6 +164,33 @@ class PseudoS3Client:
     def generate_presigned_url(self, *args, **kwargs):
         return self.origin_client.generate_presigned_url(*args, **kwargs)
 
+    def list_buckets(self):
+        return {
+            'Buckets': [{'Name': bucket_name} for bucket_name in self.buckets.keys()],
+            # Add some "realistic" fake meta data:
+            'Owner': {'DisplayName': '', 'ID': 'b36c0000000000000000000000000000000000000000000000000000abcd0005'},
+            'ResponseMetadata': {
+                'HTTPHeaders': {'x-amz-request-id': 'PseudoS3Client'},
+                'HTTPStatusCode': 200,
+                'RequestId': 'PseudoS3Client',
+            },
+        }
+
+    def head_bucket(self, Bucket, ExpectedBucketOwner=None):
+        if ExpectedBucketOwner is not None:
+            raise NotImplementedError
+
+        if Bucket not in self.buckets:
+            raise self.exceptions.NoSuchKey(Bucket)
+
+        return {  # Some "realistic" fake meta data:
+            'ResponseMetadata': {
+                'HTTPHeaders': {'x-amz-request-id': 'PseudoS3Client'},
+                'HTTPStatusCode': 200,
+                'RequestId': 'PseudoS3Client',
+            }
+        }
+
     def _list_objects_v2(self, Bucket, Prefix=None):
         bucket = self.buckets.get(Bucket, {})
         keys = bucket.keys()

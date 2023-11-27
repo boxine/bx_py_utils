@@ -95,6 +95,15 @@ class S3MockTest(TestCase):
         # Mock function
         self.assertEqual(s3.mock_list_files('buck'), ['foo/aaa', 'foo/bar/baz', 'foo/zzz', 'xxx'])
 
+    def test_list_buckets(self):
+        s3 = PseudoS3Client(init_buckets=('buck', 'foo-bar-123'))
+        bucket_names = set(b['Name'] for b in s3.list_buckets()['Buckets'])
+        self.assertEqual(bucket_names, {'buck', 'foo-bar-123'})
+        self.assertEqual(s3.head_bucket('buck')['ResponseMetadata']['HTTPStatusCode'], 200)
+
+        with self.assertRaises(s3.exceptions.NoSuchKey):
+            s3.head_bucket('hole-in-bucket')
+
     def test_upload_fileobj_closed_file(self):
         s3 = PseudoS3Client(init_buckets=('foo',))
         with tempfile.TemporaryFile() as temp_file:
