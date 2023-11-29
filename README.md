@@ -164,6 +164,11 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 * [`parse_dt()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/datetime.py#L4-L15) - Helper for easy generate a `datetime` instance via string.
 
+#### bx_py_utils.test_utils.deny_requests
+
+* [`DenyAnyRealRequestContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/deny_requests.py#L24-L38) - Context manager that denies any request via docket/urllib3. Will raise DenyCallError.
+* [`deny_any_real_request()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/deny_requests.py#L41-L50) - Deny any request via docket/urllib3. Useful for tests, because they should mock all requests.
+
 #### bx_py_utils.test_utils.filesystem_utils
 
 * [`FileWatcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/filesystem_utils.py#L6-L49) - Helper to record which new files have been created.
