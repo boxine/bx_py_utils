@@ -36,7 +36,7 @@ class ReadmeTestCase(TestCase):
             readme_path=readme_path,
             modules=['bx_py_utils'],
             exclude_func=FnmatchExclude('test_*.py'),
-            exclude_prefixes=('DocWrite:',),
+            exclude_prefixes=('DocWrite:', '[no-doc]'),
             start_marker_line='[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
             end_marker_line='[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
             start_level=2,
