@@ -19,7 +19,11 @@ def get_docstring(node):  # Origin ast.get_docstring() will not collect all DocS
 
 def iter_docstrings(file_path: Path) -> Iterator[str]:
     file_content = file_path.read_text(encoding='UTF-8')
-    ast_tree = ast.parse(file_content)
+    try:
+        ast_tree = ast.parse(file_content)
+    except SyntaxError as err:
+        logging.error('SyntaxError in %s: %s', file_path, err)
+        return
     for node in ast.walk(ast_tree):
         if doc_string := get_docstring(node):
             yield doc_string
