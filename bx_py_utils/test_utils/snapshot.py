@@ -3,6 +3,9 @@
 
     To update all snapshot files, run your tests with RAISE_SNAPSHOT_ERRORS=0 in environment.
 """
+
+from __future__ import annotations
+
 import hashlib
 import json
 import os
@@ -10,7 +13,7 @@ import pathlib
 import pprint
 import re
 from collections import Counter
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable
 
 from bx_py_utils.html_utils import get_html_elements, pretty_format_html, validate_html
 
@@ -59,10 +62,10 @@ def _write_json(obj, snapshot_file):
 
 def _get_caller_names(
     *,
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
-    name_suffix: str = None,
-    self_file_path: Union[pathlib.Path, str] = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
+    name_suffix: str | None = None,
+    self_file_path: pathlib.Path | str | None = None,
     extension_prefix: str = '.snapshot',
 ):
     """
@@ -120,11 +123,11 @@ def _get_caller_names(
 
 def get_snapshot_file(
     *,
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
-    name_suffix: str = None,
-    extension: str = None,
-    self_file_path: Union[pathlib.Path, str] = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
+    name_suffix: str | None = None,
+    extension: str | None = None,
+    self_file_path: pathlib.Path | str | None = None,
     extension_prefix: str = '.snapshot',
 ) -> pathlib.Path:
     """
@@ -149,15 +152,15 @@ def get_snapshot_file(
 
 
 def assert_text_snapshot(
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
-    got: str = None,
-    name_suffix: str = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
+    got: str | None = None,
+    name_suffix: str | None = None,
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = text_unified_diff,
-    self_file_path: Union[pathlib.Path, str] = None,
+    self_file_path: pathlib.Path | str | None = None,
 ):
     """
     Assert "text" string via snapshot file
@@ -197,15 +200,15 @@ def assert_text_snapshot(
 
 
 def assert_snapshot(
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
-    got: Optional[Union[dict, list]] = None,
-    name_suffix: str = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
+    got: dict | list | None = None,
+    name_suffix: str | None = None,
     extension: str = '.json',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = pformat_unified_diff,
-    self_file_path: Union[pathlib.Path, str] = None,
+    self_file_path: pathlib.Path | str | None = None,
 ):
     """
     Assert given data serialized to JSON snapshot file.
@@ -247,15 +250,15 @@ def assert_snapshot(
 
 
 def assert_py_snapshot(
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
     got: Any = None,
-    name_suffix: str = None,
+    name_suffix: str | None = None,
     extension: str = '.txt',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = _unified_diff,
-    self_file_path: Union[pathlib.Path, str] = None,
+    self_file_path: pathlib.Path | str | None = None,
 ):
     """
     Assert complex python objects vio PrettyPrinter() snapshot file.
@@ -296,21 +299,21 @@ def assert_py_snapshot(
 
 
 def assert_html_snapshot(
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
-    got: str = None,
-    name_suffix: str = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
+    got: str | None = None,
+    name_suffix: str | None = None,
     extension: str = '.html',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = text_unified_diff,
-    self_file_path: Union[pathlib.Path, str] = None,
+    self_file_path: pathlib.Path | str | None = None,
     validate: bool = True,
-    validate_kwargs: dict = None,
+    validate_kwargs: dict | None = None,
     pretty_format: bool = True,
-    pretty_kwargs: dict = None,
-    query_selector: str = None,
-    query_selector_kwargs: dict = None
+    pretty_kwargs: dict | None = None,
+    query_selector: str | None = None,
+    query_selector_kwargs: dict | None = None,
 ):
     """
     Assert "html" string via snapshot file with validate and pretty format
@@ -361,15 +364,15 @@ def binary_diff(got, expected, fromfile, tofile):
 
 
 def assert_binary_snapshot(
-    root_dir: Union[pathlib.Path, str] = None,
-    snapshot_name: str = None,
+    root_dir: pathlib.Path | str | None = None,
+    snapshot_name: str | None = None,
     got: bytes = None,
-    name_suffix: str = None,
+    name_suffix: str | None = None,
     extension: str = '.bin',
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func: Callable = binary_diff,
-    self_file_path: Union[pathlib.Path, str] = None,
+    self_file_path: pathlib.Path | str | None = None,
 ):
     """
     Assert binary data via snapshot file

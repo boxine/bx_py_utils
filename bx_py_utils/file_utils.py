@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import hashlib
 import io
 import re
 import tempfile
+from collections.abc import Iterable
 from pathlib import Path
-from typing import BinaryIO, Iterable
+from typing import BinaryIO
 
 
 class FileError(AssertionError):
@@ -11,14 +14,11 @@ class FileError(AssertionError):
     Base error class for all 'file_utils' exceptions.
     """
 
-    pass
-
 
 class EmptyFileError(FileError):
     """
     Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
     """
-    pass
 
 
 class FileSizeError(FileError):
@@ -84,7 +84,7 @@ class FileHasher:
 
     DEFAULT_HASH_NAMES = ('md5', 'sha1', 'sha3_224')
 
-    def __init__(self, hash_names: Iterable = None):
+    def __init__(self, hash_names: Iterable | None = None):
         hash_names = hash_names or self.DEFAULT_HASH_NAMES
         self.hash = {hash_name: hashlib.new(hash_name) for hash_name in hash_names}
         self.bytes_processed = 0
@@ -113,7 +113,7 @@ class TempFileHasher:
     def __init__(
         self,
         file_name: str,
-        hash_names: Iterable = None,
+        hash_names: Iterable | None = None,
         avoid_empty_files=True,
         expected_files_size=None,
     ):
@@ -189,8 +189,6 @@ class OverlongFilenameError(AssertionError):
     """
     cut_filename() error: The file name can not be shortened, because sterm is to short.
     """
-
-    pass
 
 
 def cut_filename(file_name: str, max_length: int, min_name_len: int = 1) -> str:

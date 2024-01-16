@@ -14,7 +14,7 @@ except ImportError:
         raise ImportError(f'Please add "tomli" to your dev-dependencies! Origin error: {err}')
 
 
-def get_pyproject_config(section: tuple[str, ...], base_path: Path | None = None) -> dict | None:
+def get_pyproject_config(section: tuple[str, ...], base_path: Path | None = None) -> None | bool | str | dict | list:
     """
     Get a config section from "pyproject.toml". The path can be optional specify.
     Section is used to get the nested information, e.g.:

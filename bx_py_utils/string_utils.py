@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import hashlib
 import re
 import unicodedata
-from typing import Union
 from uuid import UUID
 
 
@@ -64,9 +65,7 @@ def get_words(text, min_word_length=0, ignore_words=(), to_lower=True):
     return words
 
 
-def compare_sentences(
-    text1, text2, min_word_length=4, ignore_words=(), compare_lower=True
-) -> Union[None, int]:
+def compare_sentences(text1, text2, min_word_length=4, ignore_words=(), compare_lower=True) -> None | int:
     """
     Calculates the Levenshtein distance between text1 and text2. With filter functionality.
     But split to words and ignore special characters.
@@ -103,7 +102,7 @@ def uuid_from_text(text: str) -> UUID:
     return uuid
 
 
-def ensure_lf(text: str) -> str:
+def ensure_lf(text: str | None) -> str | None:
     """
     Replace line endings to unix-style.
 
@@ -116,7 +115,7 @@ def ensure_lf(text: str) -> str:
     return text
 
 
-def startswith_prefixes(text: str, prefixes: tuple[str, ...]) -> bool:
+def startswith_prefixes(text: str | None, prefixes: tuple[str, ...]) -> bool:
     """
     >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
     True

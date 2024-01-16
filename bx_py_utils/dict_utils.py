@@ -1,7 +1,9 @@
-from typing import Iterable
+from __future__ import annotations
+
+from collections.abc import Iterable
 
 
-def dict_get(item, *keys):
+def dict_get(item, *keys) -> None | bool | str | dict | list:
     """
     nested dict `get()`
 

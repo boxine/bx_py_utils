@@ -7,6 +7,8 @@ from unittest import TestCase
 from unittest.mock import patch
 from uuid import UUID
 
+import typeguard
+
 import bx_py_utils
 from bx_py_utils import html_utils
 from bx_py_utils.environ import OverrideEnviron
@@ -95,8 +97,12 @@ class SnapshotTestCase(TestCase):
             )
 
             # invalid type
-            with self.assertRaises(AssertionError) as exc_info:
-                assert_snapshot(tmp_dir, 'invalid_type', {1, 2})
+            with self.assertRaises(AssertionError) as exc_info, typeguard.suppress_type_checks():
+                assert_snapshot(
+                    tmp_dir,
+                    'invalid_type',
+                    got={1, 2},  # noqa - set() is not allowed!
+                )
             self.assertEqual(
                 str(exc_info.exception),
                 'Not JSON-serializable: {1, 2} is not a dict or list, but a set',

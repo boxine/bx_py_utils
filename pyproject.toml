@@ -46,6 +46,8 @@ beautifulsoup4 = "*"
 lxml = "*"
 pdoc = "*"  # https://pdoc.dev/
 
+typeguard = "*"  # https://github.com/agronholm/typeguard/
+
 # https://github.com/akaihola/darker
 # https://github.com/ikamensh/flynt
 # https://github.com/pycqa/isort

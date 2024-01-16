@@ -30,11 +30,11 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.auto_doc
 
-* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L201-L210) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
-* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L172-L198) - Check and update README file with generate_modules_doc()
-* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L139-L169) - Check and update README file: Asset that "text_block" is present between the markers.
-* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L44-L136) - Generate a list of function/class information via pdoc.
-* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L36-L41) - Return start and end line number for an object via inspect.
+* [`FnmatchExclude()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L203-L212) - Helper for auto doc `exclude_func` that exclude files via fnmatch pattern.
+* [`assert_readme()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L174-L200) - Check and update README file with generate_modules_doc()
+* [`assert_readme_block()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L141-L171) - Check and update README file: Asset that "text_block" is present between the markers.
+* [`generate_modules_doc()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L46-L138) - Generate a list of function/class information via pdoc.
+* [`get_code_location()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/auto_doc.py#L38-L43) - Return start and end line number for an object via inspect.
 
 #### bx_py_utils.aws.client_side_cert_manager
 
@@ -51,8 +51,8 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.dict_utils
 
-* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L4-L25) - nested dict `get()`
-* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L28-L40) - Extract values from a dict, if they are present
+* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L6-L27) - nested dict `get()`
+* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L30-L42) - Extract values from a dict, if they are present
 
 ### bx_py_utils.doc_write
 
@@ -70,14 +70,14 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.file_utils
 
-* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L17-L21) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
-* [`FileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L9-L14) - Base error class for all 'file_utils' exceptions.
+* [`EmptyFileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L18-L21) - Will be raised from get_and_assert_file_size() if a 0-bytes file was found.
+* [`FileError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L12-L15) - Base error class for all 'file_utils' exceptions.
 * [`FileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L79-L104) - Context Manager for generate different hashes from file content while processing a file.
 * [`FileSizeError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L24-L38) - File size is not the same as the expected size.
 * [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L53-L76) - Generates a temp file with the given filename **without** any random name sequence.
-* [`OverlongFilenameError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L188-L193) - cut_filename() error: The file name can not be shortened, because sterm is to short.
+* [`OverlongFilenameError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L188-L191) - cut_filename() error: The file name can not be shortened, because sterm is to short.
 * [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L107-L178) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
-* [`cut_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L196-L236) - Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
+* [`cut_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L194-L234) - Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
 * [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L41-L50) - Check file size of given file object. Raise EmptyFileError for empty files or return size
 * [`safe_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L181-L185) - Makes an arbitrary input suitable to be used as a filename.
 
@@ -140,12 +140,12 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.string_utils
 
-* [`compare_sentences()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L67-L90) - Calculates the Levenshtein distance between text1 and text2. With filter functionality.
-* [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L106-L116) - Replace line endings to unix-style.
-* [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L40-L64) - Extract words from a text. With filter functionality.
-* [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L8-L37) - Calculates the Levenshtein distance between two strings.
-* [`startswith_prefixes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L119-L135) - >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
-* [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L93-L103) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
+* [`compare_sentences()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L68-L89) - Calculates the Levenshtein distance between text1 and text2. With filter functionality.
+* [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L105-L115) - Replace line endings to unix-style.
+* [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L41-L65) - Extract words from a text. With filter functionality.
+* [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L9-L38) - Calculates the Levenshtein distance between two strings.
+* [`startswith_prefixes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L118-L134) - >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
+* [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L92-L102) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
 
 #### bx_py_utils.test_utils.assertion
 
@@ -211,13 +211,13 @@ A simple mock for Boto3's S3 modules.
 
 Assert complex output via auto updated snapshot files with nice diff error messages.
 
-* [`SnapshotChanged()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L47-L48) - Assertion failed.
-* [`assert_binary_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L363-L404) - Assert binary data via snapshot file
-* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L298-L347) - Assert "html" string via snapshot file with validate and pretty format
-* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L249-L295) - Assert complex python objects vio PrettyPrinter() snapshot file.
-* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L199-L246) - Assert given data serialized to JSON snapshot file.
-* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L151-L196) - Assert "text" string via snapshot file
-* [`get_snapshot_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L121-L148) - Generate a file path use stack information to fill not provided path components.
+* [`SnapshotChanged()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L50-L51) - Assertion failed.
+* [`assert_binary_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L366-L407) - Assert binary data via snapshot file
+* [`assert_html_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L301-L350) - Assert "html" string via snapshot file with validate and pretty format
+* [`assert_py_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L252-L298) - Assert complex python objects vio PrettyPrinter() snapshot file.
+* [`assert_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L202-L249) - Assert given data serialized to JSON snapshot file.
+* [`assert_text_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L154-L199) - Assert "text" string via snapshot file
+* [`get_snapshot_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/snapshot.py#L124-L151) - Generate a file path use stack information to fill not provided path components.
 
 #### bx_py_utils.test_utils.time
 
