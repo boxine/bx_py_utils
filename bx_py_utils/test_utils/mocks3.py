@@ -62,12 +62,13 @@ class PseudoS3Client:
 
     exceptions = PseudoS3Exceptions
 
-    def __init__(self, *, origin_client=None, init_buckets=[]):
+    def __init__(self, *, origin_client=None, init_buckets=None):
         self.origin_client = origin_client
 
         self.buckets = {}
-        for bucket_name in init_buckets:
-            self.buckets[bucket_name] = {}
+        if init_buckets:
+            for bucket_name in init_buckets:
+                self.buckets[bucket_name] = {}
 
     # non-standard variable names for Boto3 compatibility
     def download_file(self, Bucket, Key, Filename, *, ExtraArgs=None, Callback=None, Config=None):

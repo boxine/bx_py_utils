@@ -43,7 +43,7 @@ def human_timedelta(t):
     if abs(t) < 60:
         return f'{round(t, 1):.1f}\xa0seconds'
 
-    for seconds, time_string in TIMESINCE_CHUNKS:
+    for seconds, time_string in TIMESINCE_CHUNKS:  # noqa: B007
         count = t / seconds
         if abs(count) >= 1:
             count = round(count, 1)

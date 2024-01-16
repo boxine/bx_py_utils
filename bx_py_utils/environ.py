@@ -50,4 +50,4 @@ class OverrideEnviron:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type:
             raise
-        os.environ = self._origin_env
+        os.environ = self._origin_env  # noqa:B003

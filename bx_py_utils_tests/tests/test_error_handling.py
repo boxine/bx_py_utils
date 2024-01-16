@@ -11,7 +11,7 @@ class ErrorHandlingTestCase(TestCase):
         with RedirectOut() as buffer:
             try:
                 raise AssertionError(test_message)
-            except BaseException:
+            except BaseException:  # noqa: B036
                 print_exc_plus()
 
             self.assertEqual(buffer.stdout, '')
@@ -25,7 +25,7 @@ class ErrorHandlingTestCase(TestCase):
             try:
                 x = '12345678901234567890'
                 raise AssertionError(x)
-            except BaseException:
+            except BaseException:  # noqa: B036
                 print_exc_plus(max_chars=15)
 
             self.assertEqual(buffer.stdout, '')

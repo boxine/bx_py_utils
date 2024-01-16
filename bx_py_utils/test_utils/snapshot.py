@@ -173,7 +173,7 @@ def assert_text_snapshot(
     )
     try:
         expected = snapshot_file.read_bytes().decode('utf-8')
-    except (FileNotFoundError, OSError):
+    except OSError:
         snapshot_file.write_bytes(got.encode('utf-8'))
         if not raise_snapshot_errors():
             return
@@ -226,7 +226,7 @@ def assert_snapshot(
     try:
         with snapshot_file.open('r') as snapshot_handle:
             expected = json.load(snapshot_handle)
-    except (ValueError, OSError, FileNotFoundError):
+    except (ValueError, OSError):
         _write_json(got, snapshot_file)
         if not raise_snapshot_errors():
             return
@@ -385,7 +385,7 @@ def assert_binary_snapshot(
     )
     try:
         expected = snapshot_file.read_bytes()
-    except (FileNotFoundError, OSError):
+    except OSError:
         snapshot_file.write_bytes(got)
         if not raise_snapshot_errors():
             return
