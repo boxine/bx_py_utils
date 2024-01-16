@@ -47,7 +47,9 @@ Add a section `[tool.doc_write]` to your `pyproject.toml` to configure Doc-Write
 docstring_prefix = 'DocWrite:'
 output_base_path = './docs/'
 search_paths = ['./foo/', './bar/']
+delete_obsolete_files = false  # Delete obsolete files in output_base_path
 ```
+Warning: Turn `delete_obsolete_files` only on if output_base_path is excursively used by Doc-Write.
 
 ### Howto
 
@@ -67,6 +69,9 @@ Notes:
 ### Notes
 
 * The created created Markdown file is relative to `output_base_path` (defined in `pyproject.toml`)
+
+* If `delete_obsolete_files` is set to `true` in `pyproject.toml`,
+  then all `*.md` files in `output_base_path` that are not in `doc_paths` will be deleted.
 
 * Headlines will be sorted, so they appears ordered by the level.
 

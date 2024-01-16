@@ -5,6 +5,7 @@ from unittest import TestCase
 
 from bx_py_utils.doc_write.api import generate
 from bx_py_utils.doc_write.cfg import DocuwriteConfig, get_docu_write_cfg
+from bx_py_utils.path import assert_is_file
 
 
 class DocuWriteApiTestCase(TestCase):
@@ -71,11 +72,16 @@ class DocuWriteApiTestCase(TestCase):
                 ),
             )
 
+            # Create an "obsolete" file:
+            obsolete_md_path = temp_path / 'docs/test/obsolete.md'
+            obsolete_md_path.parent.mkdir(parents=True, exist_ok=False)
+            obsolete_md_path.touch()
+
             created_readme_path = temp_path / 'docs/test/README.md'
             self.assertIs(created_readme_path.exists(), False)
             doc_paths = generate(base_path=temp_path)
             self.assertEqual(doc_paths, [created_readme_path])
-            generated_content = created_readme_path.read_text(encoding='UTF-8')
+            generated_content = created_readme_path.read_text()
             self.assertEqual(
                 generated_content,
                 inspect.cleandoc(
@@ -92,3 +98,19 @@ class DocuWriteApiTestCase(TestCase):
                     """
                 ),
             )
+
+            # The default is not to delete obsolete files -> does it still exists?
+            assert_is_file(obsolete_md_path)
+
+            # Activate deleting of obsolete files:
+            with pyproject_toml_path.open('a') as f:
+                f.write('\ndelete_obsolete_files = true\n')
+
+            # Run again and delete obsolete files:
+            generate(base_path=temp_path)
+
+            # Obsolete file removed?
+            self.assertIs(obsolete_md_path.exists(), False)
+
+            # readme is still the same?
+            self.assertEqual(created_readme_path.read_text(), generated_content)
