@@ -24,13 +24,16 @@ class DocuwriteConfig:
     docstring_prefix = 'DocWrite:'
     output_base_path = './docs/'
     search_paths = ['./foo/', './bar/']
+    delete_obsolete_files = false  # Delete obsolete files in output_base_path
     ```
+    Warning: Turn `delete_obsolete_files` only on if output_base_path is excursively used by Doc-Write.
     """
 
     base_path: Path
     search_paths: list[Path]
     output_base_path: Path
     docstring_prefix: str = 'DocWrite:'
+    delete_obsolete_files: bool = False  # Delete obsolete files in output_base_path
 
     def __post_init__(self):
         self.base_path = self.base_path.resolve(strict=True)

@@ -37,6 +37,8 @@ logger = logging.getLogger(__name__)
 def generate(base_path: Path | None = None) -> list[Path]:
     config: DocuwriteConfig = get_docu_write_cfg(base_path=base_path)
 
+    output_base_path: Path = config.output_base_path
+
     doc_paths = []
     docs_data = collect_docstrings(config=config)
     for rel_file_path, data in sorted(docs_data.items()):
@@ -49,12 +51,25 @@ def generate(base_path: Path | None = None) -> list[Path]:
             docs.append('\n\n'.join(docstrings))
         merged_doc = '\n\n'.join(docs)
 
-        """ DocWrite: bx_py_utils/doc_write/README.md ### Notes
+        """DocWrite: bx_py_utils/doc_write/README.md ### Notes
         * The created created Markdown file is relative to `output_base_path` (defined in `pyproject.toml`)
         """
-        out_path = config.output_base_path / rel_file_path
+        out_path = output_base_path / rel_file_path
         logger.info('Write %s', out_path)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(merged_doc, encoding='UTF-8')
         doc_paths.append(out_path)
+
+    if config.delete_obsolete_files:
+        """DocWrite: bx_py_utils/doc_write/README.md ### Notes
+        * If `delete_obsolete_files` is set to `true` in `pyproject.toml`,
+          then all `*.md` files in `output_base_path` that are not in `doc_paths` will be deleted.
+        """
+        current_files = set(doc_paths)
+        existing_files = set(output_base_path.rglob('**/*.md'))
+        obsolete_files = existing_files - current_files
+        for obsolete_file in obsolete_files:
+            logger.info('Delete %s', obsolete_files)
+            obsolete_file.unlink()
+
     return doc_paths
