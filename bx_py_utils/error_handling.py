@@ -65,7 +65,7 @@ def print_exc_plus(exc=None, stop_on_file_path=None, max_chars=None):
 
                 try:
                     print(value, file=sys.stderr)
-                except BaseException:
+                except BaseException:  # noqa:B036
                     print('<ERROR WHILE PRINTING VALUE>', file=sys.stderr)
 
     print(file=sys.stderr)
