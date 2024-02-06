@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import importlib
 import inspect
 import re
@@ -177,7 +179,7 @@ def assert_readme(
     start_marker_line: str = '[comment]: <> (✂✂✂ auto generated start ✂✂✂)',
     end_marker_line: str = '[comment]: <> (✂✂✂ auto generated end ✂✂✂)',
     start_level: int = 1,
-    link_template: str = None,
+    link_template: str | None = None,
 ):
     """
     Check and update README file with generate_modules_doc()
