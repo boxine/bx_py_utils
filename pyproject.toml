@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bx_py_utils"
-version = "91"
+version = "92"
 description = "Various Python utility functions"
 homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
@@ -66,14 +66,12 @@ build-backend = "poetry.core.masonry.api"
 src = ["."]
 revision = "origin/master..."
 line_length = 119
-verbose = true
 color = true
 skip_string_normalization = true
 diff = false
 check = false
 stdout = false
 isort = true
-flynt = true
 lint = [
     "flake8",
 ]
@@ -114,7 +112,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{311,310,39}
+envlist = py{312,311,310,39}
 skip_missing_interpreters = True
 
 [testenv]

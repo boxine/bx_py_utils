@@ -74,7 +74,7 @@ def assert_equal(
     Check if the two objects are the same. Display a nice diff, using `pformat()`
     """
     if obj1 != obj2:
-        raise raise_cls(f'{msg}\n{diff_func(obj1,obj2, fromfile=fromfile, tofile=tofile)}')
+        raise raise_cls(f'{msg}\n{diff_func(obj1, obj2, fromfile=fromfile, tofile=tofile)}')
 
 
 def assert_text_equal(
