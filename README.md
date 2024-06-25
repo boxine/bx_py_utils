@@ -61,7 +61,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.environ
 
-* [`OverrideEnviron()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/environ.py#L31-L53) - Context manager to change 'os.environ' temporarily.
+* [`OverrideEnviron()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/environ.py#L31-L54) - Context manager to change 'os.environ' temporarily.
 * [`cgroup_memory_usage()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/environ.py#L12-L28) - Returns the memory usage of the cgroup the Python interpreter is running in.
 
 ### bx_py_utils.error_handling

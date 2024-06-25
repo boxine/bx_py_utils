@@ -45,6 +45,7 @@ class OverrideEnviron:
                 if k in os.environ:
                     del os.environ[k]
             else:
+                assert isinstance(v, str), f'Value for {k} must be a string!'
                 os.environ[k] = v
 
     def __exit__(self, exc_type, exc_val, exc_tb):
