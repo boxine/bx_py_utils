@@ -269,9 +269,10 @@ To start developing e.g.:
 ~$ git clone https://github.com/boxine/bx_py_utils.git
 ~$ cd bx_py_utils
 ~/bx_py_utils$ make
-install-poetry             install or update poetry
-install                    install project via poetry
-update                     update the sources and installation and generate "conf/requirements.txt"
+help                       List all commands
+install-base-req           Install needed base packages via apt
+install                    Install the project in a Python virtualenv
+update-requirements        Update requirements
 lint                       Run code formatters and linter
 fix-code-style             Fix code formatting
 tox-listenvs               List all tox test environments
@@ -284,6 +285,13 @@ safety                     Run https://github.com/pyupio/safety
 publish                    Release new version to PyPi
 clean                      Remove created files from the test project
 ```
+
+
+## Create a release
+
+* Increase verion number in `bx_py_utils/__init__.py`
+* Create pull request
+* After merge, call: `make publish`
 
 
 ## License

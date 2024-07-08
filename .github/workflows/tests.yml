@@ -33,10 +33,6 @@ jobs:
         cache: 'pip' # caching pip dependencies
         cache-dependency-path: '**/poetry.lock'
 
-    - name: 'Install Poetry'
-      run: |
-        make install-poetry
-
     - name: 'Install'
       run: |
         make install

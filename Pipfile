@@ -1,0 +1,26 @@
+[packages]
+
+
+[dev-packages]
+boto3 = "*"  # needed for e.g.: bx_py_utils/aws/ stuff!
+requests-mock = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+pdoc = "*"  # https://pdoc.dev/
+
+pipenv = "*"  # https://github.com/pypa/pipenv
+manageprojects = "*"  # https://github.com/jedie/manageprojects
+bx_py_utils = "*"  # https://github.com/boxine/bx_py_utils
+tox = ">=4.4.4"  # https://github.com/tox-dev/tox
+coverage= "*"  # https://github.com/nedbat/coveragepy
+darker = {version = "*", extras = ["flynt", "isort", "color"]}  # https://github.com/akaihola/darker
+flake8 = "*"  # https://github.com/pycqa/flake8
+flake8-bugbear = "*"  # https://github.com/PyCQA/flake8-bugbear
+EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
+safety = "*"  # https://github.com/pyupio/safety
+mypy = "*"  # https://github.com/python/mypy
+tomli = "*"  # https://github.com/hukkin/tomli
+build = "*"  # https://github.com/pypa/build
+twine = "*"  # https://github.com/pypa/twine
+typeguard = "*"  # https://github.com/agronholm/typeguard/
+

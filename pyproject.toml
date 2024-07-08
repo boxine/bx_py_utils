@@ -1,12 +1,11 @@
-[tool.poetry]
+[project]
 name = "bx_py_utils"
-version = "92"
+dynamic = ["version"]
 description = "Various Python utility functions"
-homepage = "https://github.com/boxine/bx_py_utils/"
 authors = [
-    "Jens Diemer <jens.diemer@boxine.de>",
-    "Philipp Hagemeister <phihag@phihag.de>",
-    "Florian Braun <mail@chiron-online.de>"
+    {name = 'Jens Diemer', email = 'jens.diemer@boxine.de'},
+    {name = 'Philipp Hagemeister', email = 'phihag@phihag.de'},
+    {name = 'Florian Braun', email = 'mail@chiron-online.de'},
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -17,49 +16,27 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Intended Audience :: Developers",
 ]
-license = "MIT"
+license = {text = "MIT"}
 keywords=["utilities"]
-include = ["LICENSE", "README.md"]
 readme="README.md"
-packages = [{ include = "bx_py_utils" }]
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/boxine/bx_py_utils/issues"
 
+[project.urls]
+Documentation = "https://github.com/boxine/bx_py_utils/"
+Source = "https://github.com/boxine/bx_py_utils/"
 
-[tool.poetry.dependencies]
-python = ">=3.9,<4.0.0"
-
-[tool.poetry.dev-dependencies]
-boto3 = "*"  # needed for e.g.: bx_py_utils/aws/ stuff!
-requests-mock = "*"
-tox = "*"  # https://github.com/tox-dev/tox
-coveralls = "*"  # http://github.com/TheKevJames/coveralls-python
-flake8 = "*"  # https://github.com/pycqa/flake8
-flake8-bugbear = "*"  # https://github.com/PyCQA/flake8-bugbear
-EditorConfig = "*"  # https://github.com/editorconfig/editorconfig-core-py
-safety = "*"  # https://github.com/pyupio/safety
-mypy = "*"  # https://github.com/python/mypy
-cli-base-utilities = "*"  # https://github.com/jedie/cli-base-utilities
-manageprojects = "*"  # https://github.com/jedie/manageprojects
-twine = "*"  # https://github.com/pypa/twine
-beautifulsoup4 = "*"
-lxml = "*"
-pdoc = "*"  # https://pdoc.dev/
-
-typeguard = "*"  # https://github.com/agronholm/typeguard/
-
-# https://github.com/akaihola/darker
-# https://github.com/ikamensh/flynt
-# https://github.com/pycqa/isort
-# https://github.com/pygments/pygments
-darker = { version = "*", extras = ["flynt", "isort", "color"] }
-
-[tool.poetry.scripts]
-publish = "bx_py_utils_tests.publish:publish"
+[project.scripts]
+bx_py_utils = "bx_py_utils.__main__:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0", "setuptools_scm>=7.1"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bx_py_utils*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "bx_py_utils.__version__"}
 
 
 [tool.darker]
@@ -141,17 +118,10 @@ docstring_prefix = 'DocWrite:'
 
 
 [manageprojects] # https://github.com/jedie/manageprojects
-initial_revision = "baf1ebc"
-initial_date = 2022-11-30T21:19:10+01:00
+initial_revision = "1f3a70e"
+initial_date = 2024-05-21T21:22:39+02:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "poetry-python"
-applied_migrations = [
-    "cf44769", # 2023-01-11T08:15:06+01:00
-    "01611af", # 2023-01-25T09:47:16+01:00
-    "04d5a25", # 2023-03-07T16:25:36+01:00
-    "be3f649", # 2023-08-22T19:36:57+02:00
-    "7271d4c", # 2023-12-29T21:57:47+01:00
-]
+cookiecutter_directory = "pipenv-python"
 
 [manageprojects.cookiecutter_context.cookiecutter]
 full_name = "Jens Diemer"

@@ -1,6 +1,9 @@
 import subprocess
+from importlib.metadata import version
 from pathlib import Path
 from unittest import TestCase
+
+from packaging.version import Version
 
 import bx_py_utils
 from bx_py_utils.path import assert_is_dir, assert_is_file
@@ -24,15 +27,28 @@ class ProjectSetupTestCase(TestCase):
             subprocess.check_call(['make', 'lint'], cwd=PACKAGE_ROOT)
         else:
             self.assertIn('darker', output)
-            self.assertIn('isort', output)
             self.assertIn('flake8', output)
 
-    def test_poetry_check(self):
-        output = subprocess.check_output(['poetry', 'check'], cwd=PACKAGE_ROOT, text=True)
-        self.assertEqual(output, 'All set!\n')
+    def test_pipenv_check(self):
+        output = subprocess.check_output(['pipenv', 'check'], cwd=PACKAGE_ROOT, text=True)
+        self.assertIn('Passed!\n', output)
+        self.assertIn('No known security vulnerabilities found.', output)
 
     def test_no_ignored_test_function(self):
         # In the past we used pytest ;)
         # Check if we still have some flat test function that will be not executed by unittests
         assert_no_flat_tests_functions(PACKAGE_ROOT / 'bx_py_utils')
         assert_no_flat_tests_functions(PACKAGE_ROOT / 'bx_py_utils_tests')
+
+    def test_version(self):
+        # We get a version string:
+        bx_py_utils_version_str = version('bx_py_utils')
+        self.assertIsInstance(bx_py_utils_version_str, str)
+        self.assertTrue(bx_py_utils_version_str)
+
+        # Note: The actual installed version may be different from the one in the __init__.py file.
+        # So check this too:
+        self.assertIsInstance(bx_py_utils.__version__, str)
+        bx_py_utils_version = Version(bx_py_utils.__version__)
+        self.assertIsInstance(bx_py_utils_version, Version)
+        self.assertEqual(str(bx_py_utils_version), bx_py_utils.__version__)  # Don't allow wrong formatting
