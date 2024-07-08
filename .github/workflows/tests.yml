@@ -26,16 +26,11 @@ jobs:
         git checkout $GITHUB_SHA || (git fetch && git checkout $GITHUB_SHA)
 
     - name: 'Set up Python ${{ matrix.python-version }}'
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       # https://github.com/marketplace/actions/setup-python
       with:
         python-version: '${{ matrix.python-version }}'
         cache: 'pip' # caching pip dependencies
-        cache-dependency-path: '**/poetry.lock'
-
-    - name: 'Install Poetry'
-      run: |
-        make install-poetry
 
     - name: 'Install'
       run: |
