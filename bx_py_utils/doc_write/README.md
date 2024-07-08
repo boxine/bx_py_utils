@@ -36,6 +36,13 @@ from bx_py_utils.doc_write.api import generate
 generate()
 ```
 
+Tip: Just include "generate Doc-Write" files" into your unittests.
+So you have always up2date documentation files.
+
+Example for a unittest can be found here:
+
+https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils_tests/tests/test_doc_write.py
+
 ## pyproject.toml settings
 
 Add a section `[tool.doc_write]` to your `pyproject.toml` to configure Doc-Write.

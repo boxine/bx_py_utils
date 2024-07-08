@@ -24,6 +24,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import logging
 from pathlib import Path
 
@@ -34,13 +35,28 @@ from bx_py_utils.doc_write.docstrings import collect_docstrings
 logger = logging.getLogger(__name__)
 
 
-def generate(base_path: Path | None = None) -> list[Path]:
+@dataclasses.dataclass
+class GeneratedInfo:
+    update_count: int
+    remove_count: int
+    paths: list[Path]
+
+
+def _needs_write(out_path: Path, content: str) -> bool:
+    if not out_path.exists():
+        return True
+    current_content = out_path.read_text(encoding='UTF-8')
+    return current_content != content
+
+
+def generate(base_path: Path | None = None) -> GeneratedInfo:
     config: DocuwriteConfig = get_docu_write_cfg(base_path=base_path)
 
     output_base_path: Path = config.output_base_path
 
     doc_paths = []
     docs_data = collect_docstrings(config=config)
+    update_count = 0
     for rel_file_path, data in sorted(docs_data.items()):
         docs = []
         for headline, docstrings in sorted(data.items()):
@@ -57,9 +73,12 @@ def generate(base_path: Path | None = None) -> list[Path]:
         out_path = output_base_path / rel_file_path
         logger.info('Write %s', out_path)
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(merged_doc, encoding='UTF-8')
+        if _needs_write(out_path, merged_doc):
+            out_path.write_text(merged_doc, encoding='UTF-8')
+            update_count += 1
         doc_paths.append(out_path)
 
+    remove_count = 0
     if config.delete_obsolete_files:
         """DocWrite: bx_py_utils/doc_write/README.md ### Notes
         * If `delete_obsolete_files` is set to `true` in `pyproject.toml`,
@@ -71,5 +90,10 @@ def generate(base_path: Path | None = None) -> list[Path]:
         for obsolete_file in obsolete_files:
             logger.info('Delete %s', obsolete_files)
             obsolete_file.unlink()
+            remove_count += 1
 
-    return doc_paths
+    return GeneratedInfo(
+        update_count=update_count,
+        remove_count=remove_count,
+        paths=doc_paths,
+    )
