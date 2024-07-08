@@ -52,5 +52,5 @@ class PyProjectTomlTestCase(TestCase):
         assert_is_file(pkg_root_path / 'pyproject.toml')
 
         with ChangeCurrentWorkDir(pkg_root_path):
-            package_name = get_pyproject_config(section=('tool', 'poetry', 'name'))
+            package_name = get_pyproject_config(section=('project', 'name'))
         self.assertEqual(package_name, 'bx_py_utils')
