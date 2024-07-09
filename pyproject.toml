@@ -21,6 +21,39 @@ license = {text = "MIT"}
 keywords=["utilities"]
 readme="README.md"
 
+
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    'boto3',  # needed for e.g.: bx_py_utils/aws/ stuff!
+    'requests-mock',
+    'beautifulsoup4',
+    'lxml',
+    'pdoc',  # https://pdoc.dev/
+
+    'manageprojects',  # https://github.com/jedie/manageprojects
+    'tox>=4.4.4',  # https://github.com/tox-dev/tox
+    'coverage',  # https://github.com/nedbat/coveragepy
+    'flake8',  # https://github.com/pycqa/flake8
+    'flake8-bugbear',  # https://github.com/PyCQA/flake8-bugbear
+    'twine',  # https://github.com/pypa/twine/
+    'tblib',  # https://github.com/ionelmc/python-tblib
+    'packaging',  # https://pypi.org/project/packaging/
+    'build',  # https://github.com/pypa/build
+    'EditorConfig',  # https://pypi.org/project/EditorConfig/
+    'safety',  # https://github.com/pyupio/safety
+
+    # https://github.com/akaihola/darker
+    # https://github.com/ikamensh/flynt
+    # https://github.com/pycqa/isort
+    # https://github.com/pygments/pygments
+    'darker[flynt, isort, color]',
+
+    'typeguard',  # https://github.com/agronholm/typeguard/
+]
+
+
 [project.urls]
 Documentation = "https://github.com/boxine/bx_py_utils/"
 Source = "https://github.com/boxine/bx_py_utils/"
@@ -95,6 +128,8 @@ skip_missing_interpreters = True
 
 [testenv]
 passenv = *
+deps =
+    .[dev]
 allowlist_externals = make
 commands_pre =
     make install
@@ -123,6 +158,9 @@ initial_revision = "1f3a70e"
 initial_date = 2024-05-21T21:22:39+02:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
 cookiecutter_directory = "pipenv-python"
+applied_migrations = [
+    "dee29ef", # 2024-07-09T16:06:43+02:00
+]
 
 [manageprojects.cookiecutter_context.cookiecutter]
 full_name = "Jens Diemer"
