@@ -20,7 +20,7 @@ classifiers = [
 license = {text = "MIT"}
 keywords=["utilities"]
 readme="README.md"
-
+requires-python = ">=3.10,<4"
 
 dependencies = []
 
@@ -123,7 +123,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{312,311,310,39}
+envlist = py{312,311,310}
 skip_missing_interpreters = True
 
 [testenv]

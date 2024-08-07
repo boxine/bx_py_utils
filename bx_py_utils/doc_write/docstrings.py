@@ -11,8 +11,8 @@ from bx_py_utils.doc_write.walk import iter_file_path
 
 
 def get_docstring(node):  # Origin ast.get_docstring() will not collect all DocStrings!
-    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Str):
-        if text := node.value.s:
+    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant):
+        if text := node.value.value:
             if text := inspect.cleandoc(text).strip():
                 return text
 
