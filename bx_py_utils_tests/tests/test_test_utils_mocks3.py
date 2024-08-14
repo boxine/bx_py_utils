@@ -95,6 +95,29 @@ class S3MockTest(TestCase):
         # Mock function
         self.assertEqual(s3.mock_list_files('buck'), ['foo/aaa', 'foo/bar/baz', 'foo/zzz', 'xxx'])
 
+    def test_copy_object(self):
+        CONTENT = b'\x001'
+        s3 = PseudoS3Client(init_buckets=('buck', 'dst'))
+        s3.mock_set_content('buck', 'foo/bar/baz', CONTENT)
+
+        s3.copy_object(CopySource='buck/foo/bar/baz', Bucket='dst', Key='qux/new')
+        self.assertEqual(s3.mock_get_content('dst', 'qux/new'), CONTENT)
+        s3.copy_object(CopySource='buck/foo/bar/baz', Bucket='buck', Key='newroot')
+        self.assertEqual(s3.mock_get_content('buck', 'newroot'), CONTENT)
+
+        with self.assertRaises(s3.exceptions.NoSuchKey):
+            s3.copy_object(Bucket='buck', Key='new', CopySource='buck/null/4')
+
+        # We don't really implement all the metadata options, but callers can specify them
+        s3.copy_object(
+            Bucket='dst',
+            CopySource='dst/qux/new',
+            Key='another',
+            ContentDisposition='attachment;filename=newname.bin',
+            MetadataDirective='REPLACE',
+        )
+        self.assertEqual(s3.mock_get_content('dst', 'another'), CONTENT)
+
     def test_list_buckets(self):
         s3 = PseudoS3Client(init_buckets=('buck', 'foo-bar-123'))
         bucket_names = set(b['Name'] for b in s3.list_buckets()['Buckets'])

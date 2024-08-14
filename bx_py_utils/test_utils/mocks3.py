@@ -1,5 +1,6 @@
 """ A simple mock for Boto3's S3 modules. """
 
+import copy
 import io
 import pathlib
 
@@ -161,6 +162,17 @@ class PseudoS3Client:
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_object
     def delete_object(self, Bucket, Key):
         del self.buckets[Bucket][Key]
+
+    # non-standard variable names for Boto3 compatibility
+    def copy_object(self, *, Bucket, CopySource, Key, ContentDisposition=None, MetadataDirective='COPY'):
+        bucket = self.buckets[Bucket]
+
+        src_bucket_name, _, src_key = CopySource.partition('/')
+        src_bucket = self.buckets[src_bucket_name]
+        if src_key not in src_bucket:
+            raise self.exceptions.NoSuchKey(src_key)
+
+        bucket[Key] = copy.deepcopy(src_bucket[src_key])
 
     def generate_presigned_url(self, *args, **kwargs):
         return self.origin_client.generate_presigned_url(*args, **kwargs)
