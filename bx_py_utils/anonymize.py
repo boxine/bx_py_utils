@@ -1,7 +1,6 @@
 import re
 import string
 
-
 _LOWERCASES = string.ascii_lowercase + 'äöüß'
 _UPPERCASES = string.ascii_uppercase + 'ÄÖÜẞ'
 _OTHER = ' ' + string.punctuation
@@ -36,3 +35,23 @@ def anonymize(value: str, handle_email: bool = True) -> str:
 
     value = f'{value[:1]}{value[1:-1].translate(_ANONYMIZATION_TRANS)}{value[-1:]}'
     return value
+
+
+def anonymize_dict(
+    data: dict,
+    secret_keys: frozenset[str] = frozenset({'secret', 'password', 'token'}),  # These keys will be anonymized
+) -> dict:
+    """
+    Returns a new dict with anonymized values for keys containing one of the given keywords.
+
+    >>> anonymize_dict({'client_id': '123', 'client_secret': 'This is really secret'})
+    {'client_id': '123', 'client_secret': 'Txxx_xx_xxxxxx_xxxxxt'}
+    """
+    anonymized_data = data.copy()  # Don't modify the original data!
+    for key, value in anonymized_data.items():
+        if value:
+            if isinstance(value, str) and any(k in key.lower() for k in secret_keys):
+                anonymized_data[key] = anonymize(value)
+            elif isinstance(value, dict):
+                anonymized_data[key] = anonymize_dict(value, secret_keys)
+    return anonymized_data
