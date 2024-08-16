@@ -26,7 +26,8 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.anonymize
 
-* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L15-L38) - Anonymize the given string with special handling for eMail addresses.
+* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L14-L37) - Anonymize the given string with special handling for eMail addresses.
+* [`anonymize_dict()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L40-L57) - Returns a new dict with anonymized values for keys containing one of the given keywords.
 
 ### bx_py_utils.auto_doc
 
