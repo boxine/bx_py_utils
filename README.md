@@ -159,7 +159,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 #### bx_py_utils.test_utils.context_managers
 
-* [`MassContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L1-L23) - A context manager that enter/exit a list of mocks.
+* [`MassContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L4-L37) - A context manager / decorator that enter/exit a list of mocks.
 
 #### bx_py_utils.test_utils.datetime
 
