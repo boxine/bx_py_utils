@@ -3,7 +3,8 @@ import tempfile
 from pathlib import Path
 from unittest import TestCase
 
-from bx_py_utils.doc_write.cfg import DocuwriteConfig, get_docu_write_cfg
+from bx_py_utils.doc_write.cfg import get_docu_write_cfg
+from bx_py_utils.doc_write.data_structures import DocuwriteConfig
 
 
 class DocuWriteCfgTestCase(TestCase):

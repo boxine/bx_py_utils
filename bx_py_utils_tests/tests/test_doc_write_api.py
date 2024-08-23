@@ -4,7 +4,8 @@ from pathlib import Path
 from unittest import TestCase
 
 from bx_py_utils.doc_write.api import GeneratedInfo, generate
-from bx_py_utils.doc_write.cfg import DocuwriteConfig, get_docu_write_cfg
+from bx_py_utils.doc_write.cfg import get_docu_write_cfg
+from bx_py_utils.doc_write.data_structures import DocuwriteConfig
 from bx_py_utils.path import assert_is_file
 
 

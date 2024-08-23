@@ -111,6 +111,10 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 * [`human_timedelta()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/humanize/time.py#L14-L52) - Converts a time duration into a friendly text representation.
 
+### bx_py_utils.import_utils
+
+* [`import_string()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/import_utils.py#L18-L31) - Import a dotted module path and return the attribute/class designated by the last name in the path.
+
 ### bx_py_utils.iteration
 
 * [`chunk_iterable()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/iteration.py#L4-L21) - Returns a generator that yields slices of iterable of the given `chunk_size`.
