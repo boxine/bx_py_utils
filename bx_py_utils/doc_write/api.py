@@ -24,22 +24,15 @@
 
 from __future__ import annotations
 
-import dataclasses
 import logging
 from pathlib import Path
 
-from bx_py_utils.doc_write.cfg import DocuwriteConfig, get_docu_write_cfg
+from bx_py_utils.doc_write.cfg import get_docu_write_cfg
+from bx_py_utils.doc_write.data_structures import DocuwriteConfig, GeneratedInfo
 from bx_py_utils.doc_write.docstrings import collect_docstrings
 
 
 logger = logging.getLogger(__name__)
-
-
-@dataclasses.dataclass
-class GeneratedInfo:
-    update_count: int
-    remove_count: int
-    paths: list[Path]
 
 
 def _needs_write(out_path: Path, content: str) -> bool:

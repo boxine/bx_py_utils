@@ -6,7 +6,8 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
-from bx_py_utils.doc_write.cfg import DocuwriteConfig
+from bx_py_utils.doc_write.data_structures import DocuwriteConfig, MacroContext
+from bx_py_utils.doc_write.macro import process_macros
 from bx_py_utils.doc_write.walk import iter_file_path
 
 
@@ -46,6 +47,8 @@ def collect_docstrings(*, config: DocuwriteConfig) -> dict:
     """
     regex = re.compile(config.docstring_prefix + r'\s*(.*?) (#{1,}.+?)\n+(.+)', re.DOTALL)
 
+    macro_prefix = config.macro_prefix
+
     storage = collections.defaultdict(dict)
     for file_path in sorted(iter_file_path(file_paths=config.search_paths, rglob_pattern='*.py')):
         for doc_string in iter_docstrings(file_path=file_path):
@@ -65,6 +68,11 @@ def collect_docstrings(*, config: DocuwriteConfig) -> dict:
                     """
                     logging.error('Ignore non *.md docstring for: %s', path)
                     continue
+
+                if macro_prefix in doc_string:
+                    # Replace "DocWriteMacro:" macros in doc_string:
+                    macro_context = MacroContext(config=config, path=path, headline=headline, doc_string=doc_string)
+                    doc_string = process_macros(macro_context=macro_context)
 
                 file_data = storage[path]
                 if headline not in file_data:

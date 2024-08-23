@@ -21,6 +21,42 @@ You can just search for the used prefix to find all code parts that contains Doc
 e.g.:
 * https://github.com/search?q=repo%3Aboxine%2Fbx_py_utils+%22DocWrite%3A%22&type=code
 
+## Macros
+
+It's possible to define callables in the DocString block by using the `DocWriteMacro:` prefix
+and the callable name as dotting path. e.g.:
+
+    DocWriteMacro: foo.bar.baz
+
+Example:
+
+```
+def add_context_attributes(macro_context: MacroContext):
+    """
+    Add MacroContext attributes to the documentation.
+    """
+    for field in dataclasses.fields(macro_context):
+        yield f' * {field.name}: {field.type.__name__}'
+
+```
+
+Macro functions must return a string or an iterable of strings.
+
+The recommendation is not to include the macro functions in the package.
+A good place could be next to the tests.
+e.g: The bx_py_utils own used doc write macros are stored in:
+
+* `bx_py_utils_tests/doc_write_macros.py`
+
+## Macros - context
+
+All macro functions will get a `MacroContext` dataclass instance as keyword argument with the following attributes:
+
+ * config: DocuwriteConfig
+ * path: str
+ * headline: str
+ * doc_string: str
+
 ## Usage
 
 To write your doc files, just call, e.g.:
@@ -52,11 +88,17 @@ Add a section `[tool.doc_write]` to your `pyproject.toml` to configure Doc-Write
 ```
 [tool.bx_py_utils.doc_write]
 docstring_prefix = 'DocWrite:'
+macro_prefix = 'DocWriteMacro:'
 output_base_path = './docs/'
 search_paths = ['./foo/', './bar/']
 delete_obsolete_files = false  # Delete obsolete files in output_base_path
 ```
-Warning: Turn `delete_obsolete_files` only on if output_base_path is excursively used by Doc-Write.
+Warning: Turn `delete_obsolete_files` only on if output_base_path is exclusively used by Doc-Write.
+
+Defaults are:
+ * `docstring_prefix`: `'DocWrite:'`
+ * `macro_prefix`: `'DocWriteMacro:'`
+ * `delete_obsolete_files`: `False`
 
 ### Howto
 
