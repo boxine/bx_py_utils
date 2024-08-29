@@ -1,0 +1,11 @@
+| index | file_size | compress_size | compress_ratio | compress_type | modification_date | crc32 | file_name |
+| ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| 1 | 205 | 149 | 72 | deflate | 2024-12-24T00:00:00+00:00 | 484DC746 | docProps/app.xml |
+| 2 | 555 | 237 | 42 | deflate | 2024-12-24T00:00:00+00:00 | B1B07CE4 | docProps/core.xml |
+| 3 | 10140 | 1552 | 15 | deflate | 2024-12-24T00:00:00+00:00 | 239C5C99 | xl/theme/theme1.xml |
+| 4 | 799 | 359 | 44 | deflate | 2024-12-24T00:00:00+00:00 | AB4C96A5 | xl/worksheets/sheet1.xml |
+| 5 | 2550 | 593 | 23 | deflate | 2024-12-24T00:00:00+00:00 | DCA3F37C | xl/styles.xml |
+| 6 | 531 | 192 | 36 | deflate | 2024-12-24T00:00:00+00:00 | 1CBB8A97 | _rels/.rels |
+| 7 | 548 | 305 | 55 | deflate | 2024-12-24T00:00:00+00:00 | 2E4D20FE | xl/workbook.xml |
+| 8 | 504 | 173 | 34 | deflate | 2024-12-24T00:00:00+00:00 | A29B1E24 | xl/_rels/workbook.xml.rels |
+| 9 | 975 | 281 | 28 | deflate | 2024-12-24T00:00:00+00:00 | 92799065 | [Content_Types].xml |

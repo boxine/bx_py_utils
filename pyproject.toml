@@ -31,6 +31,8 @@ dev = [
     'beautifulsoup4',
     'lxml',
     'pdoc',  # https://pdoc.dev/
+    'freezegun',  # https://github.com/spulec/freezegun
+    'openpyxl',  # https://foss.heptapod.net/openpyxl/openpyxl
 
     'manageprojects',  # https://github.com/jedie/manageprojects
     'tox>=4.4.4',  # https://github.com/tox-dev/tox
