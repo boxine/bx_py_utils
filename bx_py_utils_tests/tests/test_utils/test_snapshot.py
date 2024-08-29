@@ -113,7 +113,7 @@ class SnapshotTestCase(TestCase):
             assert_snapshot(tmp_dir, got=[1, 2, 3], name_suffix='suffix')
             self.assertEqual(
                 [item.name for item in pathlib.Path(tmp_dir).iterdir()],
-                ['test_test_utils_snapshot_assert_snapshot_suffix_1.snapshot.json'],
+                ['test_snapshot_assert_snapshot_suffix_1.snapshot.json'],
             )
 
     def test_assert_snapshot_with_tuple(self):
@@ -239,7 +239,7 @@ class SnapshotTestCase(TestCase):
             assert_text_snapshot(tmp_dir, got='foo', name_suffix='suffix')
             self.assertEqual(
                 [item.name for item in pathlib.Path(tmp_dir).iterdir()],
-                ['test_test_utils_snapshot_assert_text_snapshot_suffix_1.snapshot.txt'],
+                ['test_snapshot_assert_text_snapshot_suffix_1.snapshot.txt'],
             )
 
     def test_assert_py_snapshot(self):
@@ -280,7 +280,7 @@ class SnapshotTestCase(TestCase):
             assert_py_snapshot(tmp_dir, got={1: 2}, name_suffix='suffix')
             self.assertEqual(
                 [item.name for item in pathlib.Path(tmp_dir).iterdir()],
-                ['test_test_utils_snapshot_assert_py_snapshot_suffix_1.snapshot.txt'],
+                ['test_snapshot_assert_py_snapshot_suffix_1.snapshot.txt'],
             )
 
     def test_assert_binary_snapshot(self):
@@ -306,7 +306,7 @@ class SnapshotTestCase(TestCase):
             assert_binary_snapshot(tmp_dir, got=b'foo', name_suffix='suffix')
             self.assertEqual(
                 [item.name for item in pathlib.Path(tmp_dir).iterdir()],
-                ['test_test_utils_snapshot_assert_binary_snapshot_suffix_1.snapshot.bin'],
+                ['test_snapshot_assert_binary_snapshot_suffix_1.snapshot.bin'],
             )
 
     def test_auto_source_names(self):
@@ -314,19 +314,19 @@ class SnapshotTestCase(TestCase):
         assert root_dir == SELF_PATH
 
         # Name of this file + name of this test function + sequential number
-        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+        assert snapshot_name == 'test_snapshot_auto_source_names_1.snapshot'
 
         # Call it again -> sequential number =+ 1 ???
 
         root_dir, snapshot_name = _get_caller_names()
         assert root_dir == SELF_PATH
-        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_2.snapshot'
+        assert snapshot_name == 'test_snapshot_auto_source_names_2.snapshot'
 
         # set own root_dir
         own_root_dir = pathlib.Path(bx_py_utils.__file__).parent
         root_dir, snapshot_name = _get_caller_names(root_dir=own_root_dir)
         assert root_dir == own_root_dir
-        assert snapshot_name == 'test_test_utils_snapshot_auto_source_names_1.snapshot'
+        assert snapshot_name == 'test_snapshot_auto_source_names_1.snapshot'
 
         # Set not existing root_dir:
         with self.assertRaises(NotADirectoryError) as cm:
@@ -352,7 +352,7 @@ class SnapshotTestCase(TestCase):
         # Add a name suffix:
         root_dir, snapshot_name = _get_caller_names(name_suffix='django42')
         self.assertEqual(root_dir, SELF_PATH)
-        self.assertEqual(snapshot_name, 'test_test_utils_snapshot_auto_source_names_django42_1.snapshot')
+        self.assertEqual(snapshot_name, 'test_snapshot_auto_source_names_django42_1.snapshot')
 
         # own name + suffix:
         with self.assertRaises(AssertionError) as cm:
@@ -371,8 +371,8 @@ class SnapshotTestCase(TestCase):
         )
 
     def test_assert_py_snapshot_auto_names(self):
-        snapshot_filename1 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_1.snapshot.txt'
-        snapshot_filename2 = 'test_test_utils_snapshot_assert_py_snapshot_auto_names_2.snapshot.txt'
+        snapshot_filename1 = 'test_snapshot_assert_py_snapshot_auto_names_1.snapshot.txt'
+        snapshot_filename2 = 'test_snapshot_assert_py_snapshot_auto_names_2.snapshot.txt'
         snapshot_path1 = SELF_PATH / snapshot_filename1
         snapshot_path2 = SELF_PATH / snapshot_filename2
 
@@ -406,7 +406,7 @@ class SnapshotTestCase(TestCase):
             assert new_files == {snapshot_path1, snapshot_path2}
 
     def test_assert_text_snapshot_auto_names(self):
-        snapshot_path = SELF_PATH / ('test_test_utils_snapshot_assert_text_snapshot_auto_names_1.snapshot.txt')
+        snapshot_path = SELF_PATH / ('test_snapshot_assert_text_snapshot_auto_names_1.snapshot.txt')
         example = 'Foo Bar!'
         with FileWatcher(base_path=SELF_PATH, cleanup=True) as file_watcher:
             with self.assertRaises(FileNotFoundError):
@@ -442,7 +442,7 @@ class SnapshotTestCase(TestCase):
             assert_html_snapshot(tmp_dir, got='<foo />', name_suffix='suffix')
             self.assertEqual(
                 [item.name for item in pathlib.Path(tmp_dir).iterdir()],
-                ['test_test_utils_snapshot_assert_html_snapshot_suffix_1.snapshot.html'],
+                ['test_snapshot_assert_html_snapshot_suffix_1.snapshot.html'],
             )
 
     def test_assert_html_snapshot_without_lxml(self):

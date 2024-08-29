@@ -141,8 +141,7 @@ class S3MockTest(TestCase):
         res = s3.head_object('a-bucket', 'a-key')
         self.assertEqual(res['ContentLength'], 6)
 
-        expected_message = (
-            'An error occurred (404) when calling the HeadObject operation: Not Found')
+        expected_message = 'An error occurred (404) when calling the HeadObject operation: Not Found'
         with self.assertRaisesRegex(s3.exceptions.ClientError, re.escape(expected_message)):
             s3.head_object('a-bucket', 'no-such-key')
 
