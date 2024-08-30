@@ -52,9 +52,9 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.dict_utils
 
-* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L6-L27) - nested dict `get()`
-* [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L45-L69) - Convert a list of dictionaries into a markdown table.
-* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L30-L42) - Extract values from a dict, if they are present
+* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L8-L29) - nested dict `get()`
+* [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L47-L77) - Convert a list of dictionaries into a markdown table.
+* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L32-L44) - Extract values from a dict, if they are present
 
 ### bx_py_utils.doc_write
 
