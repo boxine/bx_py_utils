@@ -53,6 +53,7 @@ Please take a look into the sources and tests for deeper informations.
 ### bx_py_utils.dict_utils
 
 * [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L6-L27) - nested dict `get()`
+* [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L45-L69) - Convert a list of dictionaries into a markdown table.
 * [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L30-L42) - Extract values from a dict, if they are present
 
 ### bx_py_utils.doc_write
@@ -232,6 +233,19 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 
 * [`BaseDocTests()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L40-L91) - Helper to include all doctests in unittests, without change unittest setup. Just add a normal TestCase.
 * [`assert_no_flat_tests_functions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/unittest_utils.py#L16-L30) - Check if there exists normal test functions (That will not be executed by normal unittests)
+
+#### bx_py_utils.test_utils.xlsx
+
+* [`FreezeXlsxTimes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/xlsx.py#L84-L97) - Context manager / decorator intended to freeze timestamps of xlsx files creation by e.g.: openpyxl.
+* [`generate_xlsx_md_snapshot()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/xlsx.py#L68-L81) - Generate a markdown snapshot of a XLSX: Display ZIP info + Sheets content as Markdown.
+* [`xlsx2dict()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/xlsx.py#L27-L51) - Convert a XLSX file content into a dictionary: Every sheet is a key, and the value is a list of dictionaries.
+* [`xlsx2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/xlsx.py#L54-L65) - Convert all Sheets of a XLSX into markdown tables.
+
+#### bx_py_utils.test_utils.zip_file_utils
+
+* [`FreezeZipFileDatetime()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/zip_file_utils.py#L15-L30) - Context manager / decorator to freezes the modification time of files written to a zip file.
+* [`zip_info()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/zip_file_utils.py#L44-L68) - Generates similar information than `unzip -v`: Yields ZipFileInfo for each file in the zip file.
+* [`zip_info_markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/zip_file_utils.py#L71-L75) - Generates a markdown representation of the zip file content. Similar to `unzip -v` output.
 
 ### bx_py_utils.text_tools
 
