@@ -1,7 +1,7 @@
-import functools
+from contextlib import ContextDecorator
 
 
-class MassContextManager:
+class MassContextManager(ContextDecorator):
     """
     A context manager / decorator that enter/exit a list of mocks.
     e.g.:
@@ -23,15 +23,3 @@ class MassContextManager:
         assert self.mocks
         for mock in self.mocks:
             mock.__exit__(exc_type, exc_val, exc_tb)
-
-    def __call__(self, func):
-        """
-        Use MassContextManager as a decorator.
-        """
-
-        @functools.wraps(func)
-        def wrapped_func(*args, **kwargs):
-            with self:
-                return func(*args, **kwargs)
-
-        return wrapped_func
