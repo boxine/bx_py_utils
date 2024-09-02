@@ -122,8 +122,8 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.path
 
-* [`ChangeCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L39-L54) - Context Manager change the "CWD" to an other directory.
-* [`MockCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L57-L76) - Context Manager to move the "CWD" to a temp directory.
+* [`ChangeCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L57-L72) - Context Manager change the "CWD" to an other directory.
+* [`MockCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L75-L94) - Context Manager to move the "CWD" to a temp directory.
 * [`assert_is_dir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L7-L15) - Check if given path is a directory
 * [`assert_is_file()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L18-L28) - Check if given path is a file
 
