@@ -1,7 +1,7 @@
 from pathlib import Path
 from unittest import TestCase
 
-from bx_py_utils.path import assert_is_dir, assert_is_file, read_json_file
+from bx_py_utils.path import assert_is_dir, assert_is_file, read_json_file, write_json_file
 
 
 class PathTestCase(TestCase):
@@ -44,3 +44,17 @@ class PathTestCase(TestCase):
         assert data == {
             'foo': ['bar', 42],
         }
+
+    def test_write_json_file(self):
+        obj = {
+            'foo': ['bär', 42],
+        }
+        json_path = Path(__file__).parent / 'write_json_file.json'
+        write_json_file(json_path, obj, ensure_ascii=False)
+        text = json_path.read_text()
+        self.assertEqual(text, '{"foo": ["bär", 42]}')
+
+        broken_json_path = Path(__file__).parent / 'write_json_file_broken.json'
+        with self.assertRaises(TypeError):
+            write_json_file(json_path, {object(): 'not JSON'}, ensure_ascii=False)
+        assert not broken_json_path.exists()

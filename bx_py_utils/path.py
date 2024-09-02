@@ -36,6 +36,24 @@ def read_json_file(path):
         return json.load(f)
 
 
+def write_json_file(path: Path | str, data: dict, **json_kwargs):
+    path = Path(path)
+
+    with tempfile.NamedTemporaryFile(
+        dir=path.parent, prefix=f'{path.name}.', suffix='.tmp', mode='w', encoding='utf-8', delete=False
+    ) as tmp_handle:
+        tmp_path = Path(tmp_handle.name)
+        try:
+            json.dump(data, tmp_handle, **json_kwargs)
+            tmp_handle.flush()
+
+            tmp_path.rename(path)
+        except BaseException:
+            # Necessary for Python <3.12, where NamedTemporaryFile crashes if the file is no longer present
+            tmp_path.unlink(missing_ok=True)
+            raise
+
+
 class ChangeCurrentWorkDir:
     """
     Context Manager change the "CWD" to an other directory.
