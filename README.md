@@ -26,8 +26,8 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.anonymize
 
-* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L14-L37) - Anonymize the given string with special handling for eMail addresses.
-* [`anonymize_dict()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L40-L57) - Returns a new dict with anonymized values for keys containing one of the given keywords.
+* [`anonymize()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L17-L47) - Anonymize the given string with special handling for eMail addresses and the possibility to truncate the output.
+* [`anonymize_dict()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/anonymize.py#L50-L70) - Returns a new dict with anonymized values for keys containing one of the given keywords.
 
 ### bx_py_utils.auto_doc
 
@@ -250,6 +250,10 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 ### bx_py_utils.text_tools
 
 * [`cutout()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/text_tools.py#L1-L36) - Mark a point in a long text by line no + column with context lines around.
+
+### bx_py_utils.truncate
+
+* [`truncate()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/truncate.py#L1-L26) - Truncates the given string to the given length
 
 [comment]: <> (✂✂✂ auto generated end ✂✂✂)
 
