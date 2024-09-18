@@ -27,5 +27,48 @@ class TestAnonymizeDict(unittest.TestCase):
             },
         )
         # The origin, mutable dict is unchanged:
-        self.assertEqual(data['PassWord'], 'This is a password!')
-        self.assertEqual(data['sub-dict']['token'], 'Not really a token!')
+        self.assertEqual(
+            data,
+            {
+                'something': 'Untouched value!',
+                'client_secret': 'A test secret',
+                'PassWord': 'This is a password!',
+                'Token': 'Foo Bar Baz',
+                'sub-dict': {
+                    'token': 'Not really a token!',
+                },
+            },
+        )
+
+    def test_anonymize_dict_truncating_output(self):
+        data = {
+            'short_safe': 'SAFE',
+            'short_secret': 'SECRET',
+            'sub-dict': {
+                'long_safe': 'qwertyuiopasdfghjklzxcvbnm',
+                'long_secret': '0123456789012345678901234567890123456789',
+            },
+        }
+        self.assertEqual(
+            anonymize_dict(data, max_length=10),
+            {
+                'short_safe': 'SAFE',
+                'short_secret': 'SXXXXT',
+                'sub-dict': {
+                    'long_safe': 'qwertyuiopasdfghjklzxcvbnm',
+                    'long_secret': '0########…',
+                },
+            },
+        )
+        # The origin, mutable dict is unchanged:
+        self.assertEqual(
+            data,
+            {
+                'short_safe': 'SAFE',
+                'short_secret': 'SECRET',
+                'sub-dict': {
+                    'long_safe': 'qwertyuiopasdfghjklzxcvbnm',
+                    'long_secret': '0123456789012345678901234567890123456789',
+                },
+            },
+        )
