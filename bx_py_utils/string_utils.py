@@ -102,6 +102,31 @@ def uuid_from_text(text: str) -> UUID:
     return uuid
 
 
+def is_uuid(text: str) -> bool:
+    """
+    Generate a UUID instance from the given text in a determinism may via SHA224 hash.
+
+    >>> is_uuid('0808f64e-60d5-8979-fcb6-76c96ec93827')
+    True
+    >>> is_uuid('00000000-0000-0000-0000-000000000000')
+    True
+    >>> is_uuid('foo')
+    False
+    >>> is_uuid('42')
+    False
+    >>> is_uuid('')
+    False
+    """
+    assert isinstance(text, str)
+
+    try:
+        UUID(text)
+    except ValueError:
+        return False
+    else:
+        return True
+
+
 def ensure_lf(text: str | None) -> str | None:
     """
     Replace line endings to unix-style.
