@@ -1,5 +1,7 @@
 import unittest
 
+from parameterized import parameterized
+
 from bx_py_utils.anonymize import anonymize_dict
 
 
@@ -37,6 +39,31 @@ class TestAnonymizeDict(unittest.TestCase):
                 'sub-dict': {
                     'token': 'Not really a token!',
                 },
+            },
+        )
+
+    @parameterized.expand(
+        [
+            ('Authorization', 'Authorization'),
+            ('Authorization', 'authorization'),
+            ('authorization', 'Authorization'),
+            ('authorization', 'authorization'),
+            ('UserAuthorization', 'Authorization'),
+            ('UserAuthorization', 'authorization'),
+            ('user_authorization', 'Authorization'),
+            ('user_authorization', 'authorization'),
+        ]
+    )
+    def test_anonymize_dict_ignore_case(self, key, secret_key):
+        data = {
+            'lang': 'es',
+            key: 'secret',
+        }
+        self.assertEqual(
+            anonymize_dict(data, frozenset({secret_key})),
+            {
+                'lang': 'es',
+                key: 'sxxxxt',
             },
         )
 

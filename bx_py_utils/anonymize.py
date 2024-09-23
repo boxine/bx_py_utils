@@ -57,13 +57,18 @@ def anonymize_dict(
 
     >>> anonymize_dict({'client_id': '123', 'client_secret': 'This is really secret'})
     {'client_id': '123', 'client_secret': 'Txxx_xx_xxxxxx_xxxxxt'}
+    >>> anonymize_dict({'client_id': '123', 'client_secret': 'This is really secret'}, frozenset({'Client_Secret'}))
+    {'client_id': '123', 'client_secret': 'Txxx_xx_xxxxxx_xxxxxt'}
+    >>> anonymize_dict({'client_id': '123', 'client_secret': 'This is really secret'}, frozenset({'Secret'}))
+    {'client_id': '123', 'client_secret': 'Txxx_xx_xxxxxx_xxxxxt'}
     >>> anonymize_dict({'client_id': '123', 'client_secret': 'This is really secret'}, max_length=10)
     {'client_id': '123', 'client_secret': 'Txxx_xx_x…'}
     """
     anonymized_data = data.copy()  # Don't modify the original data!
+    lowercase_secret_keys = [key.lower() for key in secret_keys]
     for key, value in anonymized_data.items():
         if value:
-            if isinstance(value, str) and any(k in key.lower() for k in secret_keys):
+            if isinstance(value, str) and any(k in key.lower() for k in lowercase_secret_keys):
                 anonymized_data[key] = anonymize(value, max_length=max_length)
             elif isinstance(value, dict):
                 anonymized_data[key] = anonymize_dict(value, secret_keys, max_length=max_length)
