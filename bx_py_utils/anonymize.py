@@ -1,7 +1,7 @@
 import re
 import string
 
-from bx_py_utils.truncate import truncate
+from bx_py_utils.string_utils import truncate
 
 
 _LOWERCASES = string.ascii_lowercase + 'äöüß'
