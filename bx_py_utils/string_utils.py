@@ -104,7 +104,7 @@ def uuid_from_text(text: str) -> UUID:
 
 def is_uuid(text: str) -> bool:
     """
-    Generate a UUID instance from the given text in a determinism may via SHA224 hash.
+    Returns True if text is a valid UUID (https://www.rfc-editor.org/rfc/rfc9562#name-uuid-format).
 
     >>> is_uuid('0808f64e-60d5-8979-fcb6-76c96ec93827')
     True
