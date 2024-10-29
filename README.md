@@ -170,7 +170,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 #### bx_py_utils.test_utils.datetime
 
-* [`parse_dt()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/datetime.py#L4-L15) - Helper for easy generate a `datetime` instance via string.
+* [`parse_dt()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/datetime.py#L5-L25) - Helper for easy generate a `datetime` instance via string.
 
 #### bx_py_utils.test_utils.deny_requests
 
