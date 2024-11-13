@@ -1,6 +1,11 @@
 from contextlib import ContextDecorator
 
 
+class MassContextManagerExceptions(Exception):
+    def __init__(self, exceptions):
+        self.exceptions = exceptions
+
+
 class MassContextManager(ContextDecorator):
     """
     A context manager / decorator that enter/exit a list of mocks.
@@ -21,5 +26,11 @@ class MassContextManager(ContextDecorator):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         assert self.mocks
+        errors = []
         for mock in self.mocks:
-            mock.__exit__(exc_type, exc_val, exc_tb)
+            try:
+                mock.__exit__(exc_type, exc_val, exc_tb)
+            except Exception as e:
+                errors.append(e)
+        if errors:
+            raise MassContextManagerExceptions(errors)

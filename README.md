@@ -166,7 +166,8 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 #### bx_py_utils.test_utils.context_managers
 
-* [`MassContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L4-L25) - A context manager / decorator that enter/exit a list of mocks.
+* [`MassContextManager()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L9-L36) - A context manager / decorator that enter/exit a list of mocks.
+* [`MassContextManagerExceptions()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/context_managers.py#L4-L6) - Common base class for all non-exit exceptions.
 
 #### bx_py_utils.test_utils.datetime
 
