@@ -18,7 +18,7 @@ def cgroup_memory_usage(unit='B', cgroup_mem_file='/sys/fs/cgroup/memory/memory.
     With conventional tools (e.g. psutil) this is not possible, because they often rely on
     stats reported by /proc, but that one reports metrics from the host system.
     """
-    with open(cgroup_mem_file, 'r') as infile:
+    with open(cgroup_mem_file) as infile:
         usage_bytes = infile.readline()
     usage_bytes = int(usage_bytes)
 

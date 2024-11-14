@@ -1,6 +1,5 @@
 import inspect
 from pathlib import Path
-from typing import Union
 
 from bx_py_utils.path import assert_is_file
 
@@ -13,7 +12,7 @@ class FrameNotFound(LookupError):
         return f'Frame outside "{self.file_path}" not found!'
 
 
-def last_frame_outside_path(file_path: Union[Path, str]):
+def last_frame_outside_path(file_path: Path | str):
     """
     Returns the stack frame that is the direct successor of given "file_path".
     The use case may be to find caller information.

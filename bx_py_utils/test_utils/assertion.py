@@ -1,6 +1,6 @@
 import difflib
 import pprint
-from typing import Any, Type
+from typing import Any
 
 from bx_py_utils.humanize.pformat import pformat
 
@@ -68,7 +68,7 @@ def assert_equal(
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func=pformat_unified_diff,
-    raise_cls: Type[Exception] = AssertionError,
+    raise_cls: type[Exception] = AssertionError,
 ):
     """
     Check if the two objects are the same. Display a nice diff, using `pformat()`
@@ -84,7 +84,7 @@ def assert_text_equal(
     fromfile: str = 'got',
     tofile: str = 'expected',
     diff_func=text_unified_diff,
-    raise_cls: Type[Exception] = AssertionError,
+    raise_cls: type[Exception] = AssertionError,
 ):
     """
     Check if the two text strings are the same. Display an error message with a diff.
