@@ -11,21 +11,23 @@ install-base-req:  ## Install needed base packages via apt
 install:  ## Install the project in a Python virtualenv
 	python3 -m venv .venv
 	.venv/bin/pip install -U pip
-	.venv/bin/pip install -U pipenv
-	.venv/bin/pipenv install --dev
+	.venv/bin/pip install -U uv
+	.venv/bin/uv sync
 
 update-requirements:  ## Update requirements
 	python3 -m venv .venv
 	.venv/bin/pip install -U pip
-	.venv/bin/pip install -U pipenv
-	.venv/bin/pipenv update --dev
+	.venv/bin/pip install -U uv
+	.venv/bin/uv lock --upgrade
+	.venv/bin/uv sync
 
 lint: ## Run code formatters and linter
-	.venv/bin/pipenv run darker --diff --check
-	.venv/bin/pipenv run flake8 .
+	.venv/bin/darker --diff --check
+	.venv/bin/flake8 .
 
 fix-code-style: ## Fix code formatting
-	.venv/bin/pipenv run darker
+	.venv/bin/darker
+	.venv/bin/flake8 .
 
 tox-listenvs:  ## List all tox test environments
 	.venv/bin/tox --listenvs
@@ -34,7 +36,7 @@ tox:  ## Run tests via tox with all environments
 	.venv/bin/tox
 
 test: ## Run tests
-	.venv/bin/python -m unittest --verbose --locals
+	.venv/bin/python3 -m unittest --verbose --locals
 
 coverage:  ## Run tests with coverage
 	.venv/bin/coverage run
@@ -45,17 +47,18 @@ coverage:  ## Run tests with coverage
 
 update-test-snapshot-files:   ## Update all snapshot files (by remove and recreate all snapshot files)
 	find . -type f -name '*.snapshot.*' -delete
-	RAISE_SNAPSHOT_ERRORS=0 .venv/bin/python -m unittest
+	RAISE_SNAPSHOT_ERRORS=0 .venv/bin/python3 -m unittest
 
 mypy:  ## Run mypy
 	.venv/bin/mypy .
 
-safety:  ## Run https://github.com/pyupio/safety
-	.venv/bin/safety check --full-report
+pip-audit:  ## Run https://github.com/pypa/pip-audit
+	.venv/bin/uv export --no-header --frozen --no-editable --no-emit-project -o /tmp/temp_requirements.txt
+	.venv/bin/pip-audit --strict --require-hashes -r /tmp/temp_requirements.txt
 
 publish:  ## Release new version to PyPi
 	.venv/bin/pip install -e .
-	.venv/bin/pipenv run python bx_py_utils_tests/publish.py
+	.venv/bin/python3 bx_py_utils_tests/publish.py
 
 clean: ## Remove created files from the test project
 	git clean -dfX bx_py_utils_tests/

@@ -24,8 +24,7 @@ readme="README.md"
 requires-python = ">=3.10,<4"
 
 dependencies = []
-
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     'boto3',  # needed for e.g.: bx_py_utils/aws/ stuff!
     'requests-mock',
@@ -34,18 +33,25 @@ dev = [
     'pdoc',  # https://pdoc.dev/
     'freezegun',  # https://github.com/spulec/freezegun
     'openpyxl',  # https://foss.heptapod.net/openpyxl/openpyxl
+    'parameterized',  # https://github.com/wolever/parameterized
 
-    'manageprojects',  # https://github.com/jedie/manageprojects
-    'tox>=4.4.4',  # https://github.com/tox-dev/tox
-    'coverage',  # https://github.com/nedbat/coveragepy
-    'flake8',  # https://github.com/pycqa/flake8
-    'flake8-bugbear',  # https://github.com/PyCQA/flake8-bugbear
-    'twine',  # https://github.com/pypa/twine/
-    'tblib',  # https://github.com/ionelmc/python-tblib
-    'packaging',  # https://pypi.org/project/packaging/
-    'build',  # https://github.com/pypa/build
-    'EditorConfig',  # https://pypi.org/project/EditorConfig/
-    'safety',  # https://github.com/pyupio/safety
+    "manageprojects",  # https://github.com/jedie/manageprojects
+    "urllib3", # for bx_py_utils.test_utils.deny_requests.deny_any_real_request() in tests
+    "uv",  # https://github.com/astral-sh/uv
+    "tox",  # https://github.com/tox-dev/tox
+    "tox-uv",  # https://github.com/tox-dev/tox-uv
+    "coverage",  # https://github.com/nedbat/coveragepy
+    "autopep8",  # https://github.com/hhatto/autopep8
+    "pyupgrade",  # https://github.com/asottile/pyupgrade
+    "flake8",  # https://github.com/pycqa/flake8
+    "flake8-bugbear",  # https://github.com/PyCQA/flake8-bugbear
+    "pyflakes",  # https://github.com/PyCQA/pyflakes
+    "codespell",  # https://github.com/codespell-project/codespell
+    "EditorConfig",  # https://github.com/editorconfig/editorconfig-core-py
+    "pip-audit",  # https://github.com/pypa/pip-audit
+    "mypy",  # https://github.com/python/mypy
+    "twine",  # https://github.com/pypa/twine
+    "typeguard",  # https://github.com/agronholm/typeguard/
 
     # https://github.com/akaihola/darker
     # https://github.com/ikamensh/flynt
@@ -53,7 +59,10 @@ dev = [
     # https://github.com/pygments/pygments
     'darker[flynt, isort, color]',
 
-    'typeguard',  # https://github.com/agronholm/typeguard/
+    # Work-a-round for: https://github.com/jazzband/pip-tools/issues/1866
+    # see also: https://github.com/jazzband/pip-tools/issues/994#issuecomment-1321226661
+    # backports.tarfile is needed for python <3.12
+    'backports.tarfile', # via jaraco-context -> keyring -> twine
 ]
 
 
@@ -86,9 +95,7 @@ diff = false
 check = false
 stdout = false
 isort = true
-lint = [
-    "flake8",
-]
+lint = []
 log_level = "INFO"
 
 
@@ -123,22 +130,16 @@ exclude_lines = [
 
 
 [tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist = py{313,312,311,310}
-skip_missing_interpreters = True
+isolated_build = true
+env_list = ["3.13", "3.12", "3.11", "3.10"]
+skip_missing_interpreters = true
 
-[testenv]
-passenv = *
-deps =
-    .[dev]
-allowlist_externals = make
-commands_pre =
-    make install
-commands =
-    make test
-"""
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+with_dev = true
+commands = [
+    ["python3", "-m", "coverage", "run", "--context", "'{envname}'"]
+]
 
 
 [tool.mypy]
@@ -160,9 +161,10 @@ docstring_prefix = 'DocWrite:'
 initial_revision = "1f3a70e"
 initial_date = 2024-05-21T21:22:39+02:00
 cookiecutter_template = "https://github.com/jedie/cookiecutter_templates/"
-cookiecutter_directory = "pipenv-python"
+cookiecutter_directory = "make-uv-python"
 applied_migrations = [
     "dee29ef", # 2024-07-09T16:06:43+02:00
+    "e9e2dae", # 2024-11-14T17:59:23+01:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
