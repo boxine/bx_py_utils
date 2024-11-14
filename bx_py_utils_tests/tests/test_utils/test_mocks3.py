@@ -120,7 +120,7 @@ class S3MockTest(TestCase):
 
     def test_list_buckets(self):
         s3 = PseudoS3Client(init_buckets=('buck', 'foo-bar-123'))
-        bucket_names = set(b['Name'] for b in s3.list_buckets()['Buckets'])
+        bucket_names = {b['Name'] for b in s3.list_buckets()['Buckets']}
         self.assertEqual(bucket_names, {'buck', 'foo-bar-123'})
         self.assertEqual(s3.head_bucket('buck')['ResponseMetadata']['HTTPStatusCode'], 200)
 

@@ -18,7 +18,7 @@ class DockerTestCase(TestCase):
         for unit, value in expectations.items():
             with patch('bx_py_utils.environ.open', mock_open(read_data='524288000')) as m:
                 usage = cgroup_memory_usage(unit=unit)
-            m.assert_called_once_with('/sys/fs/cgroup/memory/memory.usage_in_bytes', 'r')
+            m.assert_called_once_with('/sys/fs/cgroup/memory/memory.usage_in_bytes')
             assert usage == value
 
 

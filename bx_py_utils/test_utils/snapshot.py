@@ -13,7 +13,8 @@ import pathlib
 import pprint
 import re
 from collections import Counter
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from bx_py_utils.html_utils import get_html_elements, pretty_format_html, validate_html
 
