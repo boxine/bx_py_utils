@@ -285,7 +285,10 @@ So, `bx_py_utils` is better usable in non-Django projects, because Django will n
 
 ## developing
 
-To start developing e.g.:
+To start developing, just run `make install` to create a `.venv` and install all needed packages.
+The minimal requirements are only `python3-venv` and `python3-pip` (`uv` will be installed via `pip` in `.venv`)
+
+e.g.:
 
 ```bash
 ~$ git clone https://github.com/boxine/bx_py_utils.git
@@ -303,11 +306,10 @@ test                       Run tests
 coverage                   Run tests with coverage
 update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
 mypy                       Run mypy
-safety                     Run https://github.com/pyupio/safety
+pip-audit                  Run https://github.com/pypa/pip-audit
 publish                    Release new version to PyPi
 clean                      Remove created files from the test project
 ```
-
 
 ## Create a release
 
