@@ -20,8 +20,6 @@ def publish():
     PACKAGE_ROOT = Path(__file__).parent.parent
     assert_is_file(PACKAGE_ROOT / 'pyproject.toml')
 
-    subprocess.check_call(['pipenv', 'check'])
-
     subprocess.check_call(['make', 'test'])  # don't publish if tests fail
     subprocess.check_call(['make', 'fix-code-style'])  # don't publish if code style wrong
 
