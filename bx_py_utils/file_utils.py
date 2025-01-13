@@ -123,8 +123,10 @@ class TempFileHasher:
         self.expected_files_size = expected_files_size
 
     def __enter__(self):
-        self.temp_file = NamedTemporaryFile2(file_name=self.file_name).__enter__()
+        # Init the FileHasher first: If one of the hash names are not supported,
+        # crash early, before the temp file is created!
         self.hasher = FileHasher(hash_names=self.hash_names).__enter__()
+        self.temp_file = NamedTemporaryFile2(file_name=self.file_name).__enter__()
         return self
 
     def read(self, *args):

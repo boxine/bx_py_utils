@@ -139,6 +139,14 @@ class TempFileUtilsTestCase(TestCase):
         msg = str(size_err.exception)
         assert msg == "File 'foo.bar' is 9 Bytes in size, but should be 99 Bytes!"
 
+    def test_temp_file_hasher_not_init_on_wrong_hash_name(self):
+        # If one of the hash names are not supported, crash early, before the temp file is created
+        # Otherwise we can ran into: "ResourceWarning: Implicitly cleaning up"
+        with self.assertRaises(ValueError) as err:
+            with TempFileHasher(file_name='foo.bar', hash_names=('Bam!',)):
+                self.fail('Should not reach this point!')
+        self.assertEqual(str(err.exception), 'unsupported hash type Bam!')
+
     def test_safe_filename(self):
         strange_name = '<XSS>"\' ättémpt-er😈 #1|/(\r\n2){}\t[].svg'
         assert safe_filename(strange_name) == '_XSS_ ättémpt-er_ _1_2_.svg'

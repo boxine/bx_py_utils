@@ -1,5 +1,6 @@
 import os
 import unittest.util
+import warnings
 from pathlib import Path
 
 from typeguard import install_import_hook
@@ -21,6 +22,9 @@ def pre_configure_tests() -> None:
     from bx_py_utils.test_utils.deny_requests import deny_any_real_request
 
     deny_any_real_request()
+
+    # Make warnings loud
+    warnings.simplefilter('default')
 
 
 def load_tests(loader, tests, pattern):
