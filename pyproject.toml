@@ -35,6 +35,8 @@ dev = [
     'openpyxl',  # https://foss.heptapod.net/openpyxl/openpyxl
     'parameterized',  # https://github.com/wolever/parameterized
 
+    'build', # https://github.com/pypa/build
+
     "manageprojects",  # https://github.com/jedie/manageprojects
     "urllib3", # for bx_py_utils.test_utils.deny_requests.deny_any_real_request() in tests
     "uv",  # https://github.com/astral-sh/uv
@@ -58,11 +60,6 @@ dev = [
     # https://github.com/pycqa/isort
     # https://github.com/pygments/pygments
     'darker[flynt, isort, color]',
-
-    # Work-a-round for: https://github.com/jazzband/pip-tools/issues/1866
-    # see also: https://github.com/jazzband/pip-tools/issues/994#issuecomment-1321226661
-    # backports.tarfile is needed for python <3.12
-    'backports.tarfile', # via jaraco-context -> keyring -> twine
 ]
 
 
