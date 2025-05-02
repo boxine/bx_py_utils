@@ -71,8 +71,13 @@ class PseudoS3Client:
             for bucket_name in init_buckets:
                 self.buckets[bucket_name] = {}
 
+    def _check_key(self, key):
+        assert not key.startswith('/'), f'S3 keys should not start with a slash, but {key!r} does'
+        assert len(key) <= 1024, f'S3 keys should be less than 1024 characters long, but {key!r} is {len(key)} long'
+
     # non-standard variable names for Boto3 compatibility
     def download_file(self, Bucket, Key, Filename, *, ExtraArgs=None, Callback=None, Config=None):
+        self._check_key(Key)
         bucket = self.buckets[Bucket]
         if Key not in bucket:
             raise self.exceptions.NoSuchKey(Key)
@@ -85,6 +90,7 @@ class PseudoS3Client:
 
     # non-standard variable names for Boto3 compatibility
     def download_fileobj(self, Bucket, Key, Fileobj, *, ExtraArgs=None, Callback=None, Config=None):
+        self._check_key(Key)
         bucket = self.buckets[Bucket]
         storage = getattr(bucket, 'bucket_storage', bucket)
         if Key not in storage:
@@ -97,6 +103,7 @@ class PseudoS3Client:
 
     # non-standard variable names for Boto3 compatibility
     def get_object(self, *, Bucket, Key):
+        self._check_key(Key)
         bucket = self.buckets[Bucket]
         if Key not in bucket:
             raise self.exceptions.NoSuchKey(Key)
@@ -109,6 +116,7 @@ class PseudoS3Client:
 
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.head_object
     def head_object(self, Bucket, Key):
+        self._check_key(Key)
         try:
             bucket = self.buckets[Bucket]
             content = bucket[Key]
@@ -137,6 +145,7 @@ class PseudoS3Client:
 
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.upload_fileobj
     def upload_fileobj(self, Fileobj, Bucket, Key, *, ExtraArgs=None, Callback=None, Config=None):
+        self._check_key(Key)
         if Callback:
             Callback(0)
             Callback(1)
@@ -153,6 +162,7 @@ class PseudoS3Client:
 
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.upload_file
     def upload_file(self, Filename, Bucket, Key, *, ExtraArgs=None, Callback=None, Config=None):
+        self._check_key(Key)
         contents = pathlib.Path(Filename).read_bytes()
         buf = io.BytesIO(contents)
         self.upload_fileobj(
@@ -161,10 +171,12 @@ class PseudoS3Client:
 
     # noqa non-standard variable names from https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_object
     def delete_object(self, Bucket, Key):
+        self._check_key(Key)
         del self.buckets[Bucket][Key]
 
     # non-standard variable names for Boto3 compatibility
     def copy_object(self, *, Bucket, CopySource, Key, ContentDisposition=None, MetadataDirective='COPY'):
+        self._check_key(Key)
         bucket = self.buckets[Bucket]
 
         src_bucket_name, _, src_key = CopySource.partition('/')
@@ -221,10 +233,12 @@ class PseudoS3Client:
     # Non-standard functions, prefixed by "mock_" (can be used in test code, but not main code)
     # or "debug_" (should never be committed)
     def mock_set_content(self, Bucket, Key, content: bytes):
+        self._check_key(Key)
         assert isinstance(content, bytes)
         self.buckets[Bucket][Key] = content
 
     def mock_get_content(self, Bucket, Key):
+        self._check_key(Key)
         return self.buckets[Bucket][Key]
 
     def mock_list_files(self, Bucket):
