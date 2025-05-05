@@ -30,6 +30,14 @@ class S3MockTest(TestCase):
         got = s3.debug_long_repr()
         assert_text_snapshot(got=got)
 
+    def test_invalid_keys(self):
+        s3 = PseudoS3Client(init_buckets=('bucket',))
+        with self.assertRaisesRegex(AssertionError, r"S3 keys should not start with a slash, but '/foo' does"):
+            s3.mock_set_content('bucket', '/foo', b'x')
+
+        with self.assertRaisesRegex(AssertionError, r'S3 keys should be less than 1024 characters long, but'):
+            s3.upload_fileobj(Fileobj=io.BytesIO(b'x'), Bucket='bucket', Key='a' * 1025)
+
     def test_various_get_file(self):
         s3 = PseudoS3Client(init_buckets=('buck',))
         content = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x04\xb0'
