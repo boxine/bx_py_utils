@@ -118,6 +118,8 @@ class TempFileUtilsTestCase(TestCase):
                 tfh.write(b'123')
                 assert tfh.tell() == tfh.hasher.bytes_processed == 3
 
+                self.assertIs(tfh.seekable(), True)
+
                 # Seeking back and forth is ok, until we are at the end of the file:
                 tfh.seek(2)
                 tfh.seek(3)

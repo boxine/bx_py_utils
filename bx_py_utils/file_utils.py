@@ -149,6 +149,9 @@ class TempFileHasher:
         """
         self.temp_file.file_object.seek(*args, **kwargs)
 
+    def seekable(self):
+        return self.temp_file.file_object.seekable()
+
     def tell(self):
         return self.temp_file.file_object.tell()
 
