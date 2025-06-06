@@ -77,11 +77,11 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 * [`FileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L79-L104) - Context Manager for generate different hashes from file content while processing a file.
 * [`FileSizeError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L24-L38) - File size is not the same as the expected size.
 * [`NamedTemporaryFile2()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L53-L76) - Generates a temp file with the given filename **without** any random name sequence.
-* [`OverlongFilenameError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L190-L193) - cut_filename() error: The file name can not be shortened, because sterm is to short.
-* [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L107-L180) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
-* [`cut_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L196-L236) - Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
+* [`OverlongFilenameError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L193-L196) - cut_filename() error: The file name can not be shortened, because sterm is to short.
+* [`TempFileHasher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L107-L183) - File like context manager that combines NamedTemporaryFile2 and FileHasher.
+* [`cut_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L199-L239) - Short the file name (and keep the last suffix). Raise OverlongFilenameError if it can't fit.
 * [`get_and_assert_file_size()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L41-L50) - Check file size of given file object. Raise EmptyFileError for empty files or return size
-* [`safe_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L183-L187) - Makes an arbitrary input suitable to be used as a filename.
+* [`safe_filename()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/file_utils.py#L186-L190) - Makes an arbitrary input suitable to be used as a filename.
 
 ### bx_py_utils.filename_matcher
 
