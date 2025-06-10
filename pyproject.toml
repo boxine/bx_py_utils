@@ -34,14 +34,11 @@ dev = [
     'freezegun',  # https://github.com/spulec/freezegun
     'openpyxl',  # https://foss.heptapod.net/openpyxl/openpyxl
     'parameterized',  # https://github.com/wolever/parameterized
-
-    'build', # https://github.com/pypa/build
-
+    'hatchling',  # https://github.com/pypa/hatch/tree/master/backend
     "manageprojects",  # https://github.com/jedie/manageprojects
     "urllib3", # for bx_py_utils.test_utils.deny_requests.deny_any_real_request() in tests
     "uv",  # https://github.com/astral-sh/uv
-    "tox",  # https://github.com/tox-dev/tox
-    "tox-uv",  # https://github.com/tox-dev/tox-uv
+    "nox",  # https://github.com/wntrblm/nox
     "coverage",  # https://github.com/nedbat/coveragepy
     "autopep8",  # https://github.com/hhatto/autopep8
     "pyupgrade",  # https://github.com/asottile/pyupgrade
@@ -70,21 +67,21 @@ Source = "https://github.com/boxine/bx_py_utils/"
 [project.scripts]
 bx_py_utils = "bx_py_utils.__main__:main"
 
+
 [build-system]
-requires = ["setuptools>=61.0", "setuptools_scm>=7.1"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["bx_py_utils*"]
+[tool.hatch.build.targets.wheel]
+packages = ["bx_py_utils"]
 
-[tool.setuptools.dynamic]
-version = {attr = "bx_py_utils.__version__"}
+[tool.hatch.version]
+path = "bx_py_utils/__init__.py"
 
 
 [tool.darker]
-src = ["."]
 revision = "origin/master..."
+src = ['.']
 line_length = 119
 color = true
 skip_string_normalization = true
@@ -92,7 +89,6 @@ diff = false
 check = false
 stdout = false
 isort = true
-lint = []
 log_level = "INFO"
 
 
@@ -126,19 +122,6 @@ exclude_lines = [
 ]
 
 
-[tool.tox]  # https://tox.wiki/en/latest/config.html#pyproject-toml
-isolated_build = true
-env_list = ["3.13", "3.12", "3.11", "3.10"]
-skip_missing_interpreters = true
-
-[tool.tox.env_run_base]
-runner = "uv-venv-lock-runner"
-with_dev = true
-commands = [
-    ["python3", "-m", "coverage", "run", "--context", "'{envname}'"]
-]
-
-
 [tool.mypy]
 warn_unused_configs = true
 ignore_missing_imports = true
@@ -162,6 +145,7 @@ cookiecutter_directory = "make-uv-python"
 applied_migrations = [
     "dee29ef", # 2024-07-09T16:06:43+02:00
     "e9e2dae", # 2024-11-14T17:59:23+01:00
+    "e259304", # 2025-06-10T08:32:49+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
