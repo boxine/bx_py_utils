@@ -71,7 +71,7 @@ def collect_hashes(data: dict, *, extra_keys: tuple = ()) -> dict:
     if existing_keys:
         hash_keys = hash_keys.union(set(extra_keys))
 
-    hashes = {key: data[key] for key in hash_keys}
+    hashes = {key: data[key] for key in hash_keys if key in data}
     return hashes
 
 
