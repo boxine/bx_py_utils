@@ -33,6 +33,12 @@ class HastUtilsTestCase(TestCase):
             {'sha1': 'foo', 'file_size': 1},
         )
 
+        # The extra key can be missing:
+        self.assertEqual(
+            collect_hashes({'foo': 1, 2: 3}, extra_keys=('foo', 'bar')),
+            {'foo': 1},
+        )
+
     def test_compare_hashes(self):
         # More deeper tests that also checks DictCompareResult.compare_successful()
 
@@ -97,6 +103,22 @@ class HastUtilsTestCase(TestCase):
             ),
         )
         self.assertIs(result.compare_successful(), True)
+
+        # The extra key can be missing in one of the dicts:
+        result = compare_hashes(
+            {'md5': '123', 'file_size': 456, **unrelated_data},
+            {'md5': '123', **unrelated_data},
+            extra_keys=('file_size',),
+        )
+        self.assertEqual(
+            result,
+            DictCompareResult(
+                correct_keys={'md5': '123'},
+                wrong_keys={},
+                skipped_keys={'file_size': {'current': 456, 'expected': None}},
+            ),
+        )
+        self.assertIs(result.compare_successful(), True)  # md5 matched
 
         # Use also 0 as values!
         result = compare_hashes(
