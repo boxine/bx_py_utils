@@ -102,6 +102,24 @@ def compare_dict_values(dict1: dict, dict2: dict) -> DictCompareResult:
     >>> compare_dict_values({'a': 1}, {'a': 1, 'c': 2})
     DictCompareResult(correct_keys={'a': 1}, wrong_keys={}, skipped_keys={'c': {'expected': 2, 'current': None}})
 
+    >>> compare_dict_values({'a': 0}, {'a': 1})
+    DictCompareResult(correct_keys={}, wrong_keys={'a': {'expected': 1, 'current': 0}}, skipped_keys={})
+
+    The key must be present in both:
+    >>> compare_dict_values({'a': None}, {})
+    DictCompareResult(correct_keys={}, wrong_keys={}, skipped_keys={'a': {'expected': None, 'current': None}})
+    >>> compare_dict_values({}, {'a': 0})
+    DictCompareResult(correct_keys={}, wrong_keys={}, skipped_keys={'a': {'expected': 0, 'current': None}})
+
+    Comapre 0 or False or None on both sides is successful:
+    >>> compare_dict_values({'a': 0}, {'a': 0})
+    DictCompareResult(correct_keys={'a': 0}, wrong_keys={}, skipped_keys={})
+    >>> compare_dict_values({'a': False}, {'a': False})
+    DictCompareResult(correct_keys={'a': False}, wrong_keys={}, skipped_keys={})
+    >>> compare_dict_values({'a': None}, {'a': None})
+    DictCompareResult(correct_keys={'a': None}, wrong_keys={}, skipped_keys={})
+
+    We also check the types, e.g.: 1 is not equal to True:
     >>> compare_dict_values({'a': 1}, {'a': True})
     DictCompareResult(correct_keys={}, wrong_keys={'a': {'expected': True, 'current': 1}}, skipped_keys={})
     """
@@ -112,13 +130,12 @@ def compare_dict_values(dict1: dict, dict2: dict) -> DictCompareResult:
     for key in key_union:
         expected_value = dict2.get(key)
         current_value = dict1.get(key)
-        if expected_value and current_value:
-            if expected_value is current_value:
-                correct_keys[key] = expected_value
-            else:
-                wrong_keys[key] = {'expected': expected_value, 'current': current_value}
-        else:
+        if key not in dict1 or key not in dict2:
             skipped_keys[key] = {'expected': expected_value, 'current': current_value}
+        elif type(expected_value) == type(current_value) and expected_value == current_value:  # noqa: E721
+            correct_keys[key] = expected_value
+        else:
+            wrong_keys[key] = {'expected': expected_value, 'current': current_value}
 
     result = DictCompareResult(
         correct_keys=correct_keys,
