@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import re
 from collections.abc import Generator, Iterable
 from typing import Any
@@ -75,3 +76,53 @@ def dict_list2markdown(data: Iterable[dict]) -> Generator[str]:
             assert entry.keys() == keys, f'Entry {index} has different keys: {entry.keys()} != {keys}'
         row = ' | '.join(to_cell_value(entry[key]) for key in keys)
         yield f'| {index} | {row} |'
+
+
+@dataclasses.dataclass
+class DictCompareResult:
+    correct_keys: dict  # Values of keys are present and equal in both dicts
+    wrong_keys: dict  # Values of keys are present, but not equal
+    skipped_keys: dict  # Keys are not present in one of the dicts
+
+    def compare_successful(self) -> bool | None:
+        if not self.correct_keys and not self.wrong_keys:
+            # Nothing compared -> undefined if the compare are ok or not
+            return None
+
+        if self.correct_keys and not self.wrong_keys:
+            return True
+        else:
+            return False
+
+
+def compare_dict_values(dict1: dict, dict2: dict) -> DictCompareResult:
+    """
+    Compare two dictionaries if values of the same keys are present and equal.
+
+    >>> compare_dict_values({'a': 1}, {'a': 1, 'c': 2})
+    DictCompareResult(correct_keys={'a': 1}, wrong_keys={}, skipped_keys={'c': {'expected': 2, 'current': None}})
+
+    >>> compare_dict_values({'a': 1}, {'a': True})
+    DictCompareResult(correct_keys={}, wrong_keys={'a': {'expected': True, 'current': 1}}, skipped_keys={})
+    """
+    key_union = sorted(dict1.keys() | dict2.keys())
+    correct_keys = {}
+    wrong_keys = {}
+    skipped_keys = {}
+    for key in key_union:
+        expected_value = dict2.get(key)
+        current_value = dict1.get(key)
+        if expected_value and current_value:
+            if expected_value is current_value:
+                correct_keys[key] = expected_value
+            else:
+                wrong_keys[key] = {'expected': expected_value, 'current': current_value}
+        else:
+            skipped_keys[key] = {'expected': expected_value, 'current': current_value}
+
+    result = DictCompareResult(
+        correct_keys=correct_keys,
+        wrong_keys=wrong_keys,
+        skipped_keys=skipped_keys,
+    )
+    return result
