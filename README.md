@@ -52,9 +52,10 @@ Please take a look into the sources and tests for deeper informations.
 
 ### bx_py_utils.dict_utils
 
-* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L8-L29) - nested dict `get()`
-* [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L47-L77) - Convert a list of dictionaries into a markdown table.
-* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L32-L44) - Extract values from a dict, if they are present
+* [`compare_dict_values()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L98-L128) - Compare two dictionaries if values of the same keys are present and equal.
+* [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L9-L30) - nested dict `get()`
+* [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L48-L78) - Convert a list of dictionaries into a markdown table.
+* [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L33-L45) - Extract values from a dict, if they are present
 
 ### bx_py_utils.doc_write
 
@@ -93,8 +94,10 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.hash_utils
 
-* [`url_safe_encode()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L13-L22) - Encode bytes into a URL safe string.
-* [`url_safe_hash()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L25-L46) - Generate a URL safe hash with `max_size` from given string/bytes.
+* [`collect_hashes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L54-L75) - Get all hash values from a dictionary. Use hashlib.algorithms_available for key names.
+* [`compare_hashes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L78-L95) - Compare hashes from two dictionaries. Return DictCompareResult with the results.
+* [`url_safe_encode()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L15-L24) - Encode bytes into a URL safe string.
+* [`url_safe_hash()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/hash_utils.py#L27-L48) - Generate a URL safe hash with `max_size` from given string/bytes.
 
 ### bx_py_utils.html_utils
 
