@@ -70,7 +70,7 @@ class HastUtilsTestCase(TestCase):
         )
         self.assertIs(result.compare_successful(), False)
 
-        # NO hashes to compare -> compare_successful() is None!
+        # No hashes to compare -> compare_successful() is None!
         result = compare_hashes(
             {'md5': '123', **unrelated_data},
             {'sha1': '123', **unrelated_data},
@@ -120,7 +120,23 @@ class HastUtilsTestCase(TestCase):
         )
         self.assertIs(result.compare_successful(), True)  # md5 matched
 
-        # Use also 0 as values!
+        # 0 on both sides are equal -> successful
+        result = compare_hashes(
+            {'file_size': 0, **unrelated_data},
+            {'file_size': 0, **unrelated_data},
+            extra_keys=('file_size',),
+        )
+        self.assertEqual(
+            result,
+            DictCompareResult(
+                correct_keys={'file_size': 0},
+                wrong_keys={},
+                skipped_keys={},
+            ),
+        )
+        self.assertIs(result.compare_successful(), True)
+
+        # Compare 0 with a non-zero value -> not successful
         result = compare_hashes(
             {'file_size': 123, **unrelated_data},
             {'file_size': 0, **unrelated_data},
@@ -130,8 +146,30 @@ class HastUtilsTestCase(TestCase):
             result,
             DictCompareResult(
                 correct_keys={},
-                wrong_keys={},
-                skipped_keys={'file_size': {'current': 123, 'expected': 0}},
+                wrong_keys={'file_size': {'current': 123, 'expected': 0}},
+                skipped_keys={},
             ),
         )
-        self.assertIs(result.compare_successful(), None)  # Nothing to compare!
+        self.assertIs(result.compare_successful(), False)
+
+        # We use a simple equality check: Different objects with the same value are equal!
+        value1 = '9c7c7ec25d02d8925b1446dc96cb8d708a6790f000e668d545967635'
+        # It's not easy to create string with the same value but different object id!
+        # This works and forces a new string object:
+        value2 = bytearray(value1, 'utf-8').decode('utf-8')
+
+        # Isn't it really?
+        self.assertEqual(value1, value2)
+        self.assertNotEqual(id(value1), id(value2))
+
+        # Ok, test it now:
+        result = compare_hashes({'sha3_224': value1}, {'sha3_224': value2})
+        self.assertEqual(
+            result,
+            DictCompareResult(
+                correct_keys={'sha3_224': '9c7c7ec25d02d8925b1446dc96cb8d708a6790f000e668d545967635'},
+                wrong_keys={},
+                skipped_keys={},
+            ),
+        )
+        self.assertIs(result.compare_successful(), True)
