@@ -30,7 +30,7 @@ def cutout(text, line_no, column, extra_lines=2):
         )
         if no == line_no:
             result.append(
-                f'{"-"*(line_no_width+column+1)}^'
+                f'{"-" * (line_no_width + column + 1)}^'
             )
 
     return '\n'.join(result)

@@ -35,9 +35,9 @@ class InvalidHtml(AssertionError):
     def __str__(self):
         return (
             f'{self.origin_msg}\n'
-            f'{"-"*80}\n'
+            f'{"-" * 80}\n'
             f'{self.cutout_text}\n'
-            f'{"-"*80}'
+            f'{"-" * 80}'
         )
 
 
