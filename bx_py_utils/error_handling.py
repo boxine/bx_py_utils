@@ -61,7 +61,7 @@ def print_exc_plus(exc=None, stop_on_file_path=None, max_chars=None):
                 value = repr(value)
 
                 if len(value) + 3 > max_chars:
-                    value = f'{value[:max_chars-3]}...'
+                    value = f'{value[:max_chars - 3]}...'
 
                 try:
                     print(value, file=sys.stderr)

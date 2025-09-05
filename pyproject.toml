@@ -40,25 +40,14 @@ dev = [
     "uv",  # https://github.com/astral-sh/uv
     "nox",  # https://github.com/wntrblm/nox
     "coverage",  # https://github.com/nedbat/coveragepy
-    "autopep8",  # https://github.com/hhatto/autopep8
-    "pyupgrade",  # https://github.com/asottile/pyupgrade
-    "flake8",  # https://github.com/pycqa/flake8
-    "flake8-bugbear",  # https://github.com/PyCQA/flake8-bugbear
-    "pyflakes",  # https://github.com/PyCQA/pyflakes
+    "ruff", # https://github.com/astral-sh/ruff
     "codespell",  # https://github.com/codespell-project/codespell
     "EditorConfig",  # https://github.com/editorconfig/editorconfig-core-py
     "pip-audit",  # https://github.com/pypa/pip-audit
     "mypy",  # https://github.com/python/mypy
     "twine",  # https://github.com/pypa/twine
     "typeguard",  # https://github.com/agronholm/typeguard/
-
-    # https://github.com/akaihola/darker
-    # https://github.com/ikamensh/flynt
-    # https://github.com/pycqa/isort
-    # https://github.com/pygments/pygments
-    'darker[flynt, isort, color]',
 ]
-
 
 [project.urls]
 Documentation = "https://github.com/boxine/bx_py_utils/"
@@ -79,27 +68,30 @@ packages = ["bx_py_utils"]
 path = "bx_py_utils/__init__.py"
 
 
-[tool.darker]
-revision = "origin/master..."
-src = ['.']
-line_length = 119
-color = true
-skip_string_normalization = true
-diff = false
-check = false
-stdout = false
-isort = true
-log_level = "INFO"
+[tool.ruff]
+# https://docs.astral.sh/ruff/configuration/
+line-length = 120
+exclude = [
+  ".*/",
+]
 
+[tool.ruff.lint]
+preview = true  # Needed for some of the rules
+extend-select = [
+    "E", # pycodestyle: https://docs.astral.sh/ruff/rules/#error-e
+    "I", # isort: https://docs.astral.sh/ruff/rules/#isort-i
+]
+ignore = [
+    "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
+    "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
+]
 
-[tool.isort]
-# https://pycqa.github.io/isort/docs/configuration/config_files/#pyprojecttoml-preferred-format
-atomic=true
-profile="black"
-line_length=120
-known_first_party=["bx_py_utils", "bx_py_utils_tests"]
-skip_glob=['.*', '*/htmlcov/*']
-lines_after_imports=2
+[tool.ruff.lint.isort]
+# https://docs.astral.sh/ruff/settings/#lintisort
+lines-after-imports = 2
+
+[tool.ruff.format]
+quote-style = "single"
 
 
 [tool.coverage.run]
@@ -146,6 +138,7 @@ applied_migrations = [
     "dee29ef", # 2024-07-09T16:06:43+02:00
     "e9e2dae", # 2024-11-14T17:59:23+01:00
     "e259304", # 2025-06-10T08:32:49+02:00
+    "730a268", # 2025-09-04T19:20:59+02:00
 ]
 
 [manageprojects.cookiecutter_context.cookiecutter]
