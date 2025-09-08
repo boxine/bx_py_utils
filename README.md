@@ -117,7 +117,8 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.import_utils
 
-* [`import_string()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/import_utils.py#L18-L31) - Import a dotted module path and return the attribute/class designated by the last name in the path.
+* [`import_all_files()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/import_utils.py#L36-L59) - Helper to import all Python files from a package. Helpful for registry via imports.
+* [`import_string()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/import_utils.py#L19-L33) - Import a dotted module path and return the attribute/class designated by the last name in the path.
 
 ### bx_py_utils.iteration
 
