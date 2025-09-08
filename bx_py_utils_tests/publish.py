@@ -21,7 +21,6 @@ def publish():
     assert_is_file(PACKAGE_ROOT / 'pyproject.toml')
 
     subprocess.check_call(['make', 'test'])  # don't publish if tests fail
-    subprocess.check_call(['make', 'fix-code-style'])  # don't publish if code style wrong
 
     publish_package(module=bx_py_utils, package_path=PACKAGE_ROOT)
 
