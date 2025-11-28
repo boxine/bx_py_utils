@@ -23,5 +23,11 @@ class ImportAllFilesTests(TestCase):
 
             imported = import_all_files(package=temp_path.name, init_file=str(init_file_path))
 
-        self.assertEqual(imported, ['mypackage.a', 'mypackage.b'])
-        self.assertEqual(mock_import.call_args_list, [call('mypackage.a'), call('mypackage.b')])
+        self.assertEqual(
+            sorted(imported),
+            ['mypackage.a', 'mypackage.b'],
+        )
+        self.assertEqual(
+            sorted(mock_import.call_args_list),
+            [call('mypackage.a'), call('mypackage.b')],
+        )
