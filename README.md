@@ -234,7 +234,7 @@ Assert complex output via auto updated snapshot files with nice diff error messa
 
 #### bx_py_utils.test_utils.time
 
-* [`MockTimeMonotonicGenerator()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/time.py#L1-L19) - Helper to mock `time.monotonic()` in tests.
+* [`MockTimeMonotonicGenerator()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/time.py#L1-L30) - Helper to mock `time.monotonic()`, `time.time()` etc. in tests.
 
 #### bx_py_utils.test_utils.unittest_utils
 
