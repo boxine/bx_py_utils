@@ -1,3 +1,7 @@
+#
+# https://github.com/wntrblm/nox/
+# Documentation: https://nox.thea.codes/
+#
 import nox
 from nox.sessions import Session
 
@@ -5,7 +9,11 @@ from nox.sessions import Session
 PYTHON_VERSIONS = ('3.13', '3.12', '3.11')
 
 
-@nox.session(python=PYTHON_VERSIONS)
+@nox.session(
+    python=PYTHON_VERSIONS,
+    venv_backend='uv',
+    download_python='auto',
+)
 def tests(session: Session):
     session.install('uv')
     session.run(

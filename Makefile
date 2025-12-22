@@ -57,7 +57,7 @@ mypy:  ## Run mypy
 .PHONY: pip-audit
 pip-audit:  ## Run https://github.com/pypa/pip-audit
 	.venv/bin/uv export --no-header --frozen --no-editable --no-emit-project -o /tmp/temp_requirements.txt
-	.venv/bin/pip-audit --strict --require-hashes -r /tmp/temp_requirements.txt
+	.venv/bin/pip-audit --strict --require-hashes --disable-pip -r /tmp/temp_requirements.txt
 
 .PHONY: publish
 publish:  ## Release new version to PyPi
