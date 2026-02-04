@@ -28,6 +28,8 @@ class DocuWriteTestCase(TestCase):
             """
             pass
 
+        def some_stub_function(): ...  # Has no docstring, but also shouldn't break
+
         self.assertEqual(
             doc_strings,
             [
