@@ -55,6 +55,7 @@ Please take a look into the sources and tests for deeper informations.
 * [`compare_dict_values()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L98-L145) - Compare two dictionaries if values of the same keys are present and equal.
 * [`dict_get()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L9-L30) - nested dict `get()`
 * [`dict_list2markdown()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L48-L78) - Convert a list of dictionaries into a markdown table.
+* [`dict_prune_falsy()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L148-L168) - Recursively remove all key-value pairs from a dictionary where the value is falsy.
 * [`pluck()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/dict_utils.py#L33-L45) - Extract values from a dict, if they are present
 
 ### bx_py_utils.doc_write

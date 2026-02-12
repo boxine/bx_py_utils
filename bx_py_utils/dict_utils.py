@@ -143,3 +143,26 @@ def compare_dict_values(dict1: dict, dict2: dict) -> DictCompareResult:
         skipped_keys=skipped_keys,
     )
     return result
+
+
+def dict_prune_falsy(obj):
+    """
+    Recursively remove all key-value pairs from a dictionary where the value is falsy.
+    This includes values such as 0, '', None, False, empty lists, and empty dictionaries.
+
+    >>> dict_prune_falsy({'A': 1, 'B': 0, 'C': '', 'D': None, 'E': False, 'F': [], 'G': {}, 'H': 'ok'})
+    {'A': 1, 'H': 'ok'}
+
+    >>> dict_prune_falsy({'dict': {'A1': 0, 'A2': 'ok'}, 'list': [0, 1, '', {'B1': 'ok', 'B2': None}]})
+    {'dict': {'A2': 'ok'}, 'list': [0, 1, '', {'B1': 'ok'}]}
+
+    >>> dict_prune_falsy({'tuple': (0, 1, {'A1': 'ok', 'A2': None}, 2, 3)})
+    {'tuple': (0, 1, {'A1': 'ok'}, 2, 3)}
+    """
+    if isinstance(obj, dict):
+        return {k: v for k in obj if (v := dict_prune_falsy(obj[k]))}
+    if isinstance(obj, list):
+        return [dict_prune_falsy(item) if isinstance(item, dict) else item for item in obj]
+    if isinstance(obj, tuple):
+        return tuple(dict_prune_falsy(item) if isinstance(item, dict) else item for item in obj)
+    return obj
