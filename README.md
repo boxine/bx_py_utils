@@ -212,7 +212,7 @@ A simple mock for Boto3's S3 modules.
 
 #### bx_py_utils.test_utils.redirect
 
-* [`RedirectOut()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/redirect.py#L7-L34) - Redirect stdout + stderr into a buffer (with optional strip the output)
+* [`RedirectOut()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/redirect.py#L8-L52) - Redirect stdout + stderr into a buffer (with optional strip the output)
 
 #### bx_py_utils.test_utils.requests_mock_assertion
 
