@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import re
 import unicodedata
+from typing import Literal
 from uuid import UUID
 
 
@@ -185,3 +186,32 @@ def truncate(value: str, length: int) -> str:
         raise ValueError('length must be greater than 0')
 
     return value if len(value) <= length else f'{value[:length - 1]}…'
+
+
+def strtobool(val: str) -> Literal[0, 1]:
+    """
+    Convert a string representation of truth to true (1) or false (0).
+    Backport from the now-deprecated distutils package.
+
+    >>> strtobool('y')
+    1
+    >>> strtobool('true')
+    1
+    >>> strtobool('no')
+    0
+    >>> strtobool('foo')
+    Traceback (most recent call last):
+        ...
+    ValueError: invalid truth value 'foo'
+
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in {'y', 'yes', 't', 'true', 'on', '1'}:
+        return 1
+    elif val in {'n', 'no', 'f', 'false', 'off', '0'}:
+        return 0
+    else:
+        raise ValueError(f'invalid truth value {val!r}')
