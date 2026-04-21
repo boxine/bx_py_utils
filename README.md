@@ -151,14 +151,15 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.string_utils
 
-* [`compare_sentences()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L68-L89) - Calculates the Levenshtein distance between text1 and text2. With filter functionality.
-* [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L130-L140) - Replace line endings to unix-style.
-* [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L41-L65) - Extract words from a text. With filter functionality.
-* [`is_uuid()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L105-L127) - Returns True if text is a valid UUID (https://www.rfc-editor.org/rfc/rfc9562#name-uuid-format).
-* [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L9-L38) - Calculates the Levenshtein distance between two strings.
-* [`startswith_prefixes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L143-L159) - >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
-* [`truncate()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L162-L187) - Truncates the given string to the given length
-* [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L92-L102) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
+* [`compare_sentences()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L69-L90) - Calculates the Levenshtein distance between text1 and text2. With filter functionality.
+* [`ensure_lf()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L131-L141) - Replace line endings to unix-style.
+* [`get_words()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L42-L66) - Extract words from a text. With filter functionality.
+* [`is_uuid()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L106-L128) - Returns True if text is a valid UUID (https://www.rfc-editor.org/rfc/rfc9562#name-uuid-format).
+* [`levenshtein_distance()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L10-L39) - Calculates the Levenshtein distance between two strings.
+* [`startswith_prefixes()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L144-L160) - >>> startswith_prefixes('foobar', prefixes=('foo','bar'))
+* [`strtobool()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L191-L217) - Convert a string representation of truth to true (1) or false (0).
+* [`truncate()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L163-L188) - Truncates the given string to the given length
+* [`uuid_from_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/string_utils.py#L93-L103) - Generate a UUID instance from the given text in a determinism may via SHA224 hash.
 
 #### bx_py_utils.test_utils.assertion
 
