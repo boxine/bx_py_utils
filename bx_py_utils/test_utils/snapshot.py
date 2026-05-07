@@ -57,7 +57,7 @@ def raise_snapshot_errors():
 
 
 def _write_json(obj, snapshot_file):
-    with snapshot_file.open('w') as snapshot_handle:
+    with snapshot_file.open('w', encoding='utf-8') as snapshot_handle:
         json.dump(obj, snapshot_handle, ensure_ascii=False, indent=4, sort_keys=True)
 
 
@@ -228,7 +228,7 @@ def assert_snapshot(
         self_file_path=self_file_path,
     )
     try:
-        with snapshot_file.open('r') as snapshot_handle:
+        with snapshot_file.open('r', encoding='utf-8') as snapshot_handle:
             expected = json.load(snapshot_handle)
     except (ValueError, OSError):
         _write_json(got, snapshot_file)
