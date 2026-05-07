@@ -278,15 +278,15 @@ def assert_py_snapshot(
         self_file_path=self_file_path,
     )
     try:
-        expected_str = snapshot_file.read_text()
+        expected_str = snapshot_file.read_text(encoding='utf-8')
     except FileNotFoundError:
-        snapshot_file.write_text(got_str)
+        snapshot_file.write_text(got_str, encoding='utf-8')
         if not raise_snapshot_errors():
             return
         raise
 
     if got_str != expected_str:
-        snapshot_file.write_text(got_str)
+        snapshot_file.write_text(got_str, encoding='utf-8')
 
         if raise_snapshot_errors():
             # display error message with diff:
