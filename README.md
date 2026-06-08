@@ -102,11 +102,13 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.html_utils
 
-* [`ElementsNotFoundError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L44-L48) - Happens if requested HTML elements cannot be found
-* [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L18-L41) - XMLSyntaxError with better error messages: used in validate_html()
-* [`get_html_elements()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L95-L106) - Returns the selected HTML elements as string
-* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L87-L92) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
-* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L51-L73) - Validate a HTML document via XMLParser (Needs 'lxml' package)
+* [`ElementsNotFoundError()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L49-L53) - Happens if requested HTML elements cannot be found
+* [`InvalidHtml()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L23-L46) - XMLSyntaxError with better error messages: used in validate_html()
+* [`get_html_elements()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L100-L112) - Returns the selected HTML elements as string
+* [`html2text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L186-L201) - Convert HTML to plain text, preserving paragraph breaks as double newlines.
+* [`pretty_format_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L92-L97) - Pretty format given HTML document via BeautifulSoup (Needs 'beautifulsoup4' package)
+* [`strip_html_tags()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L163-L183) - Remove HTML tags from a string using stdlib HTMLParser.
+* [`validate_html()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/html_utils.py#L56-L78) - Validate a HTML document via XMLParser (Needs 'lxml' package)
 
 #### bx_py_utils.humanize.pformat
 

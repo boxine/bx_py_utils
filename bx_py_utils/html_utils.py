@@ -1,3 +1,8 @@
+import html as _html
+import re
+from html.parser import HTMLParser
+
+from bx_py_utils.string_utils import ensure_lf
 from bx_py_utils.text_tools import cutout
 
 
@@ -101,6 +106,96 @@ def get_html_elements(data, query_selector, parser='html.parser', **bs_kwargs):
 
     if not selected_elements:
         raise ElementsNotFoundError(
-            f'The query selector {query_selector} did not match any element in the HTML document')
+            f'The query selector {query_selector} did not match any element in the HTML document'
+        )
 
     return ''.join(str(tag) for tag in selected_elements)
+
+
+class _HTMLStripper(HTMLParser):
+    def __init__(self, keep_paragraphs):
+        self.keep_paragraphs = keep_paragraphs
+        super().__init__(convert_charrefs=False)
+        self.fed = []
+
+    def handle_data(self, d):
+        d = re.sub(r'[\t\r\f\v]', ' ', d)
+        self.fed.append(d)
+
+    def handle_entityref(self, name):
+        self.fed.append(_html.unescape(f'&{name};'))
+
+    def handle_charref(self, name):
+        self.fed.append(_html.unescape(f'&#{name};'))
+
+    def handle_starttag(self, tag, attributes):
+        if tag == 'li':
+            self.fed.append('· ')
+        super().handle_starttag(tag, attributes)
+
+    def handle_endtag(self, tag):
+        if self.keep_paragraphs and tag == 'p':
+            self.fed.append('\n')
+        else:
+            self.fed.append(' ')
+
+    def get_data(self):
+        data = ''.join(self.fed)
+        data = re.sub(r'[ ]{2,}', ' ', data)
+        if self.keep_paragraphs:
+            data = '\n'.join(line.strip() for line in data.splitlines())
+        else:
+            data = ' '.join(line.strip() for line in data.splitlines() if line.strip())
+            data = re.sub(r'\s{2,}', ' ', data)
+
+        data = re.sub(r'(\n{2})\n+', r'\1', data)
+        data = data.strip()
+        return data
+
+
+def _strip_html_once(value: str, *, keep_paragraphs: bool) -> str:
+    s = _HTMLStripper(keep_paragraphs)
+    s.feed(value)
+    s.close()
+    return s.get_data()
+
+
+def strip_html_tags(value: str, *, keep_paragraphs: bool = False) -> str:
+    """
+    Remove HTML tags from a string using stdlib HTMLParser.
+
+    Runs the parser in a loop until no more tags are detected, because
+    HTMLParser can miss tags on the first pass (e.g. inside <style> blocks).
+
+    >>> strip_html_tags('<p>Hello <b>World</b></p>')
+    'Hello World'
+    >>> strip_html_tags('<p>First</p><p>Second</p>', keep_paragraphs=True)
+    'First\\nSecond'
+    """
+    assert isinstance(value, str), f'Expected a string, got {type(value).__name__}'
+    value = _strip_html_once(value, keep_paragraphs=keep_paragraphs)
+    while '<' in value and '>' in value:
+        new_value = _strip_html_once(value, keep_paragraphs=keep_paragraphs)
+        if new_value == value:
+            # no progress — remaining '<' / '>' are not HTML tags -> exit loop
+            break
+        value = new_value
+    return value
+
+
+def html2text(value: str) -> str:
+    """
+    Convert HTML to plain text, preserving paragraph breaks as double newlines.
+
+    >>> html2text('<p>First</p>\\n\\n<p>Second</p>')
+    'First\\n\\nSecond'
+    """
+    assert isinstance(value, str), f'Expected a string, got {type(value).__name__}'
+    text = ensure_lf(value)
+    text = strip_html_tags(text, keep_paragraphs=True)  # preserve paragraphs as newlines
+    parts = re.split(r'\n{2,}', text)
+    parts = (
+        strip_html_tags(part, keep_paragraphs=False)  # remove any remaining tags and extra whitespace from each part
+        for part in parts
+    )
+    return '\n\n'.join(parts)
