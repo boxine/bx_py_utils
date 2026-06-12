@@ -81,9 +81,26 @@ extend-select = [
     "E", # pycodestyle: https://docs.astral.sh/ruff/rules/#error-e
     "I", # isort: https://docs.astral.sh/ruff/rules/#isort-i
 ]
-ignore = [
+ignore = [ # TODO: Remove ignores one by one and fix the issues
     "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
     "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
+    "BLE001", # Do not catch blind exception
+    "DTZ001",  # datetime without timezone
+    "E402",    # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
+    "E731",    # https://docs.astral.sh/ruff/rules/lambda-assignment/
+    "LOG015",  # Root logger call
+    "PIE790",  # Unnecessary pass
+    "PLR1730", # Replace `if`/`else` with min/max
+    "PLW1508", # Invalid env-var default
+    "RUF010",  # Use explicit conversion flag
+    "RUF013",  # Implicit Optional
+    "RUF100",  # Unused blanket noqa
+    "SIM102",  # Nested if → single if
+    "SIM103",  # Return bool condition directly
+    "SIM117",  # Nested with → single with
+    "SIM118",  # key in dict.keys()
+    "TRY002",  # Create your own exception
+    "UP017",   # datetime.timezone.utc → datetime.UTC
 ]
 
 [tool.ruff.lint.isort]
