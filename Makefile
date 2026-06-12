@@ -26,7 +26,11 @@ update-requirements:  ## Update requirements
 	.venv/bin/uv sync
 
 .PHONY: lint
-lint: ## Check/fix code style by run: "ruff check --fix"
+lint: ## Check/fix code style by run: "ruff check"
+	.venv/bin/ruff check
+
+.PHONY: lint-fix
+lint-fix: ## Check/fix code style by run: "ruff check --fix"
 	.venv/bin/ruff check --fix
 
 .PHONY: nox

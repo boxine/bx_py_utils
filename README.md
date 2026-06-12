@@ -136,7 +136,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.processify
 
-* [`processify()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/processify.py#L12-L53) - Decorator to run a function as a process.
+* [`processify()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/processify.py#L42-L66) - Decorator to run a function as a process.
 
 ### bx_py_utils.pyproject_toml
 
@@ -306,10 +306,9 @@ help                       List all commands
 install-base-req           Install needed base packages via apt
 install                    Install the project in a Python virtualenv
 update-requirements        Update requirements
-lint                       Run code formatters and linter
-fix-code-style             Fix code formatting
-tox-listenvs               List all tox test environments
-tox                        Run tests via tox with all environments
+lint                       Check/fix code style by run: "ruff check"
+lint-fix                   Check/fix code style by run: "ruff check --fix"
+nox                        Run tests via nox with all environments
 test                       Run tests
 coverage                   Run tests with coverage
 update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)

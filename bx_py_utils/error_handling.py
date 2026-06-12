@@ -53,7 +53,7 @@ def print_exc_plus(exc=None, stop_on_file_path=None, max_chars=None):
         if print_local_vars:
             print(file=sys.stderr)
             for key, value in list(frame.f_locals.items()):
-                print('%30s =' % key, end=' ', file=sys.stderr)
+                print(f'{key:>30s} =', end=' ', file=sys.stderr)
 
                 # We have to be careful not to cause a new error in our error
                 # printer! Calling str() on an unknown object could cause an
