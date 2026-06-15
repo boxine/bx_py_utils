@@ -1,4 +1,10 @@
 .*
+!.github
+!.run
+!.editorconfig
+!.gitignore
+!.gitkeep
+
 *.egg-info
 __pycache__
 /dist/
@@ -6,8 +12,5 @@ __pycache__
 /coverage.*
 *.orig
 
-!.github
-!.run
-!.editorconfig
-!.gitignore
-!.gitkeep
+# This is a library, not an application, so don't add the lock file into the repository:
+uv.lock
