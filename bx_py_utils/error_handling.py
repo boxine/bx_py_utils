@@ -70,3 +70,19 @@ def print_exc_plus(exc=None, stop_on_file_path=None, max_chars=None):
 
     print(file=sys.stderr)
     print('=' * 100, file=sys.stderr)
+
+
+def exception2str(exc: BaseException) -> str:
+    """
+    Converts any exception into a short "ClassName: message" string or just "ClassName" if the message is empty.
+
+    >>> exception2str(ValueError('test'))
+    'ValueError: test'
+    >>> exception2str(TypeError())
+    'TypeError'
+    """
+    assert isinstance(exc, BaseException), f'{exc=}'
+    error = exc.__class__.__name__
+    if err_str := str(exc):
+        error = f'{error}: {err_str}'
+    return error

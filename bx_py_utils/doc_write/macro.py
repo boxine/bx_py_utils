@@ -3,6 +3,7 @@ import re
 from collections.abc import Iterable
 
 from bx_py_utils.doc_write.data_structures import MacroContext
+from bx_py_utils.error_handling import exception2str
 from bx_py_utils.import_utils import import_string
 
 
@@ -22,7 +23,7 @@ class CallMacro:
         try:
             result = macro_func(macro_context=self.macro_context)
         except Exception as err:
-            raise Exception(f'Call macro {dotted_path!r} error: {err}') from err
+            raise Exception(f'Call macro {dotted_path!r} error: {exception2str(err)}') from err
 
         """
         DocWrite: bx_py_utils/doc_write/README.md ## Macros
@@ -35,7 +36,7 @@ class CallMacro:
             try:
                 return '\n'.join(part for part in result)
             except TypeError as err:
-                raise TypeError(f'Error consuming macro {dotted_path!r}: {err}') from err
+                raise TypeError(f'Error consuming macro {dotted_path!r}: {exception2str(err)}') from err
         else:
             raise TypeError(f'Macro {dotted_path!r} must return str or Iterable[str], not {type(result).__name__}')
 
