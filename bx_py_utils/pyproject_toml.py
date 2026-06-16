@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from bx_py_utils.dict_utils import dict_get
+from bx_py_utils.error_handling import exception2str
 
 
 try:
@@ -11,7 +12,7 @@ except ImportError:
     try:
         import tomli as tomllib
     except ImportError as err:
-        raise ImportError(f'Please add "tomli" to your dev-dependencies! Origin error: {err}')
+        raise ImportError(f'Please add "tomli" to your dev-dependencies! Origin error: {exception2str(err)}') from err
 
 
 def get_pyproject_config(section: tuple[str, ...], base_path: Path | None = None) -> None | bool | str | dict | list:

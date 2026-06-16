@@ -1,6 +1,8 @@
 from unittest import TestCase
 
-from bx_py_utils.error_handling import print_exc_plus
+import typeguard
+
+from bx_py_utils.error_handling import exception2str, print_exc_plus
 from bx_py_utils.test_utils.redirect import RedirectOut
 
 
@@ -33,3 +35,11 @@ class ErrorHandlingTestCase(TestCase):
             self.assertIn('Locals by frame, most recent call first:', output)
             self.assertIn('/bx_py_utils_tests/tests/test_error_handling.py", line', output)
             self.assertIn("x = '12345678901...", output)
+
+    def test_exception2str(self):
+        self.assertEqual(exception2str(ValueError('test')), 'ValueError: test')
+        self.assertEqual(exception2str(TypeError()), 'TypeError')
+        self.assertEqual(exception2str(RuntimeError('something went wrong')), 'RuntimeError: something went wrong')
+
+        with typeguard.suppress_type_checks(), self.assertRaises(AssertionError):
+            exception2str('not an exception')

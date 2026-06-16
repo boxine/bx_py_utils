@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from bx_py_utils.error_handling import exception2str
 from bx_py_utils.path import assert_is_dir
 
 
@@ -43,7 +44,7 @@ class FileWatcher:
                     try:
                         item.unlink()
                     except Exception as err:
-                        errors.append(str(err))
+                        errors.append(exception2str(err))
 
             if errors:
                 raise RuntimeError(', '.join(errors))

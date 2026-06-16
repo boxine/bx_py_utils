@@ -70,6 +70,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.error_handling
 
+* [`exception2str()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/error_handling.py#L75-L88) - Converts any exception into a short "ClassName: message" string or just "ClassName" if the message is empty.
 * [`print_exc_plus()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/error_handling.py#L14-L72) - Print traceback information with a listing of all the local variables in each frame.
 
 ### bx_py_utils.file_utils
@@ -140,7 +141,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 ### bx_py_utils.pyproject_toml
 
-* [`get_pyproject_config()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/pyproject_toml.py#L17-L41) - Get a config section from "pyproject.toml". The path can be optional specify.
+* [`get_pyproject_config()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/pyproject_toml.py#L18-L42) - Get a config section from "pyproject.toml". The path can be optional specify.
 
 ### bx_py_utils.rison
 
@@ -188,7 +189,7 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 #### bx_py_utils.test_utils.filesystem_utils
 
-* [`FileWatcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/filesystem_utils.py#L6-L49) - Helper to record which new files have been created.
+* [`FileWatcher()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/test_utils/filesystem_utils.py#L7-L50) - Helper to record which new files have been created.
 
 #### bx_py_utils.test_utils.log_utils
 
