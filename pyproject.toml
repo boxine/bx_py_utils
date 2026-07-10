@@ -117,6 +117,7 @@ parallel = true
 source = ['.']
 concurrency = ["multiprocessing"]
 command_line = "-m unittest --locals --verbose"
+data_file = ".coverage_data/.coverage"
 
 [tool.coverage.report]
 omit = ['.*', '*/tests/*']

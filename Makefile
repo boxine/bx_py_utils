@@ -35,8 +35,21 @@ lint-fix: ## Check/fix code style by running: "ruff check --fix"
 	.venv/bin/ruff check --fix
 
 .PHONY: nox
-nox:  ## Run tests via nox with all environments
-	.venv/bin/nox
+nox:  ## Run tests via nox with all environments and create coverage report
+	uv run nox
+	$(MAKE) coverage-report
+
+.PHONY: coverage-report
+coverage-report:  ## Creates coverage report
+	uv run coverage combine --append
+	uv run coverage report
+	uv run coverage xml
+	uv run coverage json
+
+.PHONY: coverage
+coverage:  ## Run tests with coverage (Use better "nox" target)
+	uv run coverage run
+	$(MAKE) coverage-report
 
 .PHONY: test
 test: ## Run tests
