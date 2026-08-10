@@ -128,6 +128,12 @@ Doc-Write, see: https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/do
 
 * [`chunk_iterable()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/iteration.py#L4-L21) - Returns a generator that yields slices of iterable of the given `chunk_size`.
 
+### bx_py_utils.list_utils
+
+* [`dedupe_lines()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/list_utils.py#L4-L21) - Collapse runs of 4+ identical consecutive items to first, a cut marker, and last.
+* [`dedupe_text()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/list_utils.py#L24-L42) - Collapse runs of 4+ identical lines in a text block to "first", "a cut marker", and "last".
+* [`unique_list()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/list_utils.py#L45-L53) - >>> unique_list([2, 6, 6, 6, 1, 2, 1])
+
 ### bx_py_utils.path
 
 * [`ChangeCurrentWorkDir()`](https://github.com/boxine/bx_py_utils/blob/master/bx_py_utils/path.py#L57-L72) - Context Manager change the "CWD" to an other directory.
