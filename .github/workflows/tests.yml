@@ -34,6 +34,12 @@ jobs:
         python-version: '${{ matrix.python-version }}'
         cache: 'pip' # caching pip dependencies
 
+    - name: Install uv and set the Python version
+      # https://docs.astral.sh/uv/guides/integration/github/#multiple-python-versions
+      uses: astral-sh/setup-uv@main
+      with:
+        python-version: ${{ matrix.python-version }}
+
     - name: 'Install'
       run: |
         make install
