@@ -301,7 +301,18 @@ So, `bx_py_utils` is better usable in non-Django projects, because Django will n
 ## developing
 
 To start developing, just run `make install` to create a `.venv` and install all needed packages.
-The minimal requirements are only `python3-venv` and `python3-pip` (`uv` will be installed via `pip` in `.venv`)
+The only requirement is a system-installed [`uv`](https://docs.astral.sh/uv/).
+
+You can use [`pipx`](https://github.com/pypa/pipx) to install `uv` globally, e.g.:
+
+```bash
+sudo apt install pipx
+pipx install uv
+```
+Or use alternatives, see: https://docs.astral.sh/uv/getting-started/installation/
+
+Most `make` targets automatically run `update-requirements` when `uv.lock` is missing or older
+than one day, so local dependencies stay up to date without manual intervention.
 
 e.g.:
 
@@ -310,14 +321,14 @@ e.g.:
 ~$ cd bx_py_utils
 ~/bx_py_utils$ make
 help                       List all commands
-install-base-req           Install needed base packages via apt
 install                    Install the project in a Python virtualenv
 update-requirements        Update requirements
 lint                       Check/fix code style by running: "ruff check"
 lint-fix                   Check/fix code style by running: "ruff check --fix"
-nox                        Run tests via nox with all environments
+coverage-report            Creates coverage report
+coverage                   Run tests with coverage (prefer the "nox" target)
+nox                        Run tests via nox with all environments and create coverage report
 test                       Run tests
-coverage                   Run tests with coverage
 update-test-snapshot-files Update all snapshot files (by remove and recreate all snapshot files)
 mypy                       Run mypy
 pip-audit                  Run https://github.com/pypa/pip-audit
